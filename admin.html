@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Marketplace Boyolali</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .admin-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+    .admin-tabs button { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #ddd; background: white; }
+    .admin-tabs button.active { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+    .admin-row { background: white; border-radius: 10px; padding: 12px; margin-bottom: 8px; }
+    .admin-row .aksi { display: flex; gap: 8px; margin-top: 8px; }
+    .admin-row button { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--color-primary); background: white; color: var(--color-primary); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+
+  <div class="app-header">Panel Admin</div>
+
+  <div class="container" style="padding-bottom: 100px;">
+    <div id="loginGate">
+      <div class="form-group">
+        <label>Password Admin</label>
+        <input type="password" id="adminPassword" placeholder="Masukkan password admin" />
+      </div>
+      <button class="btn btn-primary" id="btnMasukAdmin">Masuk sebagai Admin</button>
+      <p class="info-note">
+        Password ini diatur lewat Script Properties di Apps Script Anda
+        (bukan ditulis di kode), lihat README bagian "Panel Admin".
+      </p>
+    </div>
+
+    <div id="adminPanel" style="display:none;">
+      <div class="admin-tabs">
+        <button id="tabUsers" class="active">Verifikasi User</button>
+        <button id="tabProducts">Listing Unggulan</button>
+        <button id="tabAds">Tambah Iklan</button>
+      </div>
+
+      <div id="panelUsers"></div>
+      <div id="panelProducts" style="display:none;"></div>
+      <div id="panelAds" style="display:none;">
+        <form id="adForm">
+          <div class="form-group"><label>Nama Pengiklan</label><input type="text" id="ad_nama" required></div>
+          <div class="form-group"><label>Link Gambar Banner</label><input type="url" id="ad_gambar" required></div>
+          <div class="form-group"><label>Link Tujuan (mis. wa.me/...)</label><input type="url" id="ad_link"></div>
+          <div class="form-group"><label>Tanggal Mulai</label><input type="date" id="ad_mulai" required></div>
+          <div class="form-group"><label>Tanggal Selesai</label><input type="date" id="ad_selesai" required></div>
+          <button type="submit" class="btn btn-primary">Tambah Iklan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/setup-check.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
