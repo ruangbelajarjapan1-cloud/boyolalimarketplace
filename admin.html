@@ -11,7 +11,21 @@
     .admin-tabs button.active { background: var(--color-primary); color: white; border-color: var(--color-primary); }
     .admin-row { background: white; border-radius: 10px; padding: 12px; margin-bottom: 8px; }
     .admin-row .aksi { display: flex; gap: 8px; margin-top: 8px; }
-    .admin-row button { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--color-primary); background: white; color: var(--color-primary); font-size: 0.8rem; }
+    .admin-row button {
+      padding: 9px 14px;
+      border-radius: 10px;
+      border: none;
+      background: var(--color-primary);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(14,171,111,0.25);
+      transition: transform 0.1s ease;
+    }
+    .admin-row button:active { transform: scale(0.96); }
+    .admin-row button:nth-of-type(2) { background: #c0392b; box-shadow: 0 2px 6px rgba(192,57,43,0.25); }
   </style>
 </head>
 <body>
