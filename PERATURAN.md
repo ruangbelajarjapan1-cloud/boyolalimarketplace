@@ -1,5 +1,5 @@
 # Syarat & Ketentuan, Peraturan Komunitas, dan Kebijakan Privasi
-### Marketplace Boyolali & Sekitarnya
+### Dulur — Marketplace Boyolali & Sekitarnya
 
 > **Catatan penting:** Ini adalah draf awal yang siap Anda pakai untuk tahap
 > uji coba (MVP). Sebelum aplikasi dipakai secara luas dan Anda menyelesaikan
@@ -16,7 +16,7 @@
 
 ### A.1 Tentang Layanan Ini
 
-Marketplace Boyolali & Sekitarnya ("Aplikasi", "Kami", "Platform") adalah
+Marketplace Boyolali & Sekitarnya ("Aplikasi", "Dulur", "Kami", "Platform") adalah
 layanan yang mempertemukan warga yang ingin menjual dan membeli barang bekas
 maupun baru secara langsung (C2C — *consumer to consumer*), di wilayah
 Boyolali dan sekitarnya (Surakarta/Solo, Sukoharjo, Karanganyar, Sragen,
