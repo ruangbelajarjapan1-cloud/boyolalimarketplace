@@ -5,7 +5,7 @@
 // Contoh format URL yang benar:
 // https://script.google.com/macros/s/AKfycbxXXXXXXXXXXXXXXXXX/exec
 // ============================================================
-const APPS_SCRIPT_URL = 'GANTI_DENGAN_URL_APPS_SCRIPT_ANDA';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpK6IKQ8WwTQNrzfXqGvcEm5gV04bK2sjThDfpFPArgUDiQVVDw4GMqdbGRjZWpYWxag/exec';
 
 const APP_NAME = 'Marketplace Boyolali';
 
