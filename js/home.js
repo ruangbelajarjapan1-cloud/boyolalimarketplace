@@ -12,7 +12,10 @@ function tampilkanSapaan() {
   const waktu = jam < 11 ? 'Selamat pagi' : jam < 15 ? 'Selamat siang' : jam < 18 ? 'Selamat sore' : 'Selamat malam';
   document.getElementById('greeting').textContent = user
     ? `${waktu}, ${user.nama.split(' ')[0]} 👋`
-    : 'Marketplace Boyolali';
+    : 'Dulur';
+
+  const avatar = document.getElementById('headerAvatar');
+  if (user) avatar.textContent = user.nama.charAt(0).toUpperCase();
 }
 
 function skeletonCards() {
@@ -154,8 +157,16 @@ document.getElementById('categoryChips').addEventListener('click', (e) => {
   if (!chip) return;
   document.querySelectorAll('.chip').forEach((c) => c.classList.remove('active'));
   chip.classList.add('active');
+  chip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   kategoriAktif = chip.dataset.kategori;
   muatProduk();
+});
+
+// Biar bisa digeser pakai scroll mouse di desktop (bukan cuma swipe di HP)
+document.getElementById('categoryChips').addEventListener('wheel', (e) => {
+  if (e.deltaY === 0) return;
+  e.preventDefault();
+  e.currentTarget.scrollLeft += e.deltaY;
 });
 
 let timer;
