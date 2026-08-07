@@ -44,6 +44,7 @@ function itemKeBaris(p) {
         <p style="margin:0; color: var(--color-primary-dark); font-weight:700;">Rp${harga}</p>
         <div class="aksi">
           <button onclick="location.href='produk.html?id=${p.product_id}'">Lihat</button>
+          <button onclick="location.href='edit.html?id=${p.product_id}'">✏️ Edit</button>
           ${
             terjual
               ? `<button onclick="ubahStatus('${p.product_id}', false)">Tandai Tersedia Lagi</button>`
@@ -54,6 +55,7 @@ function itemKeBaris(p) {
               ? `<button onclick="tampilkanFormUnggulan('${p.product_id}', '${p.nama_barang.replace(/'/g, "")}')" style="background:#fdf0d9; border-color:var(--color-accent-dark); color:var(--color-accent-dark);">⭐ Jadikan Unggulan</button>`
               : ''
           }
+          <button onclick="hapusBarang('${p.product_id}')" style="border-color:#c0392b; color:#c0392b;">🗑️ Hapus</button>
         </div>
       </div>
     </div>
@@ -94,6 +96,16 @@ function tampilkanFormUnggulan(productId, namaBarang) {
 async function ubahStatus(product_id, terjual) {
   const aksi = terjual ? 'markDone' : 'markAvailable';
   const result = await apiPost(aksi, { product_id });
+  if (result.error) return alert(result.error);
+  muatBarangSaya();
+}
+
+async function hapusBarang(product_id) {
+  if (!confirm('Yakin mau hapus barang ini? Tidak bisa dibatalkan.')) return;
+
+  const user = getCurrentUser();
+  const result = await apiPost('deleteProduct', { product_id, user_id: user.user_id });
+
   if (result.error) return alert(result.error);
   muatBarangSaya();
 }
