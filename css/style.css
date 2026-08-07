@@ -227,6 +227,43 @@ h1, h2, h3 {
   color: var(--color-primary-dark);
 }
 
+.seller-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-card);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  box-shadow: var(--shadow-card);
+}
+
+.seller-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-card);
+  border-top: 1px solid var(--color-border);
+  padding: 12px 16px max(12px, env(safe-area-inset-bottom));
+  z-index: 10;
+}
+.sticky-cta .btn { max-width: var(--max-width); margin: 0 auto; }
+
 .btn {
   display: block;
   width: 100%;
@@ -398,6 +435,71 @@ h1, h2, h3 {
 }
 
 .bottom-nav .nav-fab svg { width: 24px; height: 24px; stroke: white; }
+
+/* ---------------- Section title & Listing Unggulan ---------------- */
+.section-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin: 4px 0 10px;
+}
+
+.featured-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 20px;
+  scrollbar-width: none;
+}
+.featured-row::-webkit-scrollbar { display: none; }
+
+.featured-card {
+  position: relative;
+  flex: 0 0 150px;
+  background: var(--color-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow-card);
+  border: 1.5px solid #fdf0d9;
+}
+
+.featured-card img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  background: #eee;
+  display: block;
+}
+
+.featured-card .info { padding: 8px 10px 10px; }
+.featured-card .nama {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.featured-card .harga {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--color-accent-dark);
+  margin: 0;
+}
+
+/* Kartu produk muncul dengan animasi halus, bukan langsung "nempel" */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.product-card {
+  animation: cardIn 0.35s ease both;
+}
 
 /* ---------------- Misc ---------------- */
 .empty-state {
