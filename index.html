@@ -8,7 +8,9 @@
 </head>
 <body>
 
-  <div class="app-header">Marketplace Boyolali</div>
+  <div class="app-header">
+    <span id="greeting">Marketplace Boyolali</span>
+  </div>
 
   <div class="container">
     <input
@@ -34,15 +36,18 @@
     <div id="adsBanner"></div>
 
     <div class="category-chips" id="categoryChips">
-      <div class="chip active" data-kategori="">Semua</div>
-      <div class="chip" data-kategori="Kendaraan">Kendaraan</div>
-      <div class="chip" data-kategori="Elektronik">Elektronik</div>
-      <div class="chip" data-kategori="Baju">Baju</div>
-      <div class="chip" data-kategori="Perabot">Perabot</div>
-      <div class="chip" data-kategori="Pertanian">Pertanian</div>
-      <div class="chip" data-kategori="Lainnya">Lainnya</div>
+      <div class="chip active" data-kategori="">🏠 Semua</div>
+      <div class="chip" data-kategori="Kendaraan">🚗 Kendaraan</div>
+      <div class="chip" data-kategori="Elektronik">📱 Elektronik</div>
+      <div class="chip" data-kategori="Baju">👕 Baju</div>
+      <div class="chip" data-kategori="Perabot">🛋️ Perabot</div>
+      <div class="chip" data-kategori="Pertanian">🌾 Pertanian</div>
+      <div class="chip" data-kategori="Lainnya">📦 Lainnya</div>
     </div>
 
+    <div id="featuredSection"></div>
+
+    <p class="section-title" id="gridTitle">Barang Terbaru</p>
     <div id="productGrid" class="product-grid">
       <p class="empty-state">Memuat produk...</p>
     </div>
