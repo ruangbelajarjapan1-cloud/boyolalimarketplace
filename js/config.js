@@ -9,6 +9,19 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpK6IKQ8WwTQNr
 
 const APP_NAME = 'Marketplace Boyolali';
 
+// ============================================================
+// PENGATURAN HARGA & PEMBAYARAN — edit sesuai keinginan Anda
+// ============================================================
+const HARGA_UNGGULAN = 10000; // dalam Rupiah
+const DURASI_UNGGULAN_HARI = 7;
+
+// Nomor WhatsApp Anda (pengelola), format internasional TANPA tanda + atau 0 di depan
+// Contoh: 0812-3456-7890 ditulis jadi 6281234567890
+const NOMOR_WA_ADMIN = '62GANTI_NOMOR_WA_ANDA';
+
+// Info cara bayar yang akan ditampilkan ke penjual (QRIS, DANA, transfer bank, dll)
+const INFO_PEMBAYARAN = 'QRIS / Transfer ke [ISI: nomor DANA/OVO/rekening Anda] a.n. [ISI: nama Anda]';
+
 // Dipakai file lain untuk cek apakah config.js sudah diisi dengan benar
 function isConfigured() {
   return (
