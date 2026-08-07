@@ -6,23 +6,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Hijau tua = kesan tepercaya (khas transaksi C2C), emas = aksen lokal/pasar */
-  --color-primary: #1e7a5a;
-  --color-primary-dark: #145a41;
-  --color-primary-light: #e4f3ec;
-  --color-accent: #e7a93e;
-  --color-accent-dark: #c6871f;
-  --color-bg: #f7f6f2;
+  /* Hijau cerah = trust tapi lebih hidup, emas terang = aksen lokal/pasar */
+  --color-primary: #0eab6f;
+  --color-primary-dark: #078a58;
+  --color-primary-light: #dcfaec;
+  --color-accent: #ffb020;
+  --color-accent-dark: #e8960a;
+  --color-bg: #f7fbf9;
   --color-card: #ffffff;
-  --color-ink: #20261f;
-  --color-muted: #6b7568;
-  --color-border: #ebe8e0;
+  --color-ink: #182420;
+  --color-muted: #66766e;
+  --color-border: #e6efe9;
   --radius-lg: 20px;
   --radius-md: 14px;
   --radius-sm: 10px;
   --max-width: 480px;
-  --shadow-card: 0 2px 10px rgba(32, 38, 31, 0.06);
-  --shadow-float: 0 10px 24px rgba(30, 122, 90, 0.28);
+  --shadow-card: 0 2px 10px rgba(24, 36, 32, 0.07);
+  --shadow-float: 0 10px 24px rgba(14, 171, 111, 0.32);
 }
 
 * { box-sizing: border-box; }
@@ -57,10 +57,26 @@ h1, h2, h3 {
   font-size: 1.15rem;
   font-weight: 700;
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  box-shadow: 0 4px 16px rgba(20, 90, 65, 0.18);
+  box-shadow: 0 4px 16px rgba(7, 138, 88, 0.2);
   position: relative;
   z-index: 1;
 }
+
+.header-back {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.header-back svg { width: 20px; height: 20px; }
 
 /* ---------------- Search & kategori ---------------- */
 .search-box {
