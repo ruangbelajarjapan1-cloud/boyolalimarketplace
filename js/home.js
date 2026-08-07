@@ -41,18 +41,23 @@ async function muatProduk() {
   featuredSection.innerHTML = '';
 
   const params = {};
-  if (kategoriAktif) params.kategori = kategoriAktif;
+  const hibahAktif = kategoriAktif === 'HIBAH';
+  if (kategoriAktif && !hibahAktif) params.kategori = kategoriAktif;
   const q = document.getElementById('searchInput').value.trim();
   if (q) params.q = q;
   const kabupaten = document.getElementById('kabupatenFilter').value;
   if (kabupaten) params.kabupaten = kabupaten;
 
-  const produkList = await apiGet('getProducts', params);
+  let produkList = await apiGet('getProducts', params);
 
   if (produkList && produkList.error) {
     grid.innerHTML = `<p class="empty-state">⚠️ ${pesanErrorRamah(produkList.error)}</p>`;
     gridTitle.style.display = 'none';
     return;
+  }
+
+  if (Array.isArray(produkList) && hibahAktif) {
+    produkList = produkList.filter((p) => Number(p.harga) === 0);
   }
 
   if (!Array.isArray(produkList) || produkList.length === 0) {
@@ -100,16 +105,18 @@ function pesanErrorRamah(err) {
 
 function produkKeCard(p, i) {
   const fotoUrl = p.foto_url || 'img/placeholder.svg';
+  const gratis = Number(p.harga) === 0;
   const harga = Number(p.harga || 0).toLocaleString('id-ID');
   const badgeVerif = p.penjual_terverifikasi ? '<span class="badge badge-verified">✅ Terverifikasi</span>' : '';
+  const badgeGratis = gratis ? '<span class="badge badge-hibah">🎁 Hibah</span>' : '';
   const delay = (i % 6) * 0.04;
   return `
     <a class="product-card" style="animation-delay:${delay}s" href="produk.html?id=${encodeURIComponent(p.product_id)}">
       <img src="${fotoUrl}" alt="${p.nama_barang}" onerror="this.src='img/placeholder.svg'"/>
       <div class="info">
-        <div class="badges">${badgeVerif}</div>
+        <div class="badges">${badgeGratis}${badgeVerif}</div>
         <p class="nama">${p.nama_barang}</p>
-        <p class="harga">Rp${harga}</p>
+        <p class="${gratis ? 'harga-gratis' : 'harga'}">${gratis ? 'GRATIS untuk sesama 🎁' : 'Rp' + harga}</p>
         <p class="lokasi">📍 ${p.lokasi || '-'}, ${p.kabupaten || ''}</p>
       </div>
     </a>
