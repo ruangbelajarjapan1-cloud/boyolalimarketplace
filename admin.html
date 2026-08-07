@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - Marketplace Boyolali</title>
-  <link rel="stylesheet" href="css/style.css?v=3" />
+  <title>Admin - Dulur</title>
+  <link rel="stylesheet" href="css/style.css?v=5" />
   <style>
     .admin-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
     .admin-tabs button { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #ddd; background: white; }
@@ -27,6 +27,10 @@
     .admin-row button:active { transform: scale(0.96); }
     .admin-row button:nth-of-type(2) { background: #c0392b; box-shadow: 0 2px 6px rgba(192,57,43,0.25); }
   </style>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0eab6f" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="icon" href="favicon.png" />
 </head>
 <body>
 
@@ -45,7 +49,8 @@
       </div>
       <button class="btn btn-primary" id="btnMasukAdmin">Masuk sebagai Admin</button>
       <p class="info-note">
-       masih trial
+        Password ini diatur lewat Script Properties di Apps Script Anda
+        (bukan ditulis di kode), lihat README bagian "Panel Admin".
       </p>
     </div>
 
@@ -70,9 +75,10 @@
     </div>
   </div>
 
-  <script src="js/config.js?v=3"></script>
-  <script src="js/setup-check.js?v=3"></script>
-  <script src="js/api.js?v=3"></script>
-  <script src="js/admin.js?v=3"></script>
+  <script src="js/config.js?v=5"></script>
+  <script src="js/setup-check.js?v=5"></script>
+  <script src="js/api.js?v=5"></script>
+  <script src="js/admin.js?v=5"></script>
+  <script src="js/register-sw.js?v=1"></script>
 </body>
 </html>
