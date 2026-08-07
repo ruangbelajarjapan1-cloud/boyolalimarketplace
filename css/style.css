@@ -1,0 +1,449 @@
+/* ============================================================
+   STYLE.CSS — Desain ala aplikasi mobile native.
+   Ganti warna di bagian :root kalau mau ubah tema.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Hijau tua = kesan tepercaya (khas transaksi C2C), emas = aksen lokal/pasar */
+  --color-primary: #1e7a5a;
+  --color-primary-dark: #145a41;
+  --color-primary-light: #e4f3ec;
+  --color-accent: #e7a93e;
+  --color-accent-dark: #c6871f;
+  --color-bg: #f7f6f2;
+  --color-card: #ffffff;
+  --color-ink: #20261f;
+  --color-muted: #6b7568;
+  --color-border: #ebe8e0;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --max-width: 480px;
+  --shadow-card: 0 2px 10px rgba(32, 38, 31, 0.06);
+  --shadow-float: 0 10px 24px rgba(30, 122, 90, 0.28);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  padding-bottom: 84px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ---------------- App Header ---------------- */
+.app-header {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: white;
+  padding: 20px 16px 24px;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-shadow: 0 4px 16px rgba(20, 90, 65, 0.18);
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------- Search & kategori ---------------- */
+.search-box {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  font-size: 0.95rem;
+  font-family: inherit;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-card);
+  color: var(--color-ink);
+}
+
+.search-box:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.category-chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 2px 10px;
+  margin-bottom: 4px;
+  scrollbar-width: none;
+}
+.category-chips::-webkit-scrollbar { display: none; }
+
+.chip {
+  flex-shrink: 0;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 10px rgba(30, 122, 90, 0.25);
+}
+
+/* ---------------- Grid produk ---------------- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+@media (min-width: 700px) {
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1000px) {
+  .product-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.product-card {
+  background: var(--color-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.product-card:active { transform: scale(0.97); }
+
+.product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: #eee;
+  display: block;
+}
+
+.product-card .info { padding: 10px 12px 12px; }
+
+.product-card .nama {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-card .harga {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+  font-size: 0.98rem;
+  margin: 0 0 4px;
+}
+
+.product-card .lokasi {
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* ---------------- Skeleton loading (efek shimmer) ---------------- */
+.skeleton-card {
+  background: var(--color-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.skeleton-block {
+  background: linear-gradient(90deg, #eceae4 25%, #f5f4f0 37%, #eceae4 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+.skeleton-card .skeleton-block.img { aspect-ratio: 1/1; }
+.skeleton-card .skeleton-block.line { height: 10px; margin: 10px 12px; border-radius: 6px; }
+.skeleton-card .skeleton-block.line.short { width: 60%; }
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ---------------- Detail produk ---------------- */
+.detail-photo {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  background: #eee;
+  box-shadow: var(--shadow-card);
+}
+
+.detail-harga {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.98rem;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.1s ease;
+}
+.btn:active { transform: scale(0.98); }
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+  box-shadow: 0 6px 16px rgba(30, 122, 90, 0.3);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+}
+
+/* ---------------- Form ---------------- */
+.form-group { margin-bottom: 16px; }
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: var(--color-card);
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* ---------------- Chat ---------------- */
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0 70px;
+  min-height: 300px;
+}
+
+.bubble {
+  max-width: 75%;
+  padding: 11px 15px;
+  border-radius: 18px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.bubble.mine {
+  align-self: flex-end;
+  background: var(--color-primary);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.bubble.theirs {
+  align-self: flex-start;
+  background: var(--color-card);
+  box-shadow: var(--shadow-card);
+  border-bottom-left-radius: 4px;
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 8px;
+  position: fixed;
+  bottom: 78px;
+  left: 0;
+  right: 0;
+  padding: 8px 16px;
+  background: var(--color-bg);
+}
+
+.chat-input-row input {
+  flex: 1;
+  padding: 13px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  font-family: inherit;
+}
+
+.chat-input-row button {
+  padding: 0 20px;
+  border-radius: 999px;
+  border: none;
+  background: var(--color-primary);
+  color: white;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* ---------------- Bottom nav (gaya app native + FAB) ---------------- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-card);
+  border-top: 1px solid var(--color-border);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+  z-index: 10;
+}
+
+.bottom-nav .nav-item {
+  text-decoration: none;
+  color: var(--color-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.bottom-nav .nav-item svg { width: 22px; height: 22px; }
+
+.bottom-nav .nav-item.active {
+  color: var(--color-primary);
+}
+
+.bottom-nav .nav-spacer { visibility: hidden; }
+
+.bottom-nav .nav-fab {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -24px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-float);
+  border: 4px solid var(--color-bg);
+  text-decoration: none;
+}
+
+.bottom-nav .nav-fab svg { width: 24px; height: 24px; stroke: white; }
+
+/* ---------------- Misc ---------------- */
+.empty-state {
+  text-align: center;
+  color: var(--color-muted);
+  padding: 48px 16px;
+  font-size: 0.9rem;
+}
+
+.info-note {
+  background: var(--color-primary-light);
+  border: 1px solid #cde9d9;
+  border-radius: var(--radius-sm);
+  padding: 13px;
+  font-size: 0.83rem;
+  color: var(--color-primary-dark);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.badges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.badge-featured { background: #fdf0d9; color: var(--color-accent-dark); }
+.badge-verified { background: var(--color-primary-light); color: var(--color-primary-dark); }
+
+.ads-banner {
+  display: block;
+  position: relative;
+  margin-bottom: 14px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.ads-banner img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 3 / 1;
+  object-fit: cover;
+  background: #eee;
+}
+
+.ads-label {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.55);
+  color: white;
+  font-size: 0.62rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
