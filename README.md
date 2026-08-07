@@ -1,4 +1,4 @@
-# Marketplace Boyolali — MVP (Tahap 0)
+# Dulur — Marketplace Boyolali & Sekitarnya (MVP Tahap 0)
 
 Proyek ini adalah **versi awal (MVP)** dari rencana marketplace C2C untuk
 Boyolali: HTML/CSS/JS sederhana + Google Spreadsheet sebagai database.
