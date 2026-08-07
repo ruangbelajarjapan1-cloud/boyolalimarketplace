@@ -4,6 +4,17 @@
 
 let kategoriAktif = '';
 
+tampilkanSapaan();
+
+function tampilkanSapaan() {
+  const user = getCurrentUser();
+  const jam = new Date().getHours();
+  const waktu = jam < 11 ? 'Selamat pagi' : jam < 15 ? 'Selamat siang' : jam < 18 ? 'Selamat sore' : 'Selamat malam';
+  document.getElementById('greeting').textContent = user
+    ? `${waktu}, ${user.nama.split(' ')[0]} 👋`
+    : 'Marketplace Boyolali';
+}
+
 function skeletonCards() {
   return Array(6)
     .fill(0)
@@ -21,7 +32,10 @@ function skeletonCards() {
 
 async function muatProduk() {
   const grid = document.getElementById('productGrid');
+  const featuredSection = document.getElementById('featuredSection');
+  const gridTitle = document.getElementById('gridTitle');
   grid.innerHTML = skeletonCards();
+  featuredSection.innerHTML = '';
 
   const params = {};
   if (kategoriAktif) params.kategori = kategoriAktif;
@@ -34,15 +48,44 @@ async function muatProduk() {
 
   if (produkList && produkList.error) {
     grid.innerHTML = `<p class="empty-state">⚠️ ${pesanErrorRamah(produkList.error)}</p>`;
+    gridTitle.style.display = 'none';
     return;
   }
 
   if (!Array.isArray(produkList) || produkList.length === 0) {
-    grid.innerHTML = '<p class="empty-state">Belum ada barang. Jadilah yang pertama upload!</p>';
+    gridTitle.style.display = 'none';
+    grid.innerHTML = tampilanKosong();
     return;
   }
 
-  grid.innerHTML = produkList.map(produkKeCard).join('');
+  gridTitle.style.display = 'block';
+
+  const unggulan = produkList.filter((p) => p.unggulan_aktif);
+  const biasa = produkList.filter((p) => !p.unggulan_aktif);
+
+  if (unggulan.length > 0) {
+    featuredSection.innerHTML = `
+      <p class="section-title">⭐ Listing Unggulan</p>
+      <div class="featured-row">
+        ${unggulan.map(produkKeCardKecil).join('')}
+      </div>
+    `;
+  }
+
+  gridTitle.textContent = unggulan.length > 0 ? 'Barang Lainnya' : 'Barang Terbaru';
+  grid.innerHTML = biasa.length > 0 ? biasa.map(produkKeCard).join('') : '<p class="empty-state">Tidak ada barang lain di kategori/wilayah ini.</p>';
+}
+
+function tampilanKosong() {
+  return `
+    <div class="empty-state" style="grid-column: 1 / -1;">
+      <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.35; margin-bottom:8px;">
+        <path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/>
+      </svg>
+      <p>Belum ada barang di sini.<br>Jadilah yang pertama upload!</p>
+      <a href="upload.html" class="btn btn-primary" style="max-width:220px; margin:12px auto 0;">Upload Sekarang</a>
+    </div>
+  `;
 }
 
 function pesanErrorRamah(err) {
@@ -52,19 +95,34 @@ function pesanErrorRamah(err) {
   return err;
 }
 
-function produkKeCard(p) {
+function produkKeCard(p, i) {
   const fotoUrl = p.foto_url || 'img/placeholder.svg';
   const harga = Number(p.harga || 0).toLocaleString('id-ID');
-  const badgeUnggulan = p.unggulan_aktif ? '<span class="badge badge-featured">⭐ Unggulan</span>' : '';
   const badgeVerif = p.penjual_terverifikasi ? '<span class="badge badge-verified">✅ Terverifikasi</span>' : '';
+  const delay = (i % 6) * 0.04;
   return `
-    <a class="product-card" href="produk.html?id=${encodeURIComponent(p.product_id)}">
+    <a class="product-card" style="animation-delay:${delay}s" href="produk.html?id=${encodeURIComponent(p.product_id)}">
       <img src="${fotoUrl}" alt="${p.nama_barang}" onerror="this.src='img/placeholder.svg'"/>
       <div class="info">
-        <div class="badges">${badgeUnggulan}${badgeVerif}</div>
+        <div class="badges">${badgeVerif}</div>
         <p class="nama">${p.nama_barang}</p>
         <p class="harga">Rp${harga}</p>
         <p class="lokasi">📍 ${p.lokasi || '-'}, ${p.kabupaten || ''}</p>
+      </div>
+    </a>
+  `;
+}
+
+function produkKeCardKecil(p) {
+  const fotoUrl = p.foto_url || 'img/placeholder.svg';
+  const harga = Number(p.harga || 0).toLocaleString('id-ID');
+  return `
+    <a class="featured-card" href="produk.html?id=${encodeURIComponent(p.product_id)}">
+      <span class="badge badge-featured" style="position:absolute; top:8px; left:8px;">⭐ Unggulan</span>
+      <img src="${fotoUrl}" alt="${p.nama_barang}" onerror="this.src='img/placeholder.svg'"/>
+      <div class="info">
+        <p class="nama">${p.nama_barang}</p>
+        <p class="harga">Rp${harga}</p>
       </div>
     </a>
   `;
@@ -79,7 +137,6 @@ async function muatIklan() {
     return;
   }
 
-  // Tampilkan 1 iklan (yang pertama aktif) sebagai banner sederhana
   const iklan = iklanList[0];
   banner.innerHTML = `
     <a class="ads-banner" href="${iklan.link_tujuan || '#'}" target="_blank" rel="noopener">
@@ -92,7 +149,6 @@ async function muatIklan() {
 document.getElementById('kabupatenFilter').addEventListener('change', muatProduk);
 muatIklan();
 
-// Klik chip kategori
 document.getElementById('categoryChips').addEventListener('click', (e) => {
   const chip = e.target.closest('.chip');
   if (!chip) return;
@@ -102,7 +158,6 @@ document.getElementById('categoryChips').addEventListener('click', (e) => {
   muatProduk();
 });
 
-// Cari (ketik lalu tunggu sebentar, biar tidak nembak request tiap huruf)
 let timer;
 document.getElementById('searchInput').addEventListener('input', () => {
   clearTimeout(timer);
