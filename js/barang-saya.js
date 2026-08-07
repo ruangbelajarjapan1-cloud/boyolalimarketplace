@@ -80,7 +80,8 @@ function tampilkanFormUnggulan(productId, namaBarang) {
         Rp${hargaFormat}
       </p>
       <div class="info-note">
-        <strong>Cara bayar:</strong><br>${INFO_PEMBAYARAN}
+        <strong>${INFO_PEMBAYARAN}:</strong>
+        <img src="${QRIS_IMAGE_URL}" alt="QRIS Pembayaran" style="width:100%; border-radius:12px; margin-top:8px; display:block;" onerror="this.style.display='none'"/>
       </div>
       <p style="font-size:0.85rem;">Setelah transfer, kirim bukti bayar via WhatsApp — listing Anda akan diaktifkan manual dalam waktu singkat.</p>
       <a href="${linkWa}" target="_blank" class="btn btn-primary" style="margin-bottom:8px;">Kirim Bukti Bayar via WhatsApp</a>
