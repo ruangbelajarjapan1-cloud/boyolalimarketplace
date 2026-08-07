@@ -24,6 +24,7 @@ async function muatDetail() {
   }
 
   const fotoUrl = p.foto_url || 'img/placeholder.svg';
+  const gratis = Number(p.harga) === 0;
   const harga = Number(p.harga || 0).toLocaleString('id-ID');
   const inisial = (p.penjual_nama || 'W').charAt(0).toUpperCase();
   const badgeVerif = p.penjual_terverifikasi
@@ -38,7 +39,7 @@ async function muatDetail() {
     </div>
 
     <h2 style="margin: 14px 0 4px;">${p.nama_barang}</h2>
-    <p class="detail-harga">Rp${harga}</p>
+    <p class="${gratis ? 'harga-gratis' : 'detail-harga'}" style="${gratis ? 'font-size:1.5rem;' : ''}">${gratis ? '🎁 GRATIS untuk sesama' : 'Rp' + harga}</p>
     <p style="color:var(--color-muted); font-size:0.85rem; margin: 4px 0 16px;">
       📍 ${p.lokasi || '-'}, ${p.kabupaten || '-'} &nbsp;·&nbsp; ${p.kategori || '-'}
     </p>
@@ -70,6 +71,69 @@ async function muatDetail() {
         </a>
       </div>
     `;
+
+  muatKomentar(id);
+}
+
+async function muatKomentar(productId) {
+  const section = document.getElementById('commentSection');
+  section.innerHTML = `
+    <p class="section-title">💬 Komentar Publik</p>
+    <p style="font-size:0.8rem; color:var(--color-muted); margin-top:-6px; margin-bottom:12px;">
+      Tanya-jawab terbuka soal barang ini — beda dari chat pribadi, bisa dilihat semua orang.
+    </p>
+    <div id="daftarKomentar"><p class="empty-state">Memuat komentar...</p></div>
+    <div style="display:flex; gap:8px; margin-top:12px;">
+      <input type="text" id="inputKomentar" class="search-box" style="margin-bottom:0;" placeholder="Tulis pertanyaan/komentar..." />
+      <button id="btnKirimKomentar" class="btn btn-primary" style="width:auto; padding:0 18px; flex-shrink:0;">Kirim</button>
+    </div>
+  `;
+
+  const komentarList = await apiGet('getComments', { productId });
+  gambarKomentar(komentarList);
+
+  document.getElementById('btnKirimKomentar').addEventListener('click', async () => {
+    const input = document.getElementById('inputKomentar');
+    const isi = input.value.trim();
+    if (!isi) return;
+
+    const user = await requireUser();
+    if (!user) return;
+
+    input.value = '';
+    await apiPost('addComment', {
+      product_id: productId,
+      user_id: user.user_id,
+      nama_pengirim: user.nama,
+      isi_komentar: isi,
+    });
+
+    const updated = await apiGet('getComments', { productId });
+    gambarKomentar(updated);
+  });
+}
+
+function gambarKomentar(list) {
+  const el = document.getElementById('daftarKomentar');
+  if (!Array.isArray(list) || list.length === 0) {
+    el.innerHTML = '<p class="empty-state" style="padding:20px 0;">Belum ada komentar. Jadilah yang pertama bertanya!</p>';
+    return;
+  }
+  el.innerHTML = list
+    .map(
+      (k) => `
+    <div class="seller-card" style="margin-bottom:8px; align-items:flex-start;">
+      <div class="seller-avatar" style="width:32px; height:32px; font-size:0.85rem; flex-shrink:0;">
+        ${(k.nama_pengirim || '?').charAt(0).toUpperCase()}
+      </div>
+      <div style="flex:1;">
+        <p style="margin:0; font-weight:700; font-size:0.85rem;">${k.nama_pengirim || 'Warga'}</p>
+        <p style="margin:2px 0 0; font-size:0.87rem;">${k.isi_komentar}</p>
+      </div>
+    </div>
+  `
+    )
+    .join('');
 }
 
 muatDetail();
