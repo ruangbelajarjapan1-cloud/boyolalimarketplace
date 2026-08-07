@@ -8,8 +8,10 @@ async function apiGet(action, params = {}) {
     return { error: 'setup_needed' };
   }
   try {
-    const query = new URLSearchParams({ action, ...params }).toString();
-    const res = await fetch(`${APPS_SCRIPT_URL}?${query}`);
+    // "_t" (timestamp) ditambahkan supaya browser tidak pernah pakai jawaban
+    // lama yang di-cache — data selalu diambil fresh dari spreadsheet.
+    const query = new URLSearchParams({ action, ...params, _t: Date.now() }).toString();
+    const res = await fetch(`${APPS_SCRIPT_URL}?${query}`, { cache: 'no-store' });
     if (!res.ok) return { error: 'Server backend error (status ' + res.status + ')' };
     return await res.json();
   } catch (err) {
