@@ -2,6 +2,8 @@
 // DETAIL.JS — logika untuk produk.html
 // ============================================================
 
+let produkSaatIni = null;
+
 async function muatDetail() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
@@ -16,14 +18,13 @@ async function muatDetail() {
   const p = await apiGet('getProduct', { id });
 
   if (p.error) {
-    const pesan = p.error === 'setup_needed'
-      ? 'Backend belum disambungkan. Lihat pesan merah di atas.'
-      : p.error;
+    const pesan = p.error === 'setup_needed' ? 'Backend belum disambungkan. Lihat pesan merah di atas.' : p.error;
     container.innerHTML = `<p class="empty-state">⚠️ ${pesan}</p>`;
     return;
   }
 
-  const fotoUrl = p.foto_url || 'img/placeholder.svg';
+  produkSaatIni = p;
+
   const gratis = Number(p.harga) === 0;
   const harga = Number(p.harga || 0).toLocaleString('id-ID');
   const inisial = (p.penjual_nama || 'W').charAt(0).toUpperCase();
@@ -32,10 +33,22 @@ async function muatDetail() {
     : '<span class="badge" style="background:#eee; color:var(--color-muted);">Belum Terverifikasi</span>';
   const terjual = p.status === 'Terjual';
 
+  const fotoList = [p.foto_url, p.foto_url_2, p.foto_url_3].filter((f) => f);
+  const fotoTampil = fotoList.length > 0 ? fotoList : ['img/placeholder.svg'];
+
+  const user = getCurrentUser();
+  const favAktif = user ? await cekFavoritAktif(id, user.user_id) : false;
+
   container.innerHTML = `
     <div style="position:relative;">
-      <img class="detail-photo" src="${fotoUrl}" alt="${p.nama_barang}" onerror="this.src='img/placeholder.svg'" />
+      <div class="gallery-scroll" id="galleryScroll">
+        ${fotoTampil.map((f) => `<img src="${f}" onerror="this.src='img/placeholder.svg'" />`).join('')}
+      </div>
+      ${fotoTampil.length > 1 ? `<div class="gallery-dots" id="galleryDots">${fotoTampil.map((_, i) => `<span class="${i === 0 ? 'active' : ''}"></span>`).join('')}</div>` : ''}
       ${terjual ? '<span class="badge" style="position:absolute; top:12px; left:12px; background:#20261f; color:white; font-size:0.78rem; padding:5px 10px;">TERJUAL</span>' : ''}
+      <button class="fav-heart ${favAktif ? 'active' : ''}" id="favHeartDetail" style="top:12px; right:12px; width:38px; height:38px;">
+        <svg viewBox="0 0 24 24" style="width:20px; height:20px;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+      </button>
     </div>
 
     <h2 style="margin: 14px 0 4px;">${p.nama_barang}</h2>
@@ -48,7 +61,10 @@ async function muatDetail() {
       <div class="seller-avatar">${inisial}</div>
       <div style="flex:1;">
         <p style="margin:0; font-weight:700;">${p.penjual_nama || 'Warga'}</p>
-        ${badgeVerif}
+        <div style="display:flex; gap:6px; align-items:center; margin-top:2px; flex-wrap:wrap;">
+          ${badgeVerif}
+          ${p.penjual_rating_count ? `<span class="rating-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg><span class="rating-text">${p.penjual_rating_avg} (${p.penjual_rating_count} ulasan)</span></span>` : '<span class="rating-text">Belum ada ulasan</span>'}
+        </div>
       </div>
     </div>
 
@@ -60,7 +76,17 @@ async function muatDetail() {
       (COD). Disarankan bertemu di tempat umum/ramai. Aplikasi ini hanya
       menghubungkan Anda lewat chat — waktu dan lokasi ketemu silakan disepakati sendiri.
     </div>
+
+    <div style="display:flex; gap:16px; margin: 4px 0 8px;">
+      <button class="text-link-btn" id="btnShareWa">📤 Bagikan ke WhatsApp</button>
+      <button class="text-link-btn" id="btnLaporkan">🚩 Laporkan Barang Ini</button>
+    </div>
   `;
+
+  pasangGalleryScroll(fotoTampil.length);
+  pasangFavoritDetail(id);
+  pasangShareWa(p);
+  pasangLaporkan(p);
 
   cta.innerHTML = terjual
     ? `<div class="sticky-cta"><span class="btn" style="background:#eee; color:var(--color-muted);">Barang Ini Sudah Terjual</span></div>`
@@ -75,6 +101,118 @@ async function muatDetail() {
   muatKomentar(id);
 }
 
+// ------------------------------------------------------------
+// GALERI — dot indikator ikut geser
+// ------------------------------------------------------------
+function pasangGalleryScroll(jumlahFoto) {
+  if (jumlahFoto <= 1) return;
+  const scroll = document.getElementById('galleryScroll');
+  const dots = document.querySelectorAll('#galleryDots span');
+
+  scroll.addEventListener('scroll', () => {
+    const index = Math.round(scroll.scrollLeft / scroll.clientWidth);
+    dots.forEach((d, i) => d.classList.toggle('active', i === index));
+  });
+}
+
+// ------------------------------------------------------------
+// FAVORIT di halaman detail
+// ------------------------------------------------------------
+async function cekFavoritAktif(productId, userId) {
+  const hasil = await apiGet('getFavorites', { user_id: userId });
+  if (!Array.isArray(hasil)) return false;
+  return hasil.some((p) => p.product_id === productId);
+}
+
+function pasangFavoritDetail(productId) {
+  const btn = document.getElementById('favHeartDetail');
+  btn.addEventListener('click', async () => {
+    const user = await requireUser();
+    if (!user) return;
+
+    const aktif = btn.classList.contains('active');
+    btn.classList.toggle('active');
+
+    if (aktif) {
+      await apiPost('removeFavorite', { user_id: user.user_id, product_id: productId });
+    } else {
+      await apiPost('addFavorite', { user_id: user.user_id, product_id: productId });
+    }
+  });
+}
+
+// ------------------------------------------------------------
+// SHARE KE WHATSAPP
+// ------------------------------------------------------------
+function pasangShareWa(p) {
+  document.getElementById('btnShareWa').addEventListener('click', () => {
+    const harga = Number(p.harga) === 0 ? 'GRATIS' : 'Rp' + Number(p.harga).toLocaleString('id-ID');
+    const teks = `Cek barang ini di Dulur: *${p.nama_barang}* - ${harga}\n${window.location.href}`;
+    window.open('https://wa.me/?text=' + encodeURIComponent(teks), '_blank');
+  });
+}
+
+// ------------------------------------------------------------
+// LAPORKAN BARANG
+// ------------------------------------------------------------
+function pasangLaporkan(p) {
+  document.getElementById('btnLaporkan').addEventListener('click', () => {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal-box">
+        <h3 style="margin-top:0;">🚩 Laporkan Barang</h3>
+        <p style="font-size:0.85rem; color:var(--color-muted);">
+          Kenapa Anda melaporkan "<strong>${p.nama_barang}</strong>"?
+        </p>
+        <div class="form-group">
+          <select id="alasanLapor">
+            <option>Barang terlarang / melanggar hukum</option>
+            <option>Diduga penipuan</option>
+            <option>Foto/deskripsi tidak sesuai</option>
+            <option>Spam atau duplikat</option>
+            <option>Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <textarea id="detailLapor" rows="3" placeholder="Ceritakan lebih detail (opsional)"></textarea>
+        </div>
+        <button class="btn btn-primary" id="btnKirimLapor" style="margin-bottom:8px;">Kirim Laporan</button>
+        <button class="btn btn-secondary" id="btnBatalLapor">Batal</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    document.getElementById('btnBatalLapor').addEventListener('click', () => modal.remove());
+    document.getElementById('btnKirimLapor').addEventListener('click', async () => {
+      const user = await requireUser();
+      if (!user) return;
+
+      const alasan = document.getElementById('alasanLapor').value + ' — ' + document.getElementById('detailLapor').value;
+
+      await apiPost('addReport', {
+        jenis: 'barang',
+        target_id: p.product_id,
+        target_nama: p.nama_barang,
+        pelapor_id: user.user_id,
+        alasan,
+      });
+
+      modal.innerHTML = `
+        <div class="modal-box" style="text-align:center;">
+          <p style="font-size:2rem; margin:0;">✅</p>
+          <p>Laporan terkirim. Terima kasih sudah menjaga komunitas Dulur.</p>
+          <button class="btn btn-primary" id="btnTutupLapor">Tutup</button>
+        </div>
+      `;
+      document.getElementById('btnTutupLapor').addEventListener('click', () => modal.remove());
+    });
+  });
+}
+
+// ------------------------------------------------------------
+// KOMENTAR PUBLIK
+// ------------------------------------------------------------
 async function muatKomentar(productId) {
   const section = document.getElementById('commentSection');
   section.innerHTML = `
@@ -119,9 +257,7 @@ function gambarKomentar(list) {
     el.innerHTML = '<p class="empty-state" style="padding:20px 0;">Belum ada komentar. Jadilah yang pertama bertanya!</p>';
     return;
   }
-  el.innerHTML = list
-    .map(
-      (k) => `
+  el.innerHTML = list.map((k) => `
     <div class="seller-card" style="margin-bottom:8px; align-items:flex-start;">
       <div class="seller-avatar" style="width:32px; height:32px; font-size:0.85rem; flex-shrink:0;">
         ${(k.nama_pengirim || '?').charAt(0).toUpperCase()}
@@ -131,9 +267,7 @@ function gambarKomentar(list) {
         <p style="margin:2px 0 0; font-size:0.87rem;">${k.isi_komentar}</p>
       </div>
     </div>
-  `
-    )
-    .join('');
+  `).join('');
 }
 
 muatDetail();
