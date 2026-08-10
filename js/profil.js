@@ -50,6 +50,8 @@ function tampilkanProfil(user) {
   badge.style.color = terverifikasi ? '' : 'var(--color-muted)';
   badge.textContent = terverifikasi ? '✅ Terverifikasi' : '⏳ Belum Terverifikasi';
 
+  muatRatingSaya(user.user_id);
+
   document.getElementById('infoList').innerHTML = `
     <div class="row">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -72,8 +74,21 @@ function tampilkanProfil(user) {
     `;
 
   document.getElementById('areaTombol').innerHTML = `
+    <a class="btn btn-secondary" href="peraturan.html" style="margin-bottom:10px;">📄 Syarat & Ketentuan</a>
     <button class="btn btn-secondary" onclick="logout(); location.reload();">Keluar</button>
   `;
+}
+
+async function muatRatingSaya(userId) {
+  const hasil = await apiGet('getRatings', { penjual_id: userId });
+  if (!Array.isArray(hasil) || hasil.length === 0) return;
+
+  const avg = (hasil.reduce((sum, r) => sum + Number(r.nilai), 0) / hasil.length).toFixed(1);
+  const el = document.getElementById('badgeVerifikasi');
+  el.insertAdjacentHTML(
+    'afterend',
+    `<p style="margin:6px 0 0;"><span class="rating-stars"><svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:var(--color-accent);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg><span class="rating-text" style="font-size:0.8rem;">${avg} dari ${hasil.length} ulasan</span></span></p>`
+  );
 }
 
 muatProfil();
