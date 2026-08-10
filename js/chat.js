@@ -49,11 +49,22 @@ async function muatPesan() {
   chatWindow.innerHTML = pesanList
     .map((p) => {
       const punyaSaya = p.pengirim_id === currentUserId;
-      return `<div class="bubble ${punyaSaya ? 'mine' : 'theirs'}">${p.isi_pesan}</div>`;
+      const centang = punyaSaya
+        ? `<span class="centang ${p.dibaca === true ? 'dibaca' : ''}">${p.dibaca === true ? '✓✓' : '✓'}</span>`
+        : '';
+      return `<div class="bubble ${punyaSaya ? 'mine' : 'theirs'}">${p.isi_pesan}${centang}</div>`;
     })
     .join('');
 
   chatWindow.scrollTop = chatWindow.scrollHeight;
+
+  // Tandai pesan dari lawan bicara sebagai sudah dibaca, karena kita
+  // sedang aktif melihat percakapan ini
+  apiPost('markMessagesRead', {
+    terkait_id: productId,
+    user_id: currentUserId,
+    lawan_id: lawanBicaraId,
+  });
 }
 
 document.getElementById('sendBtn').addEventListener('click', kirimPesan);
