@@ -11,6 +11,7 @@ let currentUserId = null;
 let lawanBicaraId = null;
 let productId = null;
 let pollingInterval = null;
+const JEDA_POLLING_MS = 2500;
 
 async function mulaiChat() {
   const params = new URLSearchParams(window.location.search);
@@ -29,7 +30,23 @@ async function mulaiChat() {
   }
 
   await muatPesan();
-  pollingInterval = setInterval(muatPesan, 3000);
+  jalankanPolling();
+
+  // Hemat kuota: berhenti polling kalau tab/app tidak aktif dilihat,
+  // langsung jalan lagi begitu balik dibuka
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      clearInterval(pollingInterval);
+    } else {
+      muatPesan();
+      jalankanPolling();
+    }
+  });
+}
+
+function jalankanPolling() {
+  clearInterval(pollingInterval);
+  pollingInterval = setInterval(muatPesan, JEDA_POLLING_MS);
 }
 
 async function muatPesan() {
