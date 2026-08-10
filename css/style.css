@@ -570,6 +570,129 @@ h1, h2, h3 {
   animation: cardIn 0.35s ease both;
 }
 
+/* ---------------- Splash Screen ---------------- */
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  transition: opacity 0.4s ease;
+}
+.splash-screen img { width: 84px; height: 84px; border-radius: 22px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+.splash-screen .splash-title { color: white; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.4rem; }
+.splash-screen .splash-tagline { color: rgba(255,255,255,0.85); font-size: 0.85rem; }
+.splash-screen.hide { opacity: 0; pointer-events: none; }
+
+/* ---------------- Onboarding & Modal umum ---------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+.modal-box {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  max-width: 380px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+}
+
+.onb-slide { text-align: center; padding: 10px 4px 4px; }
+.onb-slide .onb-icon { font-size: 3rem; margin-bottom: 14px; }
+.onb-slide h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; margin: 0 0 8px; }
+.onb-slide p { font-size: 0.88rem; color: var(--color-muted); line-height: 1.6; }
+.onb-dots { display: flex; justify-content: center; gap: 6px; margin: 16px 0; }
+.onb-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--color-border); }
+.onb-dots span.active { background: var(--color-primary); width: 20px; border-radius: 4px; }
+.onb-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+.onb-skip { color: var(--color-muted); font-size: 0.83rem; background: none; border: none; cursor: pointer; }
+.onb-next { background: var(--color-primary); color: white; border: none; padding: 10px 22px; border-radius: 999px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+
+/* ---------------- Favorit (hati) ---------------- */
+.fav-heart {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 2;
+  border: none;
+  cursor: pointer;
+}
+.fav-heart svg { width: 16px; height: 16px; stroke: #e5455f; fill: none; stroke-width: 2.2; transition: fill 0.15s ease; }
+.fav-heart.active svg { fill: #e5455f; }
+.product-card { position: relative; }
+
+/* ---------------- Rating ---------------- */
+.rating-stars { display: inline-flex; align-items: center; gap: 3px; }
+.rating-stars svg { width: 13px; height: 13px; fill: var(--color-accent); }
+.rating-text { font-size: 0.72rem; color: var(--color-muted); font-weight: 600; }
+.star-input { display: flex; gap: 6px; justify-content: center; margin: 12px 0; }
+.star-input svg { width: 32px; height: 32px; stroke: var(--color-accent); fill: none; stroke-width: 1.5; cursor: pointer; }
+.star-input svg.filled { fill: var(--color-accent); }
+
+/* ---------------- Galeri multi-foto ---------------- */
+.gallery-scroll {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  scrollbar-width: none;
+}
+.gallery-scroll::-webkit-scrollbar { display: none; }
+.gallery-scroll img {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  background: #eee;
+}
+.gallery-dots { display: flex; justify-content: center; gap: 5px; margin-top: 8px; }
+.gallery-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--color-border); }
+.gallery-dots span.active { background: var(--color-primary); }
+
+/* ---------------- Filter & Urutan ---------------- */
+.filter-sort-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.filter-sort-row select {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  font-size: 0.8rem;
+  font-family: inherit;
+}
+
+/* ---------------- Laporkan & Share ---------------- */
+.text-link-btn {
+  background: none;
+  border: none;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
 /* ---------------- Misc ---------------- */
 .empty-state {
   text-align: center;
