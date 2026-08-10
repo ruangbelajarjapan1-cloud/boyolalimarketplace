@@ -4,13 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dulur — Jual Beli Warga Boyolali & Sekitarnya</title>
-  <link rel="stylesheet" href="css/style.css?v=6" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0eab6f" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="icon" href="favicon.png" />
 </head>
 <body>
+
+  <div class="splash-screen" id="splashScreen">
+    <img src="icon-192.png" alt="Dulur" />
+    <div class="splash-title">Dulur</div>
+    <div class="splash-tagline">jual beli sesama warga Boyolali & sekitarnya</div>
+  </div>
+
+  <div id="onboardingArea"></div>
 
   <div class="app-header">
     <div class="header-top-row">
@@ -57,6 +65,21 @@
 
     <div id="featuredSection"></div>
 
+    <div class="filter-sort-row">
+      <select id="urutkanFilter">
+        <option value="terbaru">🕓 Terbaru</option>
+        <option value="termurah">💰 Termurah</option>
+        <option value="termahal">💎 Termahal</option>
+      </select>
+      <select id="hargaMaxFilter">
+        <option value="">Semua Harga</option>
+        <option value="50000">Di bawah 50rb</option>
+        <option value="100000">Di bawah 100rb</option>
+        <option value="500000">Di bawah 500rb</option>
+        <option value="1000000">Di bawah 1jt</option>
+      </select>
+    </div>
+
     <p class="section-title" id="gridTitle">Barang Terbaru</p>
     <div id="productGrid" class="product-grid">
       <p class="empty-state">Memuat produk...</p>
@@ -86,11 +109,11 @@
     </a>
   </nav>
 
-  <script src="js/config.js?v=6"></script>
-  <script src="js/setup-check.js?v=6"></script>
-  <script src="js/api.js?v=6"></script>
-  <script src="js/session.js?v=6"></script>
-  <script src="js/home.js?v=6"></script>
-  <script src="js/register-sw.js?v=6"></script>
+  <script src="js/config.js?v=7"></script>
+  <script src="js/setup-check.js?v=7"></script>
+  <script src="js/api.js?v=7"></script>
+  <script src="js/session.js?v=7"></script>
+  <script src="js/home.js?v=7"></script>
+  <script src="js/register-sw.js?v=7"></script>
 </body>
 </html>
