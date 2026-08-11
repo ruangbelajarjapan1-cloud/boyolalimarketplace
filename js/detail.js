@@ -10,6 +10,13 @@ async function muatDetail() {
   const container = document.getElementById('detailContainer');
   const cta = document.getElementById('stickyCta');
 
+  container.innerHTML = `
+    <div class="skeleton-block img" style="border-radius:var(--radius-lg); margin-bottom:14px;"></div>
+    <div class="skeleton-block line" style="height:20px; margin:0 0 10px;"></div>
+    <div class="skeleton-block line short" style="height:14px; margin:0 0 16px;"></div>
+    <div class="skeleton-row"><div class="skeleton-block avatar"></div><div style="flex:1;"><div class="skeleton-block text"></div></div></div>
+  `;
+
   if (!id) {
     container.innerHTML = '<p class="empty-state">Produk tidak ditemukan.</p>';
     return;
@@ -110,13 +117,31 @@ async function muatDetail() {
 }
 
 function pasangGalleryScroll(jumlahFoto) {
-  if (jumlahFoto <= 1) return;
   const scroll = document.getElementById('galleryScroll');
-  const dots = document.querySelectorAll('#galleryDots span');
-  scroll.addEventListener('scroll', () => {
-    const index = Math.round(scroll.scrollLeft / scroll.clientWidth);
-    dots.forEach((d, i) => d.classList.toggle('active', i === index));
+
+  if (jumlahFoto > 1) {
+    const dots = document.querySelectorAll('#galleryDots span');
+    scroll.addEventListener('scroll', () => {
+      const index = Math.round(scroll.scrollLeft / scroll.clientWidth);
+      dots.forEach((d, i) => d.classList.toggle('active', i === index));
+    });
+  }
+
+  // Tap foto = buka versi full-screen (lightbox)
+  scroll.querySelectorAll('img').forEach((img) => {
+    img.addEventListener('click', () => bukaLightbox(img.src));
   });
+}
+
+function bukaLightbox(src) {
+  const lb = document.createElement('div');
+  lb.className = 'lightbox-overlay';
+  lb.innerHTML = `
+    <button class="lightbox-close" aria-label="Tutup">✕</button>
+    <img src="${src}" alt="Foto barang diperbesar" />
+  `;
+  lb.addEventListener('click', () => lb.remove());
+  document.body.appendChild(lb);
 }
 
 async function cekFavoritAktif(productId, userId) {
@@ -132,6 +157,9 @@ function pasangFavoritDetail(productId) {
     if (!user) return;
     const aktif = btn.classList.contains('active');
     btn.classList.toggle('active');
+    btn.classList.remove('beat');
+    void btn.offsetWidth; // trik restart animasi
+    btn.classList.add('beat');
     if (aktif) {
       await apiPost('removeFavorite', { user_id: user.user_id, product_id: productId });
     } else {
