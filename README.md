@@ -12,45 +12,63 @@ Ikuti langkah-langkah di bawah ini **satu per satu, jangan dilompat**.
 
 1. Buka [sheets.google.com](https://sheets.google.com), buat spreadsheet baru.
 2. Beri nama file: `DB_MarketplaceBoyolali`.
-3. Buat 4 tab (klik `+` di pojok kiri bawah) dengan nama **persis** seperti ini
-   (huruf besar-kecil harus sama):
-   - `Users`
-   - `Products`
-   - `ChatLogs`
-   - `Iklan`
-4. Isi **baris pertama** tiap tab dengan nama kolom berikut (copy-paste per baris,
-   pisahkan pakai Tab saat paste, atau ketik manual satu-satu di tiap sel):
+3. Buat tab-tab berikut (klik `+` di pojok kiri bawah), nama **persis**:
+   - `Users`, `Products`, `ChatLogs`, `Iklan`, `Komentar`, `Rating`, `Favorit`, `Laporan`, `Pengumuman`
+4. Isi **baris pertama** tiap tab dengan header ini:
 
-**Tab `Users`** (baris 1):
+**`Users`:**
 ```
-user_id	nama	no_hp	email	password_hash	lokasi_kecamatan	kabupaten	foto_profil_url	is_verified_ktp	tanggal_daftar
+user_id	nama	no_hp	email	password_hash	lokasi_kecamatan	kabupaten	foto_profil_url	is_verified_ktp	tanggal_daftar	kode_referral	direferensikan_oleh	is_toko	toko_sampai
 ```
 
-**Tab `Products`** (baris 1):
+**`Products`:**
 ```
-product_id	user_id	nama_barang	kategori	harga	deskripsi	foto_url	status	lokasi	kabupaten	unggulan	unggulan_sampai	tanggal_upload
-```
-
-**Tab `ChatLogs`** (baris 1):
-```
-chat_id	terkait_id	pengirim_id	penerima_id	isi_pesan	waktu
+product_id	user_id	nama_barang	kategori	harga	deskripsi	foto_url	foto_url_2	foto_url_3	status	lokasi	kabupaten	unggulan	unggulan_sampai	tanggal_upload	butuh_cepat	jumlah_dilihat
 ```
 
-**Tab `Iklan`** (baris 1):
+**`ChatLogs`:**
+```
+chat_id	terkait_id	pengirim_id	penerima_id	isi_pesan	dibaca	waktu
+```
+
+**`Iklan`:**
 ```
 iklan_id	nama_pengiklan	gambar_url	link_tujuan	aktif	tanggal_mulai	tanggal_selesai
 ```
 
-> Catatan: `terkait_id` di ChatLogs isinya = `product_id` barang yang lagi
-> dinego. `kabupaten` dipakai supaya aplikasi tidak cuma untuk Boyolali,
-> tapi juga wilayah sekitarnya (Solo, Sukoharjo, Karanganyar, Sragen,
-> Klaten, Semarang, Salatiga, Wonogiri).
+**`Komentar`:**
+```
+komentar_id	product_id	user_id	nama_pengirim	isi_komentar	waktu
+```
 
-**Penting untuk kolom `unggulan` dan `aktif`:** ubah tipe kolom itu jadi
-**checkbox**, supaya nilainya benar-benar `TRUE`/`FALSE` (bukan teks).
-Caranya: blok kolomnya > menu **Insert > Checkbox**.
+**`Rating`:**
+```
+rating_id	product_id	penjual_id	pembeli_id	nilai	komentar	waktu
+```
 
-Biarkan tab lain (Transactions, Ratings) menyusul nanti — belum dipakai di MVP ini.
+**`Favorit`:**
+```
+favorit_id	user_id	product_id	waktu
+```
+
+**`Laporan`:**
+```
+laporan_id	jenis	target_id	target_nama	pelapor_id	alasan	waktu
+```
+
+**`Pengumuman`:**
+```
+pengumuman_id	user_id	nama_pengirim	jenis	judul	isi	foto_url	waktu
+```
+
+> **Catatan penting:** urutan kolom di atas **tidak harus persis** — sistem
+> menulis data berdasarkan **nama header**, bukan posisi tetap. Jadi aman
+> kalau Anda mau tambah/geser kolom lain nanti.
+
+**Checkbox:** ubah kolom `unggulan`, `dibaca` (ChatLogs), `aktif` (Iklan),
+`is_toko`, `butuh_cepat` jadi tipe **checkbox** (blok kolom > Insert >
+Checkbox) — tapi **hati-hati**, format 1 baris saja dulu, jangan apply ke
+banyak baris kosong sekaligus (pernah bikin masalah "data nyasar ke bawah").
 
 ---
 
