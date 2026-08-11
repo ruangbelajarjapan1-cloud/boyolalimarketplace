@@ -86,6 +86,7 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     foto_url_3: fotoTerupload[3] || '',
     lokasi: document.getElementById('lokasi').value || user.lokasi_kecamatan,
     kabupaten: document.getElementById('kabupaten').value || user.kabupaten,
+    butuh_cepat: document.getElementById('butuh_cepat').checked,
   };
 
   const submitBtn = e.target.querySelector('button[type="submit"]');
