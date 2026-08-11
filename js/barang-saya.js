@@ -40,6 +40,7 @@ function itemKeBaris(p) {
           ${terjual ? 'Terjual' : 'Tersedia'}
         </span>
         ${sudahUnggulan ? '<span class="badge badge-featured">⭐ Unggulan</span>' : ''}
+        ${p.penjual_toko_aktif ? '<span class="badge badge-toko">🏪 Toko</span>' : ''}
         <p style="margin:0; font-weight:600;">${p.nama_barang}</p>
         <p style="margin:0; color: var(--color-primary-dark); font-weight:700;">Rp${harga}</p>
         <div class="aksi">
@@ -53,6 +54,11 @@ function itemKeBaris(p) {
           ${
             !terjual && !sudahUnggulan
               ? `<button onclick="tampilkanFormUnggulan('${p.product_id}', '${p.nama_barang.replace(/'/g, "")}')" style="background:#fdf0d9; border-color:var(--color-accent-dark); color:var(--color-accent-dark);">⭐ Jadikan Unggulan</button>`
+              : ''
+          }
+          ${
+            !terjual
+              ? `<button onclick="tampilkanFormSundul('${p.product_id}', '${p.nama_barang.replace(/'/g, "")}')" style="background:#e0f0ff; border-color:#1a5fa0; color:#1a5fa0;">🚀 Sundul</button>`
               : ''
           }
           <button onclick="hapusBarang('${p.product_id}')" style="border-color:#c0392b; color:#c0392b;">🗑️ Hapus</button>
@@ -87,6 +93,37 @@ function tampilkanFormUnggulan(productId, namaBarang) {
       </div>
       <p style="font-size:0.85rem;">Setelah transfer, kirim bukti bayar via WhatsApp — listing Anda akan diaktifkan manual dalam waktu singkat.</p>
       <a href="${linkWa}" target="_blank" class="btn btn-primary" style="margin-bottom:8px;">Kirim Bukti Bayar via WhatsApp</a>
+      <button class="btn btn-secondary" onclick="this.closest('div[style*=fixed]').remove()">Batal</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function tampilkanFormSundul(productId, namaBarang) {
+  const hargaFormat = HARGA_SUNDUL.toLocaleString('id-ID');
+  const pesanWa = encodeURIComponent(
+    `Halo, saya mau SUNDUL barang "${namaBarang}" (ID: ${productId}) biar naik ke atas urutan Terbaru. Saya sudah transfer Rp${hargaFormat}. Ini bukti transfernya:`
+  );
+  const linkWa = `https://wa.me/${NOMOR_WA_ADMIN}?text=${pesanWa}`;
+
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:100; padding:20px;';
+  modal.innerHTML = `
+    <div style="background:white; border-radius:var(--radius-lg); padding:20px; max-width:360px; width:100%;">
+      <h3 style="margin-top:0;">🚀 Sundul Listing</h3>
+      <p style="font-size:0.9rem; color:var(--color-muted);">
+        Barang <strong>${namaBarang}</strong> akan langsung pindah ke posisi
+        paling atas urutan "Terbaru" — sekali bayar, tanpa langganan.
+      </p>
+      <p style="font-size:1.3rem; font-weight:800; color:#1a5fa0; font-family:'Plus Jakarta Sans',sans-serif;">
+        Rp${hargaFormat}
+      </p>
+      <div class="info-note">
+        <strong>${INFO_PEMBAYARAN}:</strong>
+        <img src="${QRIS_IMAGE_URL}" alt="QRIS Pembayaran" style="width:100%; border-radius:12px; margin-top:8px; display:block;" onerror="this.style.display='none'"/>
+      </div>
+      <p style="font-size:0.85rem;">Setelah transfer, kirim bukti bayar via WhatsApp — barang Anda akan disundul manual dalam waktu singkat.</p>
+      <a href="${linkWa}" target="_blank" class="btn btn-primary" style="margin-bottom:8px; background:#1a5fa0; box-shadow:none;">Kirim Bukti Bayar via WhatsApp</a>
       <button class="btn btn-secondary" onclick="this.closest('div[style*=fixed]').remove()">Batal</button>
     </div>
   `;
