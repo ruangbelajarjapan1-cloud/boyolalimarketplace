@@ -3,6 +3,8 @@
 // ============================================================
 
 let adminPassword = sessionStorage.getItem('adminPassword') || '';
+let semuaUsers = [];
+let semuaProducts = [];
 
 document.getElementById('btnMasukAdmin').addEventListener('click', async () => {
   adminPassword = document.getElementById('adminPassword').value;
@@ -16,17 +18,18 @@ document.getElementById('btnMasukAdmin').addEventListener('click', async () => {
   sessionStorage.setItem('adminPassword', adminPassword);
   document.getElementById('loginGate').style.display = 'none';
   document.getElementById('adminPanel').style.display = 'block';
-  renderUsers(cek);
+  semuaUsers = cek;
+  renderUsers(semuaUsers);
 });
 
-// Kalau password sudah tersimpan dari sesi sebelumnya, langsung masuk
 (async function cekSesiAdmin() {
   if (!adminPassword) return;
   const cek = await apiGet('adminGetUsers', { password: adminPassword });
   if (cek.error) return;
   document.getElementById('loginGate').style.display = 'none';
   document.getElementById('adminPanel').style.display = 'block';
-  renderUsers(cek);
+  semuaUsers = cek;
+  renderUsers(semuaUsers);
 })();
 
 // --- Tab switching ---
@@ -37,28 +40,57 @@ Object.keys(tabs).forEach((tabId) => {
       document.getElementById(id).classList.toggle('active', id === tabId);
       document.getElementById(tabs[id]).style.display = id === tabId ? 'block' : 'none';
     });
-    if (tabId === 'tabUsers') renderUsers(await apiGet('adminGetUsers', { password: adminPassword }));
-    if (tabId === 'tabProducts') renderProducts(await apiGet('adminGetProducts', { password: adminPassword }));
+    if (tabId === 'tabUsers') {
+      semuaUsers = await apiGet('adminGetUsers', { password: adminPassword });
+      renderUsers(semuaUsers);
+    }
+    if (tabId === 'tabProducts') {
+      semuaProducts = await apiGet('adminGetProducts', { password: adminPassword });
+      renderProducts(semuaProducts);
+    }
   });
 });
 
-// --- Tab: Verifikasi User ---
+// --- Tab: Verifikasi User (dengan pencarian) ---
 function renderUsers(users) {
   const el = document.getElementById('panelUsers');
+
   if (!Array.isArray(users) || users.length === 0) {
     el.innerHTML = '<p class="empty-state">Belum ada user.</p>';
     return;
   }
-  el.innerHTML = users
+
+  el.innerHTML = `
+    <input type="text" id="cariUser" class="search-box" placeholder="🔍 Cari nama atau no HP..." />
+    <p style="font-size:0.8rem; color:var(--color-muted); margin-bottom:10px;">${users.length} user terdaftar</p>
+    <div id="daftarUser"></div>
+  `;
+
+  gambarDaftarUser(users);
+
+  document.getElementById('cariUser').addEventListener('input', (e) => {
+    const kata = e.target.value.toLowerCase();
+    const hasil = users.filter(
+      (u) => u.nama.toLowerCase().includes(kata) || String(u.no_hp).includes(kata)
+    );
+    gambarDaftarUser(hasil);
+  });
+}
+
+function gambarDaftarUser(users) {
+  document.getElementById('daftarUser').innerHTML = users
     .map(
       (u) => `
     <div class="admin-row">
       <strong>${u.nama}</strong> — ${u.no_hp}<br>
       <small>${u.lokasi_kecamatan || ''}, ${u.kabupaten || ''}</small><br>
-      Status: ${u.is_verified_ktp === true ? '✅ Terverifikasi' : '⏳ Belum'}
+      Status: ${u.is_verified_ktp === true ? '✅ Terverifikasi' : '⏳ Belum'} |
+      Toko: ${u.is_toko === true ? '🏪 Aktif sampai ' + formatTanggal(u.toko_sampai) : 'Tidak aktif'}
       <div class="aksi">
         <button onclick="ubahVerifikasi('${u.user_id}', true)">Verifikasi</button>
         <button onclick="ubahVerifikasi('${u.user_id}', false)">Batalkan</button>
+        <button onclick="ubahToko('${u.user_id}', true)">🏪 Jadikan Toko (30 hari)</button>
+        <button onclick="ubahToko('${u.user_id}', false)">Matikan Toko</button>
       </div>
     </div>
   `
@@ -66,20 +98,50 @@ function renderUsers(users) {
     .join('');
 }
 
+async function ubahToko(user_id, aktif) {
+  const result = await apiPost('adminSetToko', { password: adminPassword, user_id, aktif, hari: 30 });
+  if (result.error) return alert(result.error);
+  semuaUsers = await apiGet('adminGetUsers', { password: adminPassword });
+  renderUsers(semuaUsers);
+}
+
 async function ubahVerifikasi(user_id, verified) {
   const result = await apiPost('adminSetVerified', { password: adminPassword, user_id, verified });
   if (result.error) return alert(result.error);
-  renderUsers(await apiGet('adminGetUsers', { password: adminPassword }));
+  semuaUsers = await apiGet('adminGetUsers', { password: adminPassword });
+  renderUsers(semuaUsers);
 }
 
-// --- Tab: Listing Unggulan ---
+// --- Tab: Listing Unggulan (dengan pencarian) ---
 function renderProducts(products) {
   const el = document.getElementById('panelProducts');
+
   if (!Array.isArray(products) || products.length === 0) {
     el.innerHTML = '<p class="empty-state">Belum ada produk.</p>';
     return;
   }
-  el.innerHTML = products
+
+  el.innerHTML = `
+    <input type="text" id="cariProduk" class="search-box" placeholder="🔍 Cari nama barang atau penjual..." />
+    <p style="font-size:0.8rem; color:var(--color-muted); margin-bottom:10px;">${products.length} barang total</p>
+    <div id="daftarProduk"></div>
+  `;
+
+  gambarDaftarProduk(products);
+
+  document.getElementById('cariProduk').addEventListener('input', (e) => {
+    const kata = e.target.value.toLowerCase();
+    const hasil = products.filter(
+      (p) =>
+        (p.nama_barang || '').toLowerCase().includes(kata) ||
+        (p.penjual_nama || '').toLowerCase().includes(kata)
+    );
+    gambarDaftarProduk(hasil);
+  });
+}
+
+function gambarDaftarProduk(products) {
+  document.getElementById('daftarProduk').innerHTML = products
     .map(
       (p) => `
     <div class="admin-row">
@@ -89,11 +151,20 @@ function renderProducts(products) {
       <div class="aksi">
         <button onclick="ubahUnggulan('${p.product_id}', true)">Jadikan Unggulan (7 hari)</button>
         <button onclick="ubahUnggulan('${p.product_id}', false)">Matikan</button>
+        <button onclick="sundulProduk('${p.product_id}')">🚀 Sundul ke Atas</button>
       </div>
     </div>
   `
     )
     .join('');
+}
+
+async function sundulProduk(product_id) {
+  const result = await apiPost('adminSundul', { password: adminPassword, product_id });
+  if (result.error) return alert(result.error);
+  alert('Berhasil disundul!');
+  semuaProducts = await apiGet('adminGetProducts', { password: adminPassword });
+  renderProducts(semuaProducts);
 }
 
 function formatTanggal(v) {
@@ -105,7 +176,8 @@ function formatTanggal(v) {
 async function ubahUnggulan(product_id, aktif) {
   const result = await apiPost('adminSetFeatured', { password: adminPassword, product_id, aktif, hari: 7 });
   if (result.error) return alert(result.error);
-  renderProducts(await apiGet('adminGetProducts', { password: adminPassword }));
+  semuaProducts = await apiGet('adminGetProducts', { password: adminPassword });
+  renderProducts(semuaProducts);
 }
 
 // --- Tab: Tambah Iklan ---
