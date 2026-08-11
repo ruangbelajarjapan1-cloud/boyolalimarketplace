@@ -33,31 +33,34 @@ function mulaiOnboardingJikaPerlu() {
 }
 
 function tampilkanSlideOnboarding() {
-  const area = document.getElementById('onboardingArea');
+  document.getElementById('onboardingArea').innerHTML = '';
   const s = SLIDE_ONBOARDING[onbIndex];
   const isTerakhir = onbIndex === SLIDE_ONBOARDING.length - 1;
 
-  area.innerHTML = `
-    <div class="modal-overlay">
-      <div class="modal-box">
-        <div class="onb-slide">
-          <div class="onb-icon">${s.icon}</div>
-          <h3>${s.judul}</h3>
-          <p>${s.teks}</p>
-        </div>
-        <div class="onb-dots">
-          ${SLIDE_ONBOARDING.map((_, i) => `<span class="${i === onbIndex ? 'active' : ''}"></span>`).join('')}
-        </div>
-        <div class="onb-actions">
-          <button class="onb-skip" id="onbSkip">Lewati</button>
-          <button class="onb-next" id="onbNext">${isTerakhir ? 'Mulai' : 'Lanjut'}</button>
-        </div>
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.id = 'modalOnboarding';
+  modal.innerHTML = `
+    <div class="modal-box">
+      <div class="onb-slide">
+        <div class="onb-icon">${s.icon}</div>
+        <h3>${s.judul}</h3>
+        <p>${s.teks}</p>
+      </div>
+      <div class="onb-dots">
+        ${SLIDE_ONBOARDING.map((_, i) => `<span class="${i === onbIndex ? 'active' : ''}"></span>`).join('')}
+      </div>
+      <div class="onb-actions">
+        <button class="onb-skip" id="onbSkip">Lewati</button>
+        <button class="onb-next" id="onbNext">${isTerakhir ? 'Mulai' : 'Lanjut'}</button>
       </div>
     </div>
   `;
+  document.body.appendChild(modal);
 
   document.getElementById('onbSkip').addEventListener('click', selesaiOnboarding);
   document.getElementById('onbNext').addEventListener('click', () => {
+    modal.remove();
     if (isTerakhir) {
       selesaiOnboarding();
     } else {
@@ -69,7 +72,8 @@ function tampilkanSlideOnboarding() {
 
 function selesaiOnboarding() {
   localStorage.setItem('onboardingSelesai', '1');
-  document.getElementById('onboardingArea').innerHTML = '';
+  const modalLama = document.getElementById('modalOnboarding');
+  if (modalLama) modalLama.remove();
   tampilkanPilihWilayahJikaPerlu();
 }
 
@@ -83,39 +87,39 @@ function tampilkanPilihWilayahJikaPerlu() {
     return;
   }
 
-  const area = document.getElementById('onboardingArea');
   const opsi = ['Boyolali', 'Surakarta (Solo)', 'Sukoharjo', 'Karanganyar', 'Sragen', 'Klaten', 'Semarang', 'Salatiga', 'Wonogiri'];
 
-  area.innerHTML = `
-    <div class="modal-overlay">
-      <div class="modal-box">
-        <div class="onb-slide">
-          <div class="onb-icon">📍</div>
-          <h3>Anda di kabupaten/kota mana?</h3>
-          <p>Biar barang yang muncul pertama kali langsung relevan dengan daerah Anda.</p>
-        </div>
-        <div class="form-group">
-          <select id="pilihWilayahAwal">
-            ${opsi.map((o) => `<option value="${o}">${o}</option>`).join('')}
-          </select>
-        </div>
-        <button class="btn btn-primary" id="btnSimpanWilayah">Mulai Jelajah</button>
-        <button class="onb-skip" id="btnSemuaWilayah" style="display:block; margin:10px auto 0;">Lihat semua wilayah saja</button>
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-box">
+      <div class="onb-slide">
+        <div class="onb-icon">📍</div>
+        <h3>Anda di kabupaten/kota mana?</h3>
+        <p>Biar barang yang muncul pertama kali langsung relevan dengan daerah Anda.</p>
       </div>
+      <div class="form-group">
+        <select id="pilihWilayahAwal">
+          ${opsi.map((o) => `<option value="${o}">${o}</option>`).join('')}
+        </select>
+      </div>
+      <button class="btn btn-primary" id="btnSimpanWilayah">Mulai Jelajah</button>
+      <button class="onb-skip" id="btnSemuaWilayah" style="display:block; margin:10px auto 0;">Lihat semua wilayah saja</button>
     </div>
   `;
+  document.body.appendChild(modal);
 
   document.getElementById('btnSimpanWilayah').addEventListener('click', () => {
     const pilihan = document.getElementById('pilihWilayahAwal').value;
     localStorage.setItem('wilayahPilihan', pilihan);
     document.getElementById('kabupatenFilter').value = pilihan;
-    area.innerHTML = '';
+    modal.remove();
     muatProduk();
   });
 
   document.getElementById('btnSemuaWilayah').addEventListener('click', () => {
     localStorage.setItem('wilayahPilihan', '');
-    area.innerHTML = '';
+    modal.remove();
   });
 }
 
@@ -360,6 +364,45 @@ document.getElementById('categoryChips').addEventListener('wheel', (e) => {
   e.preventDefault();
   e.currentTarget.scrollLeft += e.deltaY;
 });
+
+// Geser pakai klik-tahan-tarik mouse (buat pengguna PC/Laptop)
+(function aktifkanDragScrollChip() {
+  const chips = document.getElementById('categoryChips');
+  let menggeser = false;
+  let sudahGeserJauh = false;
+  let mulaiX = 0;
+  let scrollMula = 0;
+
+  chips.addEventListener('mousedown', (e) => {
+    menggeser = true;
+    sudahGeserJauh = false;
+    chips.classList.add('dragging');
+    mulaiX = e.pageX;
+    scrollMula = chips.scrollLeft;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!menggeser) return;
+    const jarak = e.pageX - mulaiX;
+    if (Math.abs(jarak) > 5) sudahGeserJauh = true;
+    e.preventDefault();
+    chips.scrollLeft = scrollMula - jarak;
+  });
+
+  window.addEventListener('mouseup', () => {
+    menggeser = false;
+    chips.classList.remove('dragging');
+  });
+
+  // Kalau tadi benar-benar digeser (bukan sekadar klik), batalkan klik chip
+  // supaya kategori tidak ganti tidak sengaja
+  chips.addEventListener('click', (e) => {
+    if (sudahGeserJauh) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }, true);
+})();
 
 let timer;
 document.getElementById('searchInput').addEventListener('input', () => {
