@@ -594,19 +594,24 @@ h1, h2, h3 {
   inset: 0;
   background: rgba(0,0,0,0.55);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   z-index: 200;
-  padding: 20px;
+  padding: 0;
 }
 .modal-box {
   background: white;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   padding: 22px;
-  max-width: 380px;
+  max-width: var(--max-width);
   width: 100%;
   max-height: 88vh;
   overflow-y: auto;
+  animation: sheetSlideUp 0.25s ease;
+}
+@keyframes sheetSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }
 
 .onb-slide { text-align: center; padding: 10px 4px 4px; }
@@ -665,6 +670,7 @@ h1, h2, h3 {
   aspect-ratio: 1/1;
   object-fit: cover;
   background: #eee;
+  cursor: pointer;
 }
 .gallery-dots { display: flex; justify-content: center; gap: 5px; margin-top: 8px; }
 .gallery-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--color-border); }
@@ -717,6 +723,121 @@ h1, h2, h3 {
   box-shadow: 0 4px 12px rgba(232,150,10,0.28);
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
+
+/* ---------------- Toast Notification ---------------- */
+.toast-container {
+  position: fixed;
+  bottom: 96px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 500;
+  pointer-events: none;
+  padding: 0 16px;
+}
+.toast {
+  background: #20261f;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  animation: toastIn 0.25s ease, toastOut 0.25s ease 2.2s forwards;
+  max-width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.toast.success { background: var(--color-primary-dark); }
+.toast.error { background: #c0392b; }
+@keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toastOut { to { opacity: 0; transform: translateY(10px); } }
+
+/* ---------------- Lightbox (zoom foto) ---------------- */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-overlay img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+}
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: none;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* ---------------- Skeleton baris (untuk halaman list) ---------------- */
+.skeleton-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: var(--color-card);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-card);
+}
+.skeleton-row .skeleton-block.avatar { width: 52px; height: 52px; border-radius: var(--radius-sm); flex-shrink: 0; }
+.skeleton-row .skeleton-block.text { flex: 1; height: 12px; border-radius: 6px; }
+.skeleton-row .skeleton-block.text.short { flex: 0 0 50%; }
+
+/* ---------------- Micro-interaction: heartbeat ---------------- */
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.35); }
+  50% { transform: scale(0.95); }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.fav-heart.beat svg { animation: heartBeat 0.5s ease; }
+
+/* ---------------- Pull-to-refresh ---------------- */
+.ptr-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.2s ease;
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.ptr-indicator.active { height: 44px; }
+.ptr-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: ptrSpin 0.6s linear infinite;
+}
+@keyframes ptrSpin { to { transform: rotate(360deg); } }
 
 /* ---------------- Misc ---------------- */
 .empty-state {
