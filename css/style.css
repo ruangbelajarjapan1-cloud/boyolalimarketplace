@@ -526,6 +526,8 @@ h1, h2, h3 {
 }
 
 .bottom-nav .nav-fab svg { width: 24px; height: 24px; stroke: white; }
+.bottom-nav .nav-fab-text { display: none; }
+.sidebar-brand { display: none; }
 
 /* ---------------- Section title & Listing Unggulan ---------------- */
 .section-title {
@@ -949,66 +951,101 @@ h1, h2, h3 {
 
 /* --- Desktop (1000px ke atas): nav bawah jadi sidebar kiri --- */
 @media (min-width: 1000px) {
+  body { padding-bottom: 0; padding-left: 240px; background: var(--color-bg); }
+
   .container {
-    max-width: 900px;
-    padding: 24px 32px;
+    max-width: 880px;
+    padding: 32px 40px;
   }
   .app-header {
     max-width: none;
     border-radius: 0 0 32px 32px;
-    padding-left: max(32px, calc(50% - 450px + 32px));
-    padding-right: max(32px, calc(50% - 450px + 32px));
+    padding-left: max(40px, calc(50% - 440px + 40px));
+    padding-right: max(40px, calc(50% - 440px + 40px));
   }
 
-  body { padding-bottom: 0; padding-left: 220px; }
-
+  /* ---- Sidebar ---- */
   .bottom-nav {
     top: 0;
     bottom: 0;
     left: 0;
     right: auto;
-    width: 220px;
+    width: 240px;
     height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
-    gap: 6px;
-    padding: 28px 16px;
+    gap: 2px;
+    padding: 0 16px 20px;
     border-top: none;
     border-right: 1px solid var(--color-border);
+    background: var(--color-card);
   }
-  .bottom-nav .nav-item {
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 12px;
-    padding: 12px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 0.85rem;
+
+  /* Identitas brand di puncak sidebar — cuma tampil di desktop */
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 24px 6px 20px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--color-border);
+    order: -2;
   }
-  .bottom-nav .nav-item:hover { background: var(--color-bg); }
-  .bottom-nav .nav-item.active { background: var(--color-primary-light); }
-  .bottom-nav .nav-item svg { width: 20px; height: 20px; }
-  .bottom-nav .nav-spacer { display: none; }
+  .sidebar-brand img { width: 32px; height: 32px; border-radius: 9px; }
+  .sidebar-brand span {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--color-ink);
+  }
+
+  /* Tombol aksi utama (Upload) — menonjol, ditaruh di atas daftar menu */
   .bottom-nav .nav-fab {
     position: static;
+    order: -1;
     width: 100%;
-    height: 48px;
+    height: 46px;
     border-radius: var(--radius-sm);
     flex-direction: row;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     padding: 0 14px;
     border: none;
-    background: var(--color-primary);
-    margin: 0 0 16px;
-    order: -1;
-    box-shadow: none;
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+    box-shadow: 0 4px 12px rgba(232, 150, 10, 0.28);
+    margin-bottom: 18px;
   }
-  .bottom-nav .nav-fab svg { width: 20px; height: 20px; }
+  .bottom-nav .nav-fab svg { width: 18px; height: 18px; }
+  .bottom-nav .nav-fab-text {
+    display: inline;
+    color: white;
+    font-weight: 700;
+    font-size: 0.85rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
 
-  .sticky-cta { left: 220px; }
-  .chat-input-row { left: 220px; }
+  /* Menu navigasi — ikon + label sejajar, jarak antar item konsisten */
+  .bottom-nav .nav-item {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.87rem;
+    font-weight: 600;
+    transition: background 0.15s ease;
+  }
+  .bottom-nav .nav-item:hover { background: var(--color-bg); }
+  .bottom-nav .nav-item.active { background: var(--color-primary-light); color: var(--color-primary-dark); }
+  .bottom-nav .nav-item svg { width: 19px; height: 19px; flex-shrink: 0; }
+  .bottom-nav .nav-spacer { display: none; }
+
+  /* Elemen yang butuh geser karena sidebar sekarang makan tempat kiri */
+  .sticky-cta { left: 240px; }
+  .chat-input-row { left: 240px; }
 
   .product-grid { grid-template-columns: repeat(3, 1fr); }
 }
