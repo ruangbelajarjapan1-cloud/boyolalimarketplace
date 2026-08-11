@@ -31,6 +31,9 @@ async function muatDetail() {
   const badgeVerif = p.penjual_terverifikasi
     ? '<span class="badge badge-verified">✅ Terverifikasi</span>'
     : '<span class="badge" style="background:#eee; color:var(--color-muted);">Belum Terverifikasi</span>';
+  const badgeBaru = (!p.penjual_terverifikasi && p.penjual_akun_baru)
+    ? '<span class="badge badge-baru">🆕 Akun Baru</span>'
+    : '';
   const terjual = p.status === 'Terjual';
 
   const fotoList = [p.foto_url, p.foto_url_2, p.foto_url_3].filter((f) => f);
@@ -63,10 +66,13 @@ async function muatDetail() {
         <p style="margin:0; font-weight:700;">${p.penjual_nama || 'Warga'}</p>
         <div style="display:flex; gap:6px; align-items:center; margin-top:2px; flex-wrap:wrap;">
           ${badgeVerif}
+          ${badgeBaru}
           ${p.penjual_rating_count ? `<span class="rating-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg><span class="rating-text">${p.penjual_rating_avg} (${p.penjual_rating_count} ulasan)</span></span>` : '<span class="rating-text">Belum ada ulasan</span>'}
         </div>
       </div>
     </div>
+
+    ${badgeBaru ? '<div class="info-note" style="background:#fff4e0; border-color:#f5d99e; color:#a4700f;">🆕 Penjual ini baru bergabung minggu ini. Tetap hati-hati seperti biasa — utamakan COD di tempat umum, terutama untuk barang bernilai tinggi.</div>' : ''}
 
     <p class="section-title" style="margin-top:18px;">Deskripsi</p>
     <p style="line-height:1.6; color: var(--color-ink);">${p.deskripsi || 'Tidak ada deskripsi.'}</p>
@@ -101,23 +107,16 @@ async function muatDetail() {
   muatKomentar(id);
 }
 
-// ------------------------------------------------------------
-// GALERI — dot indikator ikut geser
-// ------------------------------------------------------------
 function pasangGalleryScroll(jumlahFoto) {
   if (jumlahFoto <= 1) return;
   const scroll = document.getElementById('galleryScroll');
   const dots = document.querySelectorAll('#galleryDots span');
-
   scroll.addEventListener('scroll', () => {
     const index = Math.round(scroll.scrollLeft / scroll.clientWidth);
     dots.forEach((d, i) => d.classList.toggle('active', i === index));
   });
 }
 
-// ------------------------------------------------------------
-// FAVORIT di halaman detail
-// ------------------------------------------------------------
 async function cekFavoritAktif(productId, userId) {
   const hasil = await apiGet('getFavorites', { user_id: userId });
   if (!Array.isArray(hasil)) return false;
@@ -129,10 +128,8 @@ function pasangFavoritDetail(productId) {
   btn.addEventListener('click', async () => {
     const user = await requireUser();
     if (!user) return;
-
     const aktif = btn.classList.contains('active');
     btn.classList.toggle('active');
-
     if (aktif) {
       await apiPost('removeFavorite', { user_id: user.user_id, product_id: productId });
     } else {
@@ -141,9 +138,6 @@ function pasangFavoritDetail(productId) {
   });
 }
 
-// ------------------------------------------------------------
-// SHARE KE WHATSAPP
-// ------------------------------------------------------------
 function pasangShareWa(p) {
   document.getElementById('btnShareWa').addEventListener('click', () => {
     const harga = Number(p.harga) === 0 ? 'GRATIS' : 'Rp' + Number(p.harga).toLocaleString('id-ID');
@@ -152,9 +146,6 @@ function pasangShareWa(p) {
   });
 }
 
-// ------------------------------------------------------------
-// LAPORKAN BARANG
-// ------------------------------------------------------------
 function pasangLaporkan(p) {
   document.getElementById('btnLaporkan').addEventListener('click', () => {
     const modal = document.createElement('div');
@@ -187,9 +178,7 @@ function pasangLaporkan(p) {
     document.getElementById('btnKirimLapor').addEventListener('click', async () => {
       const user = await requireUser();
       if (!user) return;
-
       const alasan = document.getElementById('alasanLapor').value + ' — ' + document.getElementById('detailLapor').value;
-
       await apiPost('addReport', {
         jenis: 'barang',
         target_id: p.product_id,
@@ -197,7 +186,6 @@ function pasangLaporkan(p) {
         pelapor_id: user.user_id,
         alasan,
       });
-
       modal.innerHTML = `
         <div class="modal-box" style="text-align:center;">
           <p style="font-size:2rem; margin:0;">✅</p>
@@ -210,9 +198,6 @@ function pasangLaporkan(p) {
   });
 }
 
-// ------------------------------------------------------------
-// KOMENTAR PUBLIK
-// ------------------------------------------------------------
 async function muatKomentar(productId) {
   const section = document.getElementById('commentSection');
   section.innerHTML = `
@@ -234,10 +219,8 @@ async function muatKomentar(productId) {
     const input = document.getElementById('inputKomentar');
     const isi = input.value.trim();
     if (!isi) return;
-
     const user = await requireUser();
     if (!user) return;
-
     input.value = '';
     await apiPost('addComment', {
       product_id: productId,
@@ -245,7 +228,6 @@ async function muatKomentar(productId) {
       nama_pengirim: user.nama,
       isi_komentar: isi,
     });
-
     const updated = await apiGet('getComments', { productId });
     gambarKomentar(updated);
   });
