@@ -414,9 +414,6 @@ h1, h2, h3 {
   border-bottom-right-radius: 4px;
 }
 
-.centang { font-size: 0.68rem; margin-left: 6px; color: rgba(255,255,255,0.55); letter-spacing: -2px; }
-.centang.dibaca { color: #7cd6ff; letter-spacing: -1px; }
-
 .bubble.theirs {
   align-self: flex-start;
   background: var(--color-card);
@@ -695,6 +692,13 @@ h1, h2, h3 {
   cursor: pointer;
   padding: 0;
 }
+
+/* ---------------- Chat centang terkirim/dibaca ---------------- */
+.centang { font-size: 0.68rem; margin-left: 6px; color: rgba(255,255,255,0.55); letter-spacing: -2px; }
+.centang.dibaca { color: #7cd6ff; letter-spacing: -1px; }
+
+/* ---------------- Badge akun baru ---------------- */
+.badge-baru { background: #fff4e0; color: #a4700f; }
 
 /* ---------------- Misc ---------------- */
 .empty-state {
