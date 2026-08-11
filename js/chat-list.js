@@ -61,8 +61,6 @@ function formatWaktuRelatif(waktuStr) {
 
 muatDaftarChat();
 
-// Refresh tiap 4 detik biar pesan baru ikut muncul — otomatis berhenti
-// kalau tab/app tidak aktif dilihat, biar hemat kuota Apps Script
 let pollingChatList = setInterval(muatDaftarChat, 4000);
 
 document.addEventListener('visibilitychange', () => {
