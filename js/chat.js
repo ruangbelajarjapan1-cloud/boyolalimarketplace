@@ -1,10 +1,5 @@
 // ============================================================
 // CHAT.JS — logika untuk chat.html
-//
-// Catatan: ini pakai "polling" (cek pesan baru tiap 3 detik),
-// BUKAN realtime asli. Cukup untuk tahap MVP/Spreadsheet.
-// Setelah pindah ke Supabase, ganti dengan Supabase Realtime
-// supaya pesan muncul instan tanpa jeda.
 // ============================================================
 
 let currentUserId = null;
@@ -22,7 +17,6 @@ async function mulaiChat() {
   if (!user) return;
   currentUserId = user.user_id;
 
-  // Kalau yang buka chat adalah penjualnya sendiri, jangan chat ke diri sendiri
   if (currentUserId === lawanBicaraId) {
     document.getElementById('chatWindow').innerHTML =
       '<p class="empty-state">Ini barang Anda sendiri.</p>';
@@ -32,8 +26,6 @@ async function mulaiChat() {
   await muatPesan();
   jalankanPolling();
 
-  // Hemat kuota: berhenti polling kalau tab/app tidak aktif dilihat,
-  // langsung jalan lagi begitu balik dibuka
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       clearInterval(pollingInterval);
@@ -75,8 +67,6 @@ async function muatPesan() {
 
   chatWindow.scrollTop = chatWindow.scrollHeight;
 
-  // Tandai pesan dari lawan bicara sebagai sudah dibaca, karena kita
-  // sedang aktif melihat percakapan ini
   apiPost('markMessagesRead', {
     terkait_id: productId,
     user_id: currentUserId,
