@@ -169,8 +169,11 @@ async function muatProduk() {
   const kabupaten = document.getElementById('kabupatenFilter').value;
   if (kabupaten) params.kabupaten = kabupaten;
 
-  await muatFavoritSaya();
-  let produkList = await apiGet('getProducts', params);
+  const [, produkListHasil] = await Promise.all([
+    muatFavoritSaya(),
+    apiGet('getProducts', params),
+  ]);
+  let produkList = produkListHasil;
 
   if (produkList && produkList.error) {
     grid.innerHTML = `<p class="empty-state">⚠️ ${pesanErrorRamah(produkList.error)}</p>`;
