@@ -4,6 +4,8 @@
 
 async function muatFavorit() {
   const grid = document.getElementById('productGrid');
+  grid.innerHTML = skeletonCardsFavorit();
+
   const user = await requireUser();
   if (!user) return;
 
@@ -34,6 +36,16 @@ async function muatFavorit() {
       muatFavorit();
     });
   });
+}
+
+function skeletonCardsFavorit() {
+  return Array(4).fill(0).map(() => `
+    <div class="skeleton-card">
+      <div class="skeleton-block img"></div>
+      <div class="skeleton-block line"></div>
+      <div class="skeleton-block line short"></div>
+    </div>
+  `).join('');
 }
 
 function produkKeCardFavorit(p) {
