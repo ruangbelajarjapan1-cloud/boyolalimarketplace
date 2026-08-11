@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Syarat & Ketentuan - Dulur</title>
+  <link rel="stylesheet" href="css/style.css?v=8" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0eab6f" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="icon" href="favicon.png" />
+  <style>
+    .doc-section { margin-bottom: 28px; }
+    .doc-section h2 {
+      font-size: 1.05rem;
+      color: var(--color-primary-dark);
+      border-bottom: 2px solid var(--color-primary-light);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .doc-section h3 { font-size: 0.92rem; margin: 16px 0 6px; }
+    .doc-section p, .doc-section li { font-size: 0.87rem; line-height: 1.65; color: var(--color-ink); }
+    .doc-section ul { padding-left: 20px; margin: 6px 0; }
+    .doc-nav { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 20px; scrollbar-width: none; }
+    .doc-nav::-webkit-scrollbar { display: none; }
+    .doc-nav a {
+      flex-shrink: 0; padding: 8px 14px; border-radius: 999px; background: var(--color-card);
+      border: 1px solid var(--color-border); font-size: 0.78rem; font-weight: 600;
+      color: var(--color-primary-dark); text-decoration: none; box-shadow: var(--shadow-card);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-header">
+    <a href="profil.html" class="header-back" aria-label="Kembali">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </a>
+    Syarat & Ketentuan
+  </div>
+
+  <div class="container" style="padding-bottom: 60px;">
+    <div class="info-note">
+      Terakhir diperbarui: <strong>Agustus 2026</strong>. Dengan menggunakan
+      Dulur, Anda menyetujui seluruh isi halaman ini.
+    </div>
+
+    <div class="doc-nav">
+      <a href="#bagian-a">📄 Syarat & Ketentuan</a>
+      <a href="#bagian-b">🤝 Peraturan Komunitas</a>
+      <a href="#bagian-c">🔒 Privasi</a>
+    </div>
+
+    <div class="doc-section" id="bagian-a">
+      <h2>A. Syarat & Ketentuan Penggunaan</h2>
+
+      <h3>A.1 Tentang Layanan Ini</h3>
+      <p>
+        Dulur ("Aplikasi", "Kami", "Platform") adalah layanan yang
+        mempertemukan warga yang ingin menjual dan membeli barang bekas
+        maupun baru secara langsung (C2C), di wilayah Boyolali dan
+        sekitarnya (Surakarta/Solo, Sukoharjo, Karanganyar, Sragen, Klaten,
+        Semarang, Salatiga, Wonogiri).
+      </p>
+
+      <h3>A.2 Peran Kami Sebagai Penyedia Platform</h3>
+      <ul>
+        <li><strong>Kami hanya penyedia sarana</strong> yang mempertemukan penjual dan pembeli. Kami <strong>bukan pihak</strong> dalam transaksi jual-beli itu sendiri.</li>
+        <li><strong>Serah terima barang dan pembayaran (COD) sepenuhnya menjadi tanggung jawab Penjual dan Pembeli sendiri</strong> — termasuk kesepakatan waktu, lokasi, cara bayar, dan kondisi barang. Kami tidak hadir, tidak mengawasi, dan tidak menjamin proses serah terima tersebut.</li>
+        <li>Kami <strong>tidak bertanggung jawab</strong> atas kerugian yang timbul dari transaksi antar Pengguna, termasuk barang tidak sesuai deskripsi, pembatalan sepihak, penipuan, atau kejadian saat pertemuan langsung.</li>
+        <li>Kami menganjurkan (tapi tidak mewajibkan) Pengguna bertemu di tempat umum yang ramai saat COD, demi keamanan bersama.</li>
+      </ul>
+
+      <h3>A.3 Syarat Menjadi Pengguna</h3>
+      <ul>
+        <li>Wajib memberikan data yang benar (nama, nomor HP) saat mulai menggunakan Aplikasi.</li>
+        <li>Bertanggung jawab penuh atas keamanan identitasnya sendiri di perangkat yang digunakan.</li>
+        <li>Ditujukan untuk pengguna berusia 18 tahun ke atas, atau di bawah 18 tahun dengan izin dan pengawasan orang tua/wali untuk transaksi yang melibatkan uang.</li>
+      </ul>
+
+      <h3>A.4 Kewajiban Penjual</h3>
+      <ul>
+        <li>Mencantumkan deskripsi, harga, dan foto barang secara jujur dan akurat.</li>
+        <li>Tidak menjual barang sebagaimana diatur dalam Bagian B (Barang Terlarang).</li>
+        <li>Menghormati kesepakatan yang sudah dibuat dengan calon pembeli.</li>
+        <li>Menandai barang sebagai "Terjual" setelah transaksi selesai.</li>
+      </ul>
+
+      <h3>A.5 Kewajiban Pembeli</h3>
+      <ul>
+        <li>Memeriksa kondisi barang secara langsung sebelum membayar — pembayaran COD dan <strong>tidak ada pengembalian dana otomatis dari Platform</strong>.</li>
+        <li>Datang tepat waktu sesuai kesepakatan, atau memberi tahu jika berhalangan.</li>
+      </ul>
+
+      <h3>A.6 Fitur Berbayar</h3>
+      <p>
+        Platform menyediakan fitur berbayar opsional: Listing Unggulan,
+        Iklan Lokal, dan Verifikasi Akun. Biaya Listing Unggulan saat ini:
+        <strong id="infoHarga">memuat...</strong>. Pembayaran fitur ini
+        <strong>tidak dapat dikembalikan</strong> setelah aktif (kecuali
+        kesalahan teknis dari Platform), dan terpisah dari transaksi
+        jual-beli barang — Platform tidak memungut komisi dari harga barang.
+      </p>
+
+      <h3>A.7 Penangguhan Akun</h3>
+      <p>
+        Kami berhak menangguhkan/menghapus akun yang melanggar Peraturan
+        Komunitas, terbukti menipu berdasarkan laporan pengguna lain, atau
+        menyalahgunakan fitur Platform.
+      </p>
+
+      <h3>A.8 Batasan Tanggung Jawab</h3>
+      <p>
+        Sepanjang diizinkan hukum yang berlaku, Platform tidak bertanggung
+        jawab atas kerugian tidak langsung, kehilangan barang, atau
+        sengketa antar Pengguna. Penggunaan Aplikasi adalah risiko
+        masing-masing.
+      </p>
+
+      <h3>A.9 Kontak</h3>
+      <p>Pertanyaan, laporan, atau keluhan terkait Platform: <strong id="infoKontak">memuat...</strong></p>
+    </div>
+
+    <div class="doc-section" id="bagian-b">
+      <h2>B. Peraturan Komunitas</h2>
+
+      <h3>B.1 Semangat Komunitas</h3>
+      <p>
+        Dulur dibangun untuk memudahkan warga Boyolali dan sekitarnya
+        bertransaksi dengan aman dan nyaman antar sesama warga. Perlakukan
+        Pengguna lain seperti tetangga sendiri — jujur, sopan, dan saling
+        menghargai.
+      </p>
+
+      <h3>B.2 Barang yang Dilarang</h3>
+      <p>Dilarang keras memposting atau memperjualbelikan:</p>
+      <ul>
+        <li>Senjata api, senjata tajam ilegal, bahan peledak.</li>
+        <li>Narkotika, psikotropika, dan obat-obatan terlarang lainnya.</li>
+        <li>Barang hasil curian atau tidak jelas asal-usulnya.</li>
+        <li>Satwa dilindungi.</li>
+        <li>Konten atau barang bermuatan pornografi.</li>
+        <li>Dokumen palsu (ijazah, KTP, sertifikat, dll).</li>
+        <li>Obat-obatan farmasi tanpa izin edar resmi.</li>
+        <li>Barang tiruan/palsu (KW) yang melanggar merek dagang.</li>
+        <li>Barang lain yang bertentangan dengan hukum Indonesia.</li>
+      </ul>
+      <p>Pelanggaran berujung pada penghapusan listing dan penangguhan akun.</p>
+
+      <h3>B.3 Etika Berkomunikasi (Chat & Komentar)</h3>
+      <ul>
+        <li>Dilarang spam, promosi di luar konteks, atau tautan mencurigakan.</li>
+        <li>Dilarang pelecehan, ancaman, atau ujaran kebencian dalam bentuk apa pun.</li>
+        <li>Dilarang meminta transfer di luar kesepakatan wajar (waspada modus "DP" tanpa bertemu langsung).</li>
+      </ul>
+
+      <h3>B.4 Etika Bertransaksi & COD</h3>
+      <ul>
+        <li>Utamakan bertemu di tempat umum yang ramai, terutama untuk transaksi pertama dengan orang baru.</li>
+        <li>Untuk barang bernilai tinggi, pertimbangkan mengajak teman/keluarga.</li>
+        <li>Periksa barang secara langsung sebelum membayar.</li>
+        <li>Jangan berikan data pribadi sensitif (KTP asli, PIN, password) lewat chat.</li>
+      </ul>
+
+      <h3>B.5 Larangan Manipulasi Platform</h3>
+      <ul>
+        <li>Dilarang membuat akun palsu/ganda untuk memanipulasi kepercayaan.</li>
+        <li>Dilarang menyalahgunakan fitur "Listing Unggulan" dengan barang fiktif.</li>
+      </ul>
+
+      <h3>B.6 Pelaporan</h3>
+      <p>Temukan pelanggaran? Laporkan lewat tombol "🚩 Laporkan Barang Ini" di halaman Detail Barang, atau hubungi: <strong id="infoKontak2">memuat...</strong></p>
+    </div>
+
+    <div class="doc-section" id="bagian-c">
+      <h2>C. Kebijakan Privasi</h2>
+      <p>Sesuai semangat UU No. 27 Tahun 2022 tentang Perlindungan Data Pribadi (UU PDP).</p>
+
+      <h3>C.1 Data yang Kami Kumpulkan</h3>
+      <ul>
+        <li>Nama, nomor HP/WhatsApp, lokasi kecamatan & kabupaten.</li>
+        <li>Foto dan deskripsi barang yang Anda posting.</li>
+        <li>Isi chat & komentar publik terkait transaksi.</li>
+        <li>Foto KTP — hanya jika Anda memilih verifikasi opsional, dikirim manual ke pengelola, tidak disimpan otomatis di sistem pada tahap ini.</li>
+      </ul>
+
+      <h3>C.2 Bagaimana Data Digunakan</h3>
+      <ul>
+        <li>Menampilkan listing Anda ke Pengguna lain.</li>
+        <li>Memungkinkan komunikasi antar Pengguna.</li>
+        <li>Keperluan verifikasi akun (jika dipilih).</li>
+        <li><strong>Tidak dijual</strong> ke pihak ketiga atau untuk iklan di luar Platform.</li>
+      </ul>
+
+      <h3>C.3 Penyimpanan Data</h3>
+      <p>Saat ini data disimpan di Google Spreadsheet milik pengelola Aplikasi, akses terbatas hanya untuk pengelola.</p>
+
+      <h3>C.4 Hak Anda</h3>
+      <p>Anda berhak meminta penghapusan data dengan menghubungi: <strong id="infoKontak3">memuat...</strong></p>
+
+      <h3>C.5 Keamanan</h3>
+      <p>
+        Kami berupaya menjaga keamanan data Anda, namun tidak ada sistem
+        yang 100% bebas risiko. Jangan bagikan informasi sangat sensitif
+        (password, PIN, nomor rekening) lewat fitur chat Aplikasi.
+      </p>
+    </div>
+  </div>
+
+  <script src="js/config.js?v=8"></script>
+  <script>
+    const hariText = DURASI_UNGGULAN_HARI + ' hari';
+    const hargaText = 'Rp' + HARGA_UNGGULAN.toLocaleString('id-ID') + ' / ' + hariText;
+    document.getElementById('infoHarga').textContent = hargaText;
+
+    const kontakText = NOMOR_WA_ADMIN.indexOf('GANTI') === -1
+      ? 'WhatsApp ' + NOMOR_WA_ADMIN
+      : '[nomor kontak pengelola]';
+    document.getElementById('infoKontak').textContent = kontakText;
+    document.getElementById('infoKontak2').textContent = kontakText;
+    document.getElementById('infoKontak3').textContent = kontakText;
+  </script>
+  <script src="js/register-sw.js?v=8"></script>
+</body>
+</html>
