@@ -4,6 +4,7 @@
 
 async function muatBarangSaya() {
   const container = document.getElementById('listContainer');
+  container.innerHTML = skeletonRows(3);
 
   const user = await requireUser();
   if (!user) return; // requireUser sudah redirect ke daftar.html kalau belum login
@@ -24,6 +25,18 @@ async function muatBarangSaya() {
   }
 
   container.innerHTML = items.map(itemKeBaris).join('');
+}
+
+function skeletonRows(jumlah) {
+  return Array(jumlah).fill(0).map(() => `
+    <div class="skeleton-row">
+      <div class="skeleton-block avatar"></div>
+      <div style="flex:1;">
+        <div class="skeleton-block text" style="margin-bottom:8px;"></div>
+        <div class="skeleton-block text short"></div>
+      </div>
+    </div>
+  `).join('');
 }
 
 function itemKeBaris(p) {
@@ -133,17 +146,20 @@ function tampilkanFormSundul(productId, namaBarang) {
 async function ubahStatus(product_id, terjual) {
   const aksi = terjual ? 'markDone' : 'markAvailable';
   const result = await apiPost(aksi, { product_id });
-  if (result.error) return alert(result.error);
+  if (result.error) return tampilkanToast(result.error, 'error');
+  tampilkanToast(terjual ? 'Ditandai Terjual' : 'Ditandai Tersedia lagi', 'success');
   muatBarangSaya();
 }
 
 async function hapusBarang(product_id) {
-  if (!confirm('Yakin mau hapus barang ini? Tidak bisa dibatalkan.')) return;
+  const yakin = await tampilkanKonfirmasi('Barang ini akan dihapus permanen dan tidak bisa dibatalkan.', 'Hapus Barang?');
+  if (!yakin) return;
 
   const user = getCurrentUser();
   const result = await apiPost('deleteProduct', { product_id, user_id: user.user_id });
 
-  if (result.error) return alert(result.error);
+  if (result.error) return tampilkanToast(result.error, 'error');
+  tampilkanToast('Barang berhasil dihapus', 'success');
   muatBarangSaya();
 }
 
