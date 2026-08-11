@@ -71,12 +71,68 @@ function tampilkanProfil(user) {
       </div>
     `;
 
+  const tokoAktif = user.is_toko === true && user.toko_sampai && new Date(user.toko_sampai) >= new Date();
+  document.getElementById('ctaToko').innerHTML = tokoAktif
+    ? `<div class="info-note" style="background:#e0f0ff; border-color:#b3d9ff; color:#1a5fa0;">🏪 Anda Akun Toko aktif sampai ${new Date(user.toko_sampai).toLocaleDateString('id-ID')}.</div>`
+    : `<button class="btn" style="width:100%; background:#e0f0ff; color:#1a5fa0; margin-bottom:12px;" onclick="tampilkanFormToko()">🏪 Jadi Akun Toko (Rp${HARGA_TOKO_BULANAN.toLocaleString('id-ID')}/bulan)</button>`;
+
   muatRatingSaya(user.user_id);
 
   document.getElementById('areaTombol').innerHTML = `
+    <button class="donasi-btn" style="margin-bottom:10px;" onclick="tampilkanFormDonasi()">☕ Traktir Kopi untuk Developer</button>
     <a class="btn btn-secondary" href="peraturan.html" style="margin-bottom:10px;">📄 Syarat & Ketentuan</a>
     <button class="btn btn-secondary" onclick="logout(); location.reload();">Keluar</button>
   `;
+}
+
+function tampilkanFormToko() {
+  const user = getCurrentUser();
+  const hargaFormat = HARGA_TOKO_BULANAN.toLocaleString('id-ID');
+  const pesanWa = encodeURIComponent(
+    `Halo, saya (${user.nama}, ID: ${user.user_id}) mau jadi Akun Toko selama ${DURASI_TOKO_HARI} hari. Saya sudah transfer Rp${hargaFormat}. Ini bukti transfernya:`
+  );
+  const linkWa = `https://wa.me/${NOMOR_WA_ADMIN}?text=${pesanWa}`;
+
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-box">
+      <h3 style="margin-top:0;">🏪 Jadi Akun Toko</h3>
+      <p style="font-size:0.9rem; color:var(--color-muted);">
+        Badge "🏪 Toko" muncul di semua listing Anda, tanda Anda penjual
+        aktif & rutin — bukan cuma jual barang bekas sesekali.
+      </p>
+      <p style="font-size:1.3rem; font-weight:800; color:#1a5fa0; font-family:'Plus Jakarta Sans',sans-serif;">
+        Rp${hargaFormat} / ${DURASI_TOKO_HARI} hari
+      </p>
+      <div class="info-note">
+        <strong>${INFO_PEMBAYARAN}:</strong>
+        <img src="${QRIS_IMAGE_URL}" alt="QRIS Pembayaran" style="width:100%; border-radius:12px; margin-top:8px; display:block;" onerror="this.style.display='none'"/>
+      </div>
+      <p style="font-size:0.85rem;">Setelah transfer, kirim bukti bayar via WhatsApp — status Toko Anda diaktifkan manual dalam waktu singkat.</p>
+      <a href="${linkWa}" target="_blank" class="btn btn-primary" style="margin-bottom:8px; background:#1a5fa0; box-shadow:none;">Kirim Bukti Bayar via WhatsApp</a>
+      <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">Batal</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function tampilkanFormDonasi() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-box" style="text-align:center;">
+      <p style="font-size:2rem; margin:0 0 6px;">☕</p>
+      <h3 style="margin-top:0;">Traktir Kopi untuk Developer</h3>
+      <p style="font-size:0.85rem; color:var(--color-muted);">
+        Suka pakai Dulur? Boleh banget kasih dukungan kecil, nominal bebas —
+        ini murni sukarela, bukan wajib.
+      </p>
+      <img src="${QRIS_IMAGE_URL}" alt="QRIS Donasi" style="width:80%; border-radius:12px; margin:10px auto; display:block;" onerror="this.style.display='none'"/>
+      <button class="btn btn-primary" onclick="this.closest('.modal-overlay').remove()">Terima Kasih! Tutup</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
 }
 
 async function muatRatingSaya(userId) {
