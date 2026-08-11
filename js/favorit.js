@@ -31,7 +31,7 @@ async function muatFavorit() {
       e.preventDefault();
       e.stopPropagation();
       await apiPost('removeFavorite', { user_id: user.user_id, product_id: btn.dataset.id });
-      muatFavorit(); // refresh, hilang dari daftar
+      muatFavorit();
     });
   });
 }
