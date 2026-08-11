@@ -2,6 +2,13 @@
 // DAFTAR.JS — logika untuk daftar.html
 // ============================================================
 
+// Auto-isi kode referral kalau orang dibuka lewat link ajakan (?ref=KODE)
+(function isiKodeReferralDariLink() {
+  const params = new URLSearchParams(window.location.search);
+  const kode = params.get('ref');
+  if (kode) document.getElementById('kode_referral_dipakai').value = kode.toUpperCase();
+})();
+
 document.getElementById('daftarForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -21,6 +28,7 @@ document.getElementById('daftarForm').addEventListener('submit', async (e) => {
     no_hp: noHp,
     lokasi_kecamatan: document.getElementById('lokasi_kecamatan').value,
     kabupaten: document.getElementById('kabupaten').value,
+    kode_referral_dipakai: document.getElementById('kode_referral_dipakai').value.trim(),
   };
 
   const result = await apiPost('addUser', payload);
@@ -32,7 +40,7 @@ document.getElementById('daftarForm').addEventListener('submit', async (e) => {
     return;
   }
 
-  setCurrentUser({ user_id: result.user_id, ...payload });
+  setCurrentUser({ user_id: result.user_id, kode_referral: result.kode_referral, ...payload });
 
   const params = new URLSearchParams(window.location.search);
   window.location.href = params.get('redirect') || 'index.html';
