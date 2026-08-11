@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Papan Pengumuman - Dulur</title>
+  <link rel="stylesheet" href="css/style.css?v=11" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0eab6f" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="icon" href="favicon.png" />
+  <style>
+    .pengumuman-item { background: var(--color-card); border-radius: var(--radius-md); padding: 14px; margin-bottom: 10px; box-shadow: var(--shadow-card); }
+    .pengumuman-item img { width: 100%; border-radius: var(--radius-sm); margin: 8px 0; aspect-ratio: 16/9; object-fit: cover; }
+    .jenis-pill { font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; display: inline-block; margin-bottom: 6px; }
+    .jenis-kerja_bakti { background: #e0f0ff; color: #1a5fa0; }
+    .jenis-kajian { background: #f3e0f7; color: #8e2fa0; }
+    .jenis-kehilangan { background: #ffe0e0; color: #c0392b; }
+    .jenis-lainnya { background: #eee; color: var(--color-muted); }
+  </style>
+</head>
+<body>
+
+  <div class="app-header">
+    <a href="index.html" class="header-back" aria-label="Kembali">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </a>
+    📢 Papan Pengumuman
+  </div>
+
+  <div class="container" style="padding-bottom: 90px;">
+    <div class="info-note">
+      Bukan jual-beli — tempat berbagi info kerja bakti, kajian, pengumuman
+      RT/RW, atau barang hilang. Gratis untuk semua warga.
+    </div>
+
+    <button class="btn btn-primary" id="btnBukaForm" style="margin-bottom:16px;">➕ Buat Pengumuman</button>
+
+    <div id="daftarPengumuman">
+      <p class="empty-state">Memuat...</p>
+    </div>
+  </div>
+
+  <script src="js/config.js?v=11"></script>
+  <script src="js/setup-check.js?v=11"></script>
+  <script src="js/api.js?v=11"></script>
+  <script src="js/session.js?v=11"></script>
+  <script src="js/toast.js?v=11"></script>
+  <script src="js/pengumuman.js?v=1"></script>
+  <script src="js/register-sw.js?v=11"></script>
+</body>
+</html>
