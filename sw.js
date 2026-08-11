@@ -8,7 +8,7 @@
 // server (tidak di-cache) — cuma "kerangka" app ini yang di-cache.
 // ============================================================
 
-const CACHE_NAME = 'dulur-shell-v4';
+const CACHE_NAME = 'dulur-shell-v5';
 
 const FILE_KERANGKA = [
   './index.html',
