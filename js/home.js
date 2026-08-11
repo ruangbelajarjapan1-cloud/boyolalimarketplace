@@ -305,6 +305,9 @@ function pasangEventFavorit() {
       const productId = btn.dataset.id;
       const aktif = btn.classList.contains('active');
       btn.classList.toggle('active');
+      btn.classList.remove('beat');
+      void btn.offsetWidth;
+      btn.classList.add('beat');
 
       if (aktif) {
         await apiPost('removeFavorite', { user_id: user.user_id, product_id: productId });
@@ -367,3 +370,8 @@ tampilkanSapaan();
 muatIklan();
 muatProduk();
 mulaiOnboardingJikaPerlu();
+aktifkanPullToRefresh(async () => {
+  await muatProduk();
+  await muatIklan();
+  tampilkanToast('Barang diperbarui', 'success');
+});
