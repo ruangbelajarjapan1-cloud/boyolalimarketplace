@@ -941,6 +941,18 @@ h1, h2, h3 {
    TAMPILAN TABLET & DESKTOP — beda dari HP, bukan cuma HP diperbesar
    ============================================================ */
 
+@media (min-width: 1000px) {
+  .category-chips {
+    scrollbar-width: thin;
+    cursor: grab;
+    padding-bottom: 10px;
+  }
+  .category-chips::-webkit-scrollbar { display: block; height: 6px; }
+  .category-chips::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 999px; }
+  .category-chips::-webkit-scrollbar-thumb:hover { background: var(--color-muted); }
+  .category-chips.dragging { cursor: grabbing; scroll-behavior: auto; }
+}
+
 /* --- Tablet (700px ke atas): container lebih lega --- */
 @media (min-width: 700px) {
   .container, .app-header, .sticky-cta > .btn {
@@ -1027,6 +1039,7 @@ h1, h2, h3 {
     font-weight: 700;
     font-size: 0.85rem;
     font-family: 'Plus Jakarta Sans', sans-serif;
+    white-space: nowrap;
   }
 
   /* Menu navigasi — ikon + label sejajar, jarak antar item konsisten */
