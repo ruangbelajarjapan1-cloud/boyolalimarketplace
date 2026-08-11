@@ -7,14 +7,14 @@ let semuaProdukTerakhir = [];
 let daftarFavoritSaya = [];
 
 // ------------------------------------------------------------
-// SPLASH SCREEN — tampil sebentar lalu hilang
+// SPLASH SCREEN
 // ------------------------------------------------------------
 setTimeout(() => {
   document.getElementById('splashScreen').classList.add('hide');
 }, 900);
 
 // ------------------------------------------------------------
-// ONBOARDING — cuma tampil sekali (disimpan di localStorage)
+// ONBOARDING — cuma tampil sekali
 // ------------------------------------------------------------
 const SLIDE_ONBOARDING = [
   { icon: '🔍', judul: 'Cari barang di sekitar Anda', teks: 'Lihat listing warga Boyolali & sekitarnya, sesuai kecamatan atau kabupaten Anda.' },
@@ -74,8 +74,7 @@ function selesaiOnboarding() {
 }
 
 // ------------------------------------------------------------
-// TANYA WILAYAH DI AWAL — sekali saja, biar listing pertama
-// yang muncul langsung relevan dengan daerah user
+// TANYA WILAYAH DI AWAL
 // ------------------------------------------------------------
 function tampilkanPilihWilayahJikaPerlu() {
   const wilayahTersimpan = localStorage.getItem('wilayahPilihan');
@@ -115,7 +114,7 @@ function tampilkanPilihWilayahJikaPerlu() {
   });
 
   document.getElementById('btnSemuaWilayah').addEventListener('click', () => {
-    localStorage.setItem('wilayahPilihan', ''); // simpan pilihan "semua" juga, biar tidak nanya lagi
+    localStorage.setItem('wilayahPilihan', '');
     area.innerHTML = '';
   });
 }
@@ -189,7 +188,6 @@ async function muatProduk() {
   const urutan = document.getElementById('urutkanFilter').value;
   if (urutan === 'termurah') produkList.sort((a, b) => Number(a.harga) - Number(b.harga));
   if (urutan === 'termahal') produkList.sort((a, b) => Number(b.harga) - Number(a.harga));
-  // "terbaru" = urutan asli dari server (sudah terbaru + unggulan di atas)
 
   semuaProdukTerakhir = produkList;
 
@@ -252,6 +250,7 @@ function produkKeCard(p, i) {
   const harga = Number(p.harga || 0).toLocaleString('id-ID');
   const badgeVerif = p.penjual_terverifikasi ? '<span class="badge badge-verified">✅ Terverifikasi</span>' : '';
   const badgeGratis = gratis ? '<span class="badge badge-hibah">🎁 Hibah</span>' : '';
+  const badgeBaru = (!p.penjual_terverifikasi && p.penjual_akun_baru) ? '<span class="badge badge-baru">🆕 Akun Baru</span>' : '';
   const delay = (i % 6) * 0.04;
   const favAktif = daftarFavoritSaya.indexOf(p.product_id) !== -1;
 
@@ -263,7 +262,7 @@ function produkKeCard(p, i) {
       <a href="produk.html?id=${encodeURIComponent(p.product_id)}">
         <img src="${fotoUrl}" alt="${p.nama_barang}" onerror="this.src='img/placeholder.svg'"/>
         <div class="info">
-          <div class="badges">${badgeGratis}${badgeVerif}</div>
+          <div class="badges">${badgeGratis}${badgeVerif}${badgeBaru}</div>
           <p class="nama">${p.nama_barang}</p>
           <p class="${gratis ? 'harga-gratis' : 'harga'}">${gratis ? 'GRATIS untuk sesama 🎁' : 'Rp' + harga}</p>
           ${ratingHtml(p.penjual_rating_avg, p.penjual_rating_count)}
@@ -290,7 +289,7 @@ function produkKeCardKecil(p) {
 }
 
 // ------------------------------------------------------------
-// FAVORIT — toggle hati di kartu produk
+// FAVORIT
 // ------------------------------------------------------------
 function pasangEventFavorit() {
   document.querySelectorAll('.fav-heart').forEach((btn) => {
@@ -303,7 +302,6 @@ function pasangEventFavorit() {
 
       const productId = btn.dataset.id;
       const aktif = btn.classList.contains('active');
-
       btn.classList.toggle('active');
 
       if (aktif) {
