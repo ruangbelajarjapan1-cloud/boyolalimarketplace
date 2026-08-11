@@ -993,23 +993,19 @@ h1, h2, h3 {
   .bottom-nav .nav-fab {
     position: static;
     width: 100%;
-    height: auto;
+    height: 48px;
     border-radius: var(--radius-sm);
     flex-direction: row;
-    justify-content: flex-start;
-    gap: 12px;
-    padding: 12px 14px;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 14px;
     border: none;
     background: var(--color-primary);
-    margin: 8px 0 12px;
+    margin: 0 0 16px;
     order: -1;
+    box-shadow: none;
   }
-  .bottom-nav .nav-fab::after {
-    content: 'Upload Barang';
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: white;
-  }
+  .bottom-nav .nav-fab svg { width: 20px; height: 20px; }
 
   .sticky-cta { left: 220px; }
   .chat-input-row { left: 220px; }
