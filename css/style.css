@@ -934,3 +934,89 @@ h1, h2, h3 {
   padding: 2px 8px;
   border-radius: 999px;
 }
+
+/* ============================================================
+   TAMPILAN TABLET & DESKTOP — beda dari HP, bukan cuma HP diperbesar
+   ============================================================ */
+
+/* --- Tablet (700px ke atas): container lebih lega --- */
+@media (min-width: 700px) {
+  .container, .app-header, .sticky-cta > .btn {
+    max-width: 700px;
+  }
+  .app-header { border-radius: 0 0 28px 28px; }
+}
+
+/* --- Desktop (1000px ke atas): nav bawah jadi sidebar kiri --- */
+@media (min-width: 1000px) {
+  .container {
+    max-width: 900px;
+    padding: 24px 32px;
+  }
+  .app-header {
+    max-width: none;
+    border-radius: 0 0 32px 32px;
+    padding-left: max(32px, calc(50% - 450px + 32px));
+    padding-right: max(32px, calc(50% - 450px + 32px));
+  }
+
+  body { padding-bottom: 0; padding-left: 220px; }
+
+  .bottom-nav {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: auto;
+    width: 220px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 28px 16px;
+    border-top: none;
+    border-right: 1px solid var(--color-border);
+  }
+  .bottom-nav .nav-item {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+  }
+  .bottom-nav .nav-item:hover { background: var(--color-bg); }
+  .bottom-nav .nav-item.active { background: var(--color-primary-light); }
+  .bottom-nav .nav-item svg { width: 20px; height: 20px; }
+  .bottom-nav .nav-spacer { display: none; }
+  .bottom-nav .nav-fab {
+    position: static;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border: none;
+    background: var(--color-primary);
+    margin: 8px 0 12px;
+    order: -1;
+  }
+  .bottom-nav .nav-fab::after {
+    content: 'Upload Barang';
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: white;
+  }
+
+  .sticky-cta { left: 220px; }
+  .chat-input-row { left: 220px; }
+
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1300px) {
+  .product-grid { grid-template-columns: repeat(4, 1fr); }
+}
