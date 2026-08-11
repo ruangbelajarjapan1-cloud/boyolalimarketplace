@@ -157,10 +157,12 @@ async function simpanPerubahan() {
   const result = await apiPost('updateProduct', data);
 
   if (result.success) {
-    alert('Perubahan disimpan!');
-    window.location.href = `produk.html?id=${productIdEdit}`;
+    tampilkanToast('Perubahan disimpan!', 'success');
+    setTimeout(() => {
+      window.location.href = `produk.html?id=${productIdEdit}`;
+    }, 900);
   } else {
-    alert(result.error || 'Gagal menyimpan.');
+    tampilkanToast(result.error || 'Gagal menyimpan.', 'error');
     btn.disabled = false;
     btn.textContent = 'Simpan Perubahan';
   }
