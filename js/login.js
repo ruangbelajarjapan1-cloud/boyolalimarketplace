@@ -12,7 +12,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   const result = await apiGet('findUserByPhone', { no_hp });
 
   if (result.error) {
-    alert(result.error);
+    tampilkanToast(result.error, 'error');
     btn.disabled = false;
     btn.textContent = 'Masuk';
     return;
