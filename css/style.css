@@ -196,6 +196,28 @@ h1, h2, h3 {
   box-shadow: 0 4px 10px rgba(142, 47, 160, 0.3);
 }
 
+.chip-donasi {
+  border-color: #9ed9b0 !important;
+  color: #1a7a3f !important;
+  background: #eefbf2 !important;
+}
+.chip-donasi.active {
+  background: linear-gradient(135deg, #2fb36a 0%, #1a7a3f 100%) !important;
+  color: white !important;
+  border-color: #1a7a3f !important;
+  box-shadow: 0 4px 10px rgba(26, 122, 63, 0.3);
+}
+
+.badge-cepat {
+  background: #ffe0e0;
+  color: #c0392b;
+  animation: cepatPulse 1.5s ease infinite;
+}
+@keyframes cepatPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
 /* ---------------- Grid produk ---------------- */
 .product-grid {
   display: grid;
