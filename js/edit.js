@@ -45,10 +45,17 @@ async function muatFormEdit() {
     <div class="form-group">
       <label>Kategori</label>
       <select id="kategori" required>
-        ${['Kendaraan','Elektronik','Baju','Perabot','Pertanian','Lainnya']
+        ${['Kendaraan','Elektronik','Baju','Perabot','Pertanian','Donasi','Lainnya']
           .map((k) => `<option ${k === p.kategori ? 'selected' : ''}>${k}</option>`)
           .join('')}
       </select>
+    </div>
+
+    <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+      <input type="checkbox" id="butuh_cepat" ${p.butuh_cepat === true ? 'checked' : ''} style="width:18px; height:18px; flex-shrink:0;" />
+      <label for="butuh_cepat" style="font-weight:400; font-size:0.85rem; margin:0;">
+        🔴 Tandai "Butuh Cepat" (jual mendesak)
+      </label>
     </div>
 
     <div class="form-group">
@@ -151,6 +158,7 @@ async function simpanPerubahan() {
     deskripsi: document.getElementById('deskripsi').value,
     lokasi: document.getElementById('lokasi').value,
     kabupaten: document.getElementById('kabupaten').value,
+    butuh_cepat: document.getElementById('butuh_cepat').checked,
   };
   if (fotoBaruTerupload) data.foto_url = fotoBaruTerupload;
 
