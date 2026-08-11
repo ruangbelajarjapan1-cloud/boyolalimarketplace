@@ -4,13 +4,21 @@
 
 document.getElementById('daftarForm').addEventListener('submit', async (e) => {
   e.preventDefault();
+
+  const noHp = document.getElementById('no_hp').value.trim();
+  const formatValid = /^(\+?62|0)8[0-9]{8,12}$/.test(noHp.replace(/[\s-]/g, ''));
+  if (!formatValid) {
+    alert('Format nomor HP tidak valid. Contoh yang benar: 0812xxxxxxx');
+    return;
+  }
+
   const btn = e.target.querySelector('button');
   btn.disabled = true;
   btn.textContent = 'Mendaftarkan...';
 
   const payload = {
     nama: document.getElementById('nama').value,
-    no_hp: document.getElementById('no_hp').value,
+    no_hp: noHp,
     lokasi_kecamatan: document.getElementById('lokasi_kecamatan').value,
     kabupaten: document.getElementById('kabupaten').value,
   };
@@ -26,7 +34,6 @@ document.getElementById('daftarForm').addEventListener('submit', async (e) => {
 
   setCurrentUser({ user_id: result.user_id, ...payload });
 
-  // Kalau tadi diarahkan ke sini dari halaman lain (mis. Upload), kembali ke sana
   const params = new URLSearchParams(window.location.search);
   window.location.href = params.get('redirect') || 'index.html';
 });
