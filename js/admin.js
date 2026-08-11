@@ -11,7 +11,7 @@ document.getElementById('btnMasukAdmin').addEventListener('click', async () => {
   const cek = await apiGet('adminGetUsers', { password: adminPassword });
 
   if (cek.error) {
-    alert(cek.error);
+    tampilkanToast(cek.error, 'error');
     return;
   }
 
@@ -100,14 +100,16 @@ function gambarDaftarUser(users) {
 
 async function ubahToko(user_id, aktif) {
   const result = await apiPost('adminSetToko', { password: adminPassword, user_id, aktif, hari: 30 });
-  if (result.error) return alert(result.error);
+  if (result.error) return tampilkanToast(result.error, 'error');
+  tampilkanToast('Status Toko diperbarui', 'success');
   semuaUsers = await apiGet('adminGetUsers', { password: adminPassword });
   renderUsers(semuaUsers);
 }
 
 async function ubahVerifikasi(user_id, verified) {
   const result = await apiPost('adminSetVerified', { password: adminPassword, user_id, verified });
-  if (result.error) return alert(result.error);
+  if (result.error) return tampilkanToast(result.error, 'error');
+  tampilkanToast('Status verifikasi diperbarui', 'success');
   semuaUsers = await apiGet('adminGetUsers', { password: adminPassword });
   renderUsers(semuaUsers);
 }
@@ -161,8 +163,8 @@ function gambarDaftarProduk(products) {
 
 async function sundulProduk(product_id) {
   const result = await apiPost('adminSundul', { password: adminPassword, product_id });
-  if (result.error) return alert(result.error);
-  alert('Berhasil disundul!');
+  if (result.error) return tampilkanToast(result.error, 'error');
+  tampilkanToast('Berhasil disundul!', 'success');
   semuaProducts = await apiGet('adminGetProducts', { password: adminPassword });
   renderProducts(semuaProducts);
 }
@@ -175,7 +177,8 @@ function formatTanggal(v) {
 
 async function ubahUnggulan(product_id, aktif) {
   const result = await apiPost('adminSetFeatured', { password: adminPassword, product_id, aktif, hari: 7 });
-  if (result.error) return alert(result.error);
+  if (result.error) return tampilkanToast(result.error, 'error');
+  tampilkanToast('Listing Unggulan diperbarui', 'success');
   semuaProducts = await apiGet('adminGetProducts', { password: adminPassword });
   renderProducts(semuaProducts);
 }
@@ -191,7 +194,7 @@ document.getElementById('adForm').addEventListener('submit', async (e) => {
     tanggal_mulai: document.getElementById('ad_mulai').value,
     tanggal_selesai: document.getElementById('ad_selesai').value,
   });
-  if (result.error) return alert(result.error);
-  alert('Iklan berhasil ditambahkan!');
+  if (result.error) return tampilkanToast(result.error, 'error');
+  tampilkanToast('Iklan berhasil ditambahkan!', 'success');
   e.target.reset();
 });
