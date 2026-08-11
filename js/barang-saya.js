@@ -1,65 +1,166 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Barang Saya - Dulur</title>
-  <link rel="stylesheet" href="css/style.css?v=15" />
-  <style>
-    .my-item { background: var(--color-card); border-radius: var(--radius-md); padding: 12px; margin-bottom: 10px; box-shadow: var(--shadow-card); display: flex; gap: 12px; align-items: flex-start; }
-    .my-item img { width: 64px; height: 64px; border-radius: var(--radius-sm); object-fit: cover; background: #eee; flex-shrink: 0; }
-    .my-item .aksi { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-    .my-item .aksi button { padding: 7px 12px; border-radius: 8px; border: 1px solid var(--color-primary); background: white; color: var(--color-primary); font-size: 0.75rem; font-weight: 600; }
-    .status-pill { font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; display: inline-block; margin-bottom: 4px; }
-    .status-tersedia { background: var(--color-primary-light); color: var(--color-primary-dark); }
-    .status-terjual { background: #eee; color: var(--color-muted); }
-  </style>
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0eab6f" />
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <link rel="icon" href="favicon.png" />
-</head>
-<body>
+// ============================================================
+// BARANG-SAYA.JS — logika untuk barang-saya.html
+// ============================================================
 
-  <div class="app-header">Barang Saya</div>
+async function muatBarangSaya() {
+  const container = document.getElementById('listContainer');
+  container.innerHTML = skeletonRows(3);
 
-  <div class="container" id="listContainer">
-    <p class="empty-state">Memuat...</p>
-  </div>
+  const user = await requireUser();
+  if (!user) return; // requireUser sudah redirect ke daftar.html kalau belum login
 
-  <nav class="bottom-nav">
-    <div class="sidebar-brand">
-      <img src="icon-192.png" alt="Dulur" />
-      <span>Dulur</span>
+  const items = await apiGet('getMyProducts', { user_id: user.user_id });
+
+  if (items && items.error) {
+    container.innerHTML = `<p class="empty-state">⚠️ ${items.error}</p>`;
+    return;
+  }
+
+  if (!Array.isArray(items) || items.length === 0) {
+    container.innerHTML = `
+      <p class="empty-state">Anda belum upload barang apa pun.</p>
+      <a class="btn btn-primary" href="upload.html">Upload Barang Pertama</a>
+    `;
+    return;
+  }
+
+  container.innerHTML = items.map(itemKeBaris).join('');
+}
+
+function skeletonRows(jumlah) {
+  return Array(jumlah).fill(0).map(() => `
+    <div class="skeleton-row">
+      <div class="skeleton-block avatar"></div>
+      <div style="flex:1;">
+        <div class="skeleton-block text" style="margin-bottom:8px;"></div>
+        <div class="skeleton-block text short"></div>
+      </div>
     </div>
-    <a href="index.html" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
-      Home
-    </a>
-    <a href="chat-list.html" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-      Chat
-    </a>
-    <span class="nav-spacer"></span>
-    <a href="barang-saya.html" class="nav-item active">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
-      Barang Saya
-    </a>
-    <a href="profil.html" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
-      Profil
-    </a>
-    <a href="upload.html" class="nav-fab" aria-label="Upload Barang" title="Upload Barang">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-    <span class="nav-fab-text">Jual Barang</span></a>
-  </nav>
+  `).join('');
+}
 
-  <script src="js/config.js?v=15"></script>
-  <script src="js/setup-check.js?v=15"></script>
-  <script src="js/api.js?v=15"></script>
-  <script src="js/toast.js?v=15"></script>
-  <script src="js/session.js?v=15"></script>
-  <script src="js/barang-saya.js?v=15"></script>
-  <script src="js/register-sw.js?v=15"></script>
-</body>
-</html>
+function itemKeBaris(p) {
+  const fotoUrl = p.foto_url || 'img/placeholder.svg';
+  const harga = Number(p.harga || 0).toLocaleString('id-ID');
+  const terjual = p.status === 'Terjual';
+  const sudahUnggulan = p.unggulan === true;
+
+  return `
+    <div class="my-item">
+      <img src="${fotoUrl}" onerror="this.src='img/placeholder.svg'" />
+      <div style="flex:1">
+        <span class="status-pill ${terjual ? 'status-terjual' : 'status-tersedia'}">
+          ${terjual ? 'Terjual' : 'Tersedia'}
+        </span>
+        ${sudahUnggulan ? '<span class="badge badge-featured">⭐ Unggulan</span>' : ''}
+        ${p.penjual_toko_aktif ? '<span class="badge badge-toko">🏪 Toko</span>' : ''}
+        <p style="margin:0; font-weight:600;">${p.nama_barang}</p>
+        <p style="margin:0; color: var(--color-primary-dark); font-weight:700;">Rp${harga}</p>
+        <div class="aksi">
+          <button onclick="location.href='produk.html?id=${p.product_id}'">Lihat</button>
+          <button onclick="location.href='edit.html?id=${p.product_id}'">✏️ Edit</button>
+          ${
+            terjual
+              ? `<button onclick="ubahStatus('${p.product_id}', false)">Tandai Tersedia Lagi</button>`
+              : `<button onclick="ubahStatus('${p.product_id}', true)">Tandai Terjual</button>`
+          }
+          ${
+            !terjual && !sudahUnggulan
+              ? `<button onclick="tampilkanFormUnggulan('${p.product_id}', '${p.nama_barang.replace(/'/g, "")}')" style="background:#fdf0d9; border-color:var(--color-accent-dark); color:var(--color-accent-dark);">⭐ Jadikan Unggulan</button>`
+              : ''
+          }
+          ${
+            !terjual
+              ? `<button onclick="tampilkanFormSundul('${p.product_id}', '${p.nama_barang.replace(/'/g, "")}')" style="background:#e0f0ff; border-color:#1a5fa0; color:#1a5fa0;">🚀 Sundul</button>`
+              : ''
+          }
+          <button onclick="hapusBarang('${p.product_id}')" style="border-color:#c0392b; color:#c0392b;">🗑️ Hapus</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function tampilkanFormUnggulan(productId, namaBarang) {
+  const hargaFormat = HARGA_UNGGULAN.toLocaleString('id-ID');
+  const pesanWa = encodeURIComponent(
+    `Halo, saya mau jadikan barang "${namaBarang}" (ID: ${productId}) sebagai Listing Unggulan. Saya sudah transfer Rp${hargaFormat} untuk ${DURASI_UNGGULAN_HARI} hari. Ini bukti transfernya:`
+  );
+  const linkWa = `https://wa.me/${NOMOR_WA_ADMIN}?text=${pesanWa}`;
+
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:100; padding:20px;';
+  modal.innerHTML = `
+    <div style="background:white; border-radius:var(--radius-lg); padding:20px; max-width:360px; width:100%;">
+      <h3 style="margin-top:0;">⭐ Jadikan Listing Unggulan</h3>
+      <p style="font-size:0.9rem; color:var(--color-muted);">
+        Barang <strong>${namaBarang}</strong> akan tampil di posisi teratas Home selama
+        <strong>${DURASI_UNGGULAN_HARI} hari</strong>.
+      </p>
+      <p style="font-size:1.3rem; font-weight:800; color:var(--color-accent-dark); font-family:'Plus Jakarta Sans',sans-serif;">
+        Rp${hargaFormat}
+      </p>
+      <div class="info-note">
+        <strong>${INFO_PEMBAYARAN}:</strong>
+        <img src="${QRIS_IMAGE_URL}" alt="QRIS Pembayaran" style="width:100%; border-radius:12px; margin-top:8px; display:block;" onerror="this.style.display='none'"/>
+      </div>
+      <p style="font-size:0.85rem;">Setelah transfer, kirim bukti bayar via WhatsApp — listing Anda akan diaktifkan manual dalam waktu singkat.</p>
+      <a href="${linkWa}" target="_blank" class="btn btn-primary" style="margin-bottom:8px;">Kirim Bukti Bayar via WhatsApp</a>
+      <button class="btn btn-secondary" onclick="this.closest('div[style*=fixed]').remove()">Batal</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function tampilkanFormSundul(productId, namaBarang) {
+  const hargaFormat = HARGA_SUNDUL.toLocaleString('id-ID');
+  const pesanWa = encodeURIComponent(
+    `Halo, saya mau SUNDUL barang "${namaBarang}" (ID: ${productId}) biar naik ke atas urutan Terbaru. Saya sudah transfer Rp${hargaFormat}. Ini bukti transfernya:`
+  );
+  const linkWa = `https://wa.me/${NOMOR_WA_ADMIN}?text=${pesanWa}`;
+
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:100; padding:20px;';
+  modal.innerHTML = `
+    <div style="background:white; border-radius:var(--radius-lg); padding:20px; max-width:360px; width:100%;">
+      <h3 style="margin-top:0;">🚀 Sundul Listing</h3>
+      <p style="font-size:0.9rem; color:var(--color-muted);">
+        Barang <strong>${namaBarang}</strong> akan langsung pindah ke posisi
+        paling atas urutan "Terbaru" — sekali bayar, tanpa langganan.
+      </p>
+      <p style="font-size:1.3rem; font-weight:800; color:#1a5fa0; font-family:'Plus Jakarta Sans',sans-serif;">
+        Rp${hargaFormat}
+      </p>
+      <div class="info-note">
+        <strong>${INFO_PEMBAYARAN}:</strong>
+        <img src="${QRIS_IMAGE_URL}" alt="QRIS Pembayaran" style="width:100%; border-radius:12px; margin-top:8px; display:block;" onerror="this.style.display='none'"/>
+      </div>
+      <p style="font-size:0.85rem;">Setelah transfer, kirim bukti bayar via WhatsApp — barang Anda akan disundul manual dalam waktu singkat.</p>
+      <a href="${linkWa}" target="_blank" class="btn btn-primary" style="margin-bottom:8px; background:#1a5fa0; box-shadow:none;">Kirim Bukti Bayar via WhatsApp</a>
+      <button class="btn btn-secondary" onclick="this.closest('div[style*=fixed]').remove()">Batal</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+async function ubahStatus(product_id, terjual) {
+  const aksi = terjual ? 'markDone' : 'markAvailable';
+  const result = await apiPost(aksi, { product_id });
+  if (result.error) return tampilkanToast(result.error, 'error');
+  tampilkanToast(terjual ? 'Ditandai Terjual' : 'Ditandai Tersedia lagi', 'success');
+  muatBarangSaya();
+}
+
+async function hapusBarang(product_id) {
+  const yakin = await tampilkanKonfirmasi('Barang ini akan dihapus permanen dan tidak bisa dibatalkan.', 'Hapus Barang?');
+  if (!yakin) return;
+
+  const user = getCurrentUser();
+  const result = await apiPost('deleteProduct', { product_id, user_id: user.user_id });
+
+  if (result.error) return tampilkanToast(result.error, 'error');
+  tampilkanToast('Barang berhasil dihapus', 'success');
+  muatBarangSaya();
+}
+
+muatBarangSaya();
