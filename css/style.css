@@ -697,8 +697,26 @@ h1, h2, h3 {
 .centang { font-size: 0.68rem; margin-left: 6px; color: rgba(255,255,255,0.55); letter-spacing: -2px; }
 .centang.dibaca { color: #7cd6ff; letter-spacing: -1px; }
 
-/* ---------------- Badge akun baru ---------------- */
+/* ---------------- Badge akun baru & toko ---------------- */
 .badge-baru { background: #fff4e0; color: #a4700f; }
+.badge-toko { background: #e0f0ff; color: #1a5fa0; }
+
+.donasi-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(135deg, #ffb020 0%, #e8960a 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 13px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(232,150,10,0.28);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
 
 /* ---------------- Misc ---------------- */
 .empty-state {
