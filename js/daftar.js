@@ -8,7 +8,7 @@ document.getElementById('daftarForm').addEventListener('submit', async (e) => {
   const noHp = document.getElementById('no_hp').value.trim();
   const formatValid = /^(\+?62|0)8[0-9]{8,12}$/.test(noHp.replace(/[\s-]/g, ''));
   if (!formatValid) {
-    alert('Format nomor HP tidak valid. Contoh yang benar: 0812xxxxxxx');
+    tampilkanToast('Format nomor HP tidak valid. Contoh: 0812xxxxxxx', 'error');
     return;
   }
 
@@ -26,7 +26,7 @@ document.getElementById('daftarForm').addEventListener('submit', async (e) => {
   const result = await apiPost('addUser', payload);
 
   if (result.error) {
-    alert(result.error);
+    tampilkanToast(result.error, 'error');
     btn.disabled = false;
     btn.textContent = 'Daftar';
     return;
