@@ -6,6 +6,7 @@ let userSaatIni = null;
 
 async function muatRiwayat() {
   const container = document.getElementById('listContainer');
+  container.innerHTML = skeletonRows(3);
   userSaatIni = await requireUser();
   if (!userSaatIni) return;
 
@@ -27,6 +28,18 @@ async function muatRiwayat() {
   }
 
   container.innerHTML = items.map(itemKeBaris).join('');
+}
+
+function skeletonRows(jumlah) {
+  return Array(jumlah).fill(0).map(() => `
+    <div class="skeleton-row">
+      <div class="skeleton-block avatar"></div>
+      <div style="flex:1;">
+        <div class="skeleton-block text" style="margin-bottom:8px;"></div>
+        <div class="skeleton-block text short"></div>
+      </div>
+    </div>
+  `).join('');
 }
 
 function itemKeBaris(p) {
@@ -83,7 +96,7 @@ function bukaFormRating(productId, penjualId, namaBarang) {
   modal.querySelector('#btnBatalRating').addEventListener('click', () => modal.remove());
   modal.querySelector('#btnKirimRating').addEventListener('click', async () => {
     if (nilaiTerpilih === 0) {
-      alert('Tap bintang dulu untuk kasih nilai.');
+      tampilkanToast('Tap bintang dulu untuk kasih nilai.', 'error');
       return;
     }
 
@@ -96,6 +109,7 @@ function bukaFormRating(productId, penjualId, namaBarang) {
     });
 
     modal.remove();
+    tampilkanToast('Terima kasih atas rating Anda!', 'success');
     muatRiwayat();
   });
 }
