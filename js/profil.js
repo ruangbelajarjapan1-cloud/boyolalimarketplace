@@ -12,6 +12,10 @@ async function muatProfil() {
     return;
   }
 
+  document.getElementById('infoList').innerHTML = `
+    <div class="skeleton-row" style="box-shadow:none; margin:0;"><div style="flex:1;"><div class="skeleton-block text"></div></div></div>
+  `;
+
   // Ambil data terbaru dari server pakai user_id yang tersimpan
   const fresh = await apiGet('getUserById', { user_id: localUser.user_id });
 
