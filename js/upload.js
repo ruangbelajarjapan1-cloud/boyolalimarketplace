@@ -95,10 +95,12 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
   const result = await apiPost('addProduct', data);
 
   if (result.success) {
-    alert('Barang berhasil diposting!');
-    window.location.href = `produk.html?id=${result.product_id}`;
+    tampilkanToast('Barang berhasil diposting!', 'success');
+    setTimeout(() => {
+      window.location.href = `produk.html?id=${result.product_id}`;
+    }, 900);
   } else {
-    alert(result.error || 'Gagal upload. Coba lagi.');
+    tampilkanToast(result.error || 'Gagal upload. Coba lagi.', 'error');
     submitBtn.disabled = false;
     submitBtn.textContent = 'Posting Barang';
   }
