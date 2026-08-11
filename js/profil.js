@@ -105,7 +105,10 @@ async function muatJumlahReferral(userId) {
 }
 
 function tampilkanShareReferral(kode, userId) {
-  if (!kode) return;
+  if (!kode || kode === '-') {
+    tampilkanToast('Kode referral sedang disiapkan, coba refresh halaman sebentar lagi.', 'error');
+    return;
+  }
   const linkReferral = window.location.origin + window.location.pathname.replace(/[^/]*$/, '') + 'daftar.html?ref=' + kode;
   const teks = encodeURIComponent(
     `Yuk daftar di *Dulur* pakai kode referral aku: *${kode}*\nDaftar di sini: ${linkReferral}`
