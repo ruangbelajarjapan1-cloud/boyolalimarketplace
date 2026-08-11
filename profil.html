@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Profil - Dulur</title>
-  <link rel="stylesheet" href="css/style.css?v=10" />
+  <link rel="stylesheet" href="css/style.css?v=12" />
   <style>
     .profile-hero {
       text-align: center;
@@ -52,7 +52,8 @@
     .info-list .row:last-child { border-bottom: none; }
     .info-list .row svg { width: 18px; height: 18px; color: var(--color-primary); flex-shrink: 0; }
     .quick-link-row {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
       margin-bottom: 16px;
     }
@@ -99,6 +100,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <br>Riwayat Beli
       </a>
+      <a href="pengumuman.html" class="quick-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a2 2 0 0 1-3.2 2.4L6 15"/></svg>
+        <br>Pengumuman
+      </a>
     </div>
 
     <div class="info-list" id="infoList"></div>
@@ -133,12 +138,12 @@
     </a>
   </nav>
 
-  <script src="js/config.js?v=10"></script>
-  <script src="js/setup-check.js?v=10"></script>
-  <script src="js/api.js?v=10"></script>
-  <script src="js/session.js?v=10"></script>
-  <script src="js/profil.js?v=10"></script>
-  <script src="js/share.js?v=1"></script>
-  <script src="js/register-sw.js?v=10"></script>
+  <script src="js/config.js?v=12"></script>
+  <script src="js/setup-check.js?v=12"></script>
+  <script src="js/api.js?v=12"></script>
+  <script src="js/session.js?v=12"></script>
+  <script src="js/profil.js?v=12"></script>
+  <script src="js/share.js?v=12"></script>
+  <script src="js/register-sw.js?v=12"></script>
 </body>
 </html>
