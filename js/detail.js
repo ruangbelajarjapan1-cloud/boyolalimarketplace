@@ -34,6 +34,7 @@ async function muatDetail() {
   const badgeBaru = (!p.penjual_terverifikasi && p.penjual_akun_baru)
     ? '<span class="badge badge-baru">🆕 Akun Baru</span>'
     : '';
+  const badgeToko = p.penjual_toko_aktif ? '<span class="badge badge-toko">🏪 Toko</span>' : '';
   const terjual = p.status === 'Terjual';
 
   const fotoList = [p.foto_url, p.foto_url_2, p.foto_url_3].filter((f) => f);
@@ -66,6 +67,7 @@ async function muatDetail() {
         <p style="margin:0; font-weight:700;">${p.penjual_nama || 'Warga'}</p>
         <div style="display:flex; gap:6px; align-items:center; margin-top:2px; flex-wrap:wrap;">
           ${badgeVerif}
+          ${badgeToko}
           ${badgeBaru}
           ${p.penjual_rating_count ? `<span class="rating-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg><span class="rating-text">${p.penjual_rating_avg} (${p.penjual_rating_count} ulasan)</span></span>` : '<span class="rating-text">Belum ada ulasan</span>'}
         </div>
