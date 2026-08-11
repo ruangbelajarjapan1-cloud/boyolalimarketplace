@@ -4,12 +4,17 @@
 
 let userChatList = null;
 
+let sudahPernahMuatChat = false;
+
 async function muatDaftarChat() {
   userChatList = await requireUser();
   if (!userChatList) return;
 
   const el = document.getElementById('daftarChat');
+  if (!sudahPernahMuatChat) el.innerHTML = skeletonRowsChat(4);
+
   const hasil = await apiGet('getChatList', { user_id: userChatList.user_id });
+  sudahPernahMuatChat = true;
 
   if (hasil && hasil.error) {
     el.innerHTML = `<p class="empty-state">⚠️ ${hasil.error}</p>`;
@@ -45,6 +50,18 @@ function chatKeBaris(c) {
       <span class="waktu">${waktu}</span>
     </a>
   `;
+}
+
+function skeletonRowsChat(jumlah) {
+  return Array(jumlah).fill(0).map(() => `
+    <div class="skeleton-row">
+      <div class="skeleton-block avatar"></div>
+      <div style="flex:1;">
+        <div class="skeleton-block text" style="margin-bottom:8px;"></div>
+        <div class="skeleton-block text short"></div>
+      </div>
+    </div>
+  `).join('');
 }
 
 function formatWaktuRelatif(waktuStr) {
