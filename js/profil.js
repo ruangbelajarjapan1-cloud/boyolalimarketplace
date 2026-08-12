@@ -88,12 +88,26 @@ function tampilkanProfil(user) {
 
   muatRatingSaya(user.user_id);
 
+  const notifSudahAktif = typeof notifikasiAktif === 'function' && notifikasiAktif();
+
   document.getElementById('areaTombol').innerHTML = `
+    <button class="btn" id="btnToggleNotif" style="width:100%; margin-bottom:10px; ${notifSudahAktif ? 'background:#eee; color:var(--color-ink);' : 'background:var(--color-primary); color:white;'}">
+      ${notifSudahAktif ? '🔕 Matikan Notifikasi Chat' : '🔔 Aktifkan Notifikasi Chat'}
+    </button>
     <button class="btn" style="width:100%; background:#25D366; color:white; margin-bottom:10px;" onclick="tampilkanAjakShare()">📤 Ajak Teman/Keluarga Pakai Dulur</button>
     <button class="donasi-btn" style="margin-bottom:10px;" onclick="tampilkanFormDonasi()">☕ Traktir Kopi untuk Developer</button>
     <a class="btn btn-secondary" href="peraturan.html" style="margin-bottom:10px;">📄 Syarat & Ketentuan</a>
     <button class="btn btn-secondary" onclick="logout(); location.reload();">Keluar</button>
   `;
+
+  document.getElementById('btnToggleNotif').addEventListener('click', async () => {
+    if (notifSudahAktif) {
+      matikanNotifikasiChat();
+    } else {
+      await mintaIzinNotifikasi();
+    }
+    tampilkanProfil(user);
+  });
 }
 
 async function muatJumlahReferral(userId) {
