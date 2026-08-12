@@ -2,17 +2,31 @@
 // API.JS — Semua fungsi di sini "bicara" ke Google Apps Script.
 // Anda TIDAK perlu edit file ini kecuali menambah fitur baru.
 //
-// Ada retry otomatis: kalau server Google Apps Script sesaat sibuk
-// (mis. banyak warga buka app bersamaan, kena batas 30 eksekusi
-// bersamaan dari Google), app akan coba ulang otomatis 2x sebelum
-// benar-benar nampilkan error ke user. Jadi lebih tahan trafik ramai.
+// 2 pengaman:
+// 1. TIMEOUT — tiap permintaan dibatasi maksimal 15 detik. Kalau
+//    koneksi macet total (bukan cuma lambat), permintaan otomatis
+//    dibatalkan, tidak akan menunggu selamanya.
+// 2. RETRY — kalau gagal/timeout, coba ulang otomatis 2x dengan
+//    jeda meningkat, sebelum benar-benar nampilkan error ke user.
 // ============================================================
 
 const MAKS_PERCOBAAN_ULANG = 2;
 const JEDA_PERCOBAAN_ULANG_MS = 900;
+const BATAS_WAKTU_MS = 15000;
 
 function tunggu(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Bungkus fetch biasa dengan batas waktu — kalau lebih dari 15 detik
+// tidak ada balasan sama sekali, permintaan dibatalkan paksa.
+function fetchDenganTimeout(url, options = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), BATAS_WAKTU_MS);
+
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => {
+    clearTimeout(timer);
+  });
 }
 
 async function apiGet(action, params = {}) {
@@ -25,7 +39,7 @@ async function apiGet(action, params = {}) {
       // "_t" (timestamp) ditambahkan supaya browser tidak pernah pakai jawaban
       // lama yang di-cache — data selalu diambil fresh dari spreadsheet.
       const query = new URLSearchParams({ action, ...params, _t: Date.now() }).toString();
-      const res = await fetch(`${APPS_SCRIPT_URL}?${query}`, { cache: 'no-store' });
+      const res = await fetchDenganTimeout(`${APPS_SCRIPT_URL}?${query}`, { cache: 'no-store' });
 
       if (res.ok) return await res.json();
 
@@ -40,7 +54,10 @@ async function apiGet(action, params = {}) {
         await tunggu(JEDA_PERCOBAAN_ULANG_MS * (percobaan + 1));
         continue;
       }
-      return { error: 'Gagal terhubung ke backend. Cek koneksi internet & URL Apps Script.' };
+      const pesan = err.name === 'AbortError'
+        ? 'Koneksi ke server macet (lebih dari 15 detik tidak ada balasan). Cek internet Anda, lalu refresh.'
+        : 'Gagal terhubung ke backend. Cek koneksi internet & URL Apps Script.';
+      return { error: pesan };
     }
   }
 }
@@ -52,7 +69,7 @@ async function apiPost(action, data = {}) {
 
   for (let percobaan = 0; percobaan <= MAKS_PERCOBAAN_ULANG; percobaan++) {
     try {
-      const res = await fetch(APPS_SCRIPT_URL, {
+      const res = await fetchDenganTimeout(APPS_SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ action, ...data }),
@@ -70,7 +87,10 @@ async function apiPost(action, data = {}) {
         await tunggu(JEDA_PERCOBAAN_ULANG_MS * (percobaan + 1));
         continue;
       }
-      return { error: 'Gagal terhubung ke backend. Cek koneksi internet & URL Apps Script.' };
+      const pesan = err.name === 'AbortError'
+        ? 'Koneksi ke server macet (lebih dari 15 detik tidak ada balasan). Cek internet Anda, lalu coba lagi.'
+        : 'Gagal terhubung ke backend. Cek koneksi internet & URL Apps Script.';
+      return { error: pesan };
     }
   }
 }
