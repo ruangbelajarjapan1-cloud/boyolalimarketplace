@@ -271,7 +271,7 @@ function produkKeCard(p, i) {
         <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
       </button>
       <a href="produk.html?id=${encodeURIComponent(p.product_id)}">
-        <img src="${fotoUrl}" alt="${p.nama_barang}" onerror="this.src='img/placeholder.svg'"/>
+        <img src="${fotoUrl}" alt="${p.nama_barang}" loading="lazy" onerror="this.src='img/placeholder.svg'"/>
         <div class="info">
           <div class="badges">${badgeGratis}${badgeVerif}${badgeToko}${badgeBaru}${badgeCepat}${badgeLama}</div>
           <p class="nama">${p.nama_barang}</p>
@@ -290,7 +290,7 @@ function produkKeCardKecil(p) {
   return `
     <a class="featured-card" href="produk.html?id=${encodeURIComponent(p.product_id)}">
       <span class="badge badge-featured" style="position:absolute; top:8px; left:8px;">⭐ Unggulan</span>
-      <img src="${fotoUrl}" alt="${p.nama_barang}" onerror="this.src='img/placeholder.svg'"/>
+      <img src="${fotoUrl}" alt="${p.nama_barang}" loading="lazy" onerror="this.src='img/placeholder.svg'"/>
       <div class="info">
         <p class="nama">${p.nama_barang}</p>
         <p class="harga">Rp${harga}</p>
