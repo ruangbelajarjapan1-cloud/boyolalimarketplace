@@ -44,7 +44,7 @@ function kompresFotoKeBase64(file) {
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
-        const maxSize = 1000;
+        const maxSize = 800;
         let { width, height } = img;
         if (width > height && width > maxSize) {
           height = (height * maxSize) / width;
@@ -57,7 +57,7 @@ function kompresFotoKeBase64(file) {
         canvas.width = width;
         canvas.height = height;
         canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL('image/jpeg', 0.7).split(',')[1]);
+        resolve(canvas.toDataURL('image/jpeg', 0.65).split(',')[1]);
       };
       img.onerror = reject;
       img.src = e.target.result;
