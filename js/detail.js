@@ -43,6 +43,7 @@ async function muatDetail() {
     : '';
   const badgeToko = p.penjual_toko_aktif ? '<span class="badge badge-toko">🏪 Toko</span>' : '';
   const badgeCepat = (p.butuh_cepat === true) ? '<span class="badge badge-cepat">🔴 Butuh Cepat</span>' : '';
+  const badgeLama = (p.listing_lama === true) ? '<span class="badge badge-lama">🕒 Listing Lama</span>' : '';
   const terjual = p.status === 'Terjual';
 
   const fotoList = [p.foto_url, p.foto_url_2, p.foto_url_3].filter((f) => f);
@@ -63,7 +64,7 @@ async function muatDetail() {
       </button>
     </div>
 
-    <h2 style="margin: 14px 0 4px;">${p.nama_barang} ${badgeCepat}</h2>
+    <h2 style="margin: 14px 0 4px;">${p.nama_barang} ${badgeCepat}${badgeLama}</h2>
     <p class="${gratis ? 'harga-gratis' : 'detail-harga'}" style="${gratis ? 'font-size:1.5rem;' : ''}">${p.kategori === 'Donasi' ? '💚 Ajakan Donasi' : gratis ? '🎁 GRATIS untuk sesama' : 'Rp' + harga}</p>
     <p style="color:var(--color-muted); font-size:0.85rem; margin: 4px 0 6px;">
       📍 ${p.lokasi || '-'}, ${p.kabupaten || '-'} &nbsp;·&nbsp; ${p.kategori || '-'}
