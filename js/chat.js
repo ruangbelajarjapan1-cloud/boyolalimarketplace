@@ -8,6 +8,11 @@ let productId = null;
 let pollingInterval = null;
 const JEDA_POLLING_MS = 2500;
 
+const KATA_RAWAN_PENIPUAN = [
+  'transfer dulu', 'transfer duluan', 'dp dulu', 'kirim dulu',
+  'bayar dulu', 'ongkir dulu', 'kirim ongkir', 'uang muka', 'panjar',
+];
+
 async function mulaiChat() {
   const params = new URLSearchParams(window.location.search);
   productId = params.get('productId');
@@ -23,6 +28,8 @@ async function mulaiChat() {
     return;
   }
 
+  tampilkanTipsAmanJikaPerlu();
+
   await muatPesan();
   jalankanPolling();
 
@@ -33,6 +40,48 @@ async function mulaiChat() {
       muatPesan();
       jalankanPolling();
     }
+  });
+}
+
+// ------------------------------------------------------------
+// TIPS AMAN BERTRANSAKSI — cuma muncul sekali seumur hidup app
+// ------------------------------------------------------------
+function tampilkanTipsAmanJikaPerlu() {
+  if (localStorage.getItem('tipsAmanSudahLihat')) return;
+
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-box">
+      <div class="onb-slide">
+        <div class="onb-icon">💡</div>
+        <h3>Tips Aman Bertransaksi</h3>
+      </div>
+      <ul style="font-size:0.87rem; line-height:1.9; color:var(--color-ink); padding-left:20px; margin:12px 0;">
+        <li>Selalu ketemu di tempat umum yang ramai.</li>
+        <li>Cek kondisi barang langsung sebelum bayar.</li>
+        <li>Waspada kalau diminta transfer/DP sebelum ketemu.</li>
+        <li>Untuk barang mahal, ajak teman/keluarga ikut.</li>
+      </ul>
+      <button class="btn btn-primary" id="btnTutupTipsAman">Mengerti</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  document.getElementById('btnTutupTipsAman').addEventListener('click', () => {
+    localStorage.setItem('tipsAmanSudahLihat', '1');
+    modal.remove();
+  });
+}
+
+// ------------------------------------------------------------
+// DETEKSI KATA RAWAN PENIPUAN — cek pesan dari lawan bicara
+// ------------------------------------------------------------
+function cekKataRawanPenipuan(pesanList) {
+  return pesanList.some((p) => {
+    if (p.pengirim_id === currentUserId) return false; // cuma cek pesan LAWAN bicara
+    const teks = String(p.isi_pesan).toLowerCase();
+    return KATA_RAWAN_PENIPUAN.some((kata) => teks.includes(kata));
   });
 }
 
@@ -49,10 +98,16 @@ async function muatPesan() {
   });
 
   const chatWindow = document.getElementById('chatWindow');
+  const peringatan = document.getElementById('peringatanRawan');
 
   if (!Array.isArray(pesanList) || pesanList.length === 0) {
     chatWindow.innerHTML = '<p class="empty-state">Belum ada pesan. Mulai chat!</p>';
+    if (peringatan) peringatan.style.display = 'none';
     return;
+  }
+
+  if (peringatan) {
+    peringatan.style.display = cekKataRawanPenipuan(pesanList) ? 'block' : 'none';
   }
 
   chatWindow.innerHTML = pesanList
