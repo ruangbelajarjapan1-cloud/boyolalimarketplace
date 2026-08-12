@@ -19,7 +19,10 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   }
 
   setCurrentUser(result);
+  tampilkanToast(`Selamat datang kembali, ${result.nama.split(' ')[0]}! 👋`, 'success');
 
   const params = new URLSearchParams(window.location.search);
-  window.location.href = params.get('redirect') || 'index.html';
+  setTimeout(() => {
+    window.location.href = params.get('redirect') || 'index.html';
+  }, 900);
 });
