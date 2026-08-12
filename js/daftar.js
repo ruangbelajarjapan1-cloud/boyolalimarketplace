@@ -41,7 +41,10 @@ document.getElementById('daftarForm').addEventListener('submit', async (e) => {
   }
 
   setCurrentUser({ user_id: result.user_id, kode_referral: result.kode_referral, ...payload });
+  tampilkanToast(`Selamat datang, ${payload.nama.split(' ')[0]}! Akun berhasil dibuat 🎉`, 'success');
 
   const params = new URLSearchParams(window.location.search);
-  window.location.href = params.get('redirect') || 'index.html';
+  setTimeout(() => {
+    window.location.href = params.get('redirect') || 'index.html';
+  }, 900);
 });
