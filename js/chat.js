@@ -86,12 +86,18 @@ async function kirimPesan() {
 
   input.value = '';
 
-  await apiPost('sendMessage', {
+  const result = await apiPost('sendMessage', {
     terkait_id: productId,
     pengirim_id: currentUserId,
     penerima_id: lawanBicaraId,
     isi_pesan: isi,
   });
+
+  if (result.error) {
+    tampilkanToast(result.error, 'error');
+    input.value = isi; // kembalikan teksnya biar tidak hilang
+    return;
+  }
 
   await muatPesan();
 }
