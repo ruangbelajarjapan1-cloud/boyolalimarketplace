@@ -261,6 +261,7 @@ function produkKeCard(p, i) {
   const badgeBaru = (!p.penjual_terverifikasi && p.penjual_akun_baru) ? '<span class="badge badge-baru">🆕 Akun Baru</span>' : '';
   const badgeToko = p.penjual_toko_aktif ? '<span class="badge badge-toko">🏪 Toko</span>' : '';
   const badgeCepat = (p.butuh_cepat === true) ? '<span class="badge badge-cepat">🔴 Butuh Cepat</span>' : '';
+  const badgeLama = (p.listing_lama === true) ? '<span class="badge badge-lama">🕒 Listing Lama</span>' : '';
   const delay = (i % 6) * 0.04;
   const favAktif = daftarFavoritSaya.indexOf(p.product_id) !== -1;
 
@@ -272,7 +273,7 @@ function produkKeCard(p, i) {
       <a href="produk.html?id=${encodeURIComponent(p.product_id)}">
         <img src="${fotoUrl}" alt="${p.nama_barang}" onerror="this.src='img/placeholder.svg'"/>
         <div class="info">
-          <div class="badges">${badgeGratis}${badgeVerif}${badgeToko}${badgeBaru}${badgeCepat}</div>
+          <div class="badges">${badgeGratis}${badgeVerif}${badgeToko}${badgeBaru}${badgeCepat}${badgeLama}</div>
           <p class="nama">${p.nama_barang}</p>
           <p class="${gratis ? 'harga-gratis' : 'harga'}">${gratis ? 'GRATIS untuk sesama 🎁' : 'Rp' + harga}</p>
           ${ratingHtml(p.penjual_rating_avg, p.penjual_rating_count)}
