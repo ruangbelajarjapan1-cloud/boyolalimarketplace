@@ -48,7 +48,7 @@ function itemKeBaris(p) {
 
   return `
     <div class="riwayat-item">
-      <img src="${fotoUrl}" onerror="this.src='img/placeholder.svg'" />
+      <img src="${fotoUrl}" loading="lazy" onerror="this.src='img/placeholder.svg'" />
       <div style="flex:1">
         <p style="margin:0; font-weight:600;">${p.nama_barang}</p>
         <p style="margin:0; font-size:0.8rem; color:var(--color-muted);">Penjual: ${p.penjual_nama || '-'} · Rp${harga}</p>
