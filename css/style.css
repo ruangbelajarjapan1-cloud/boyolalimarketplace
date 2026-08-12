@@ -727,9 +727,22 @@ h1, h2, h3 {
 .centang { font-size: 0.68rem; margin-left: 6px; color: rgba(255,255,255,0.55); letter-spacing: -2px; }
 .centang.dibaca { color: #7cd6ff; letter-spacing: -1px; }
 
-/* ---------------- Badge akun baru & toko ---------------- */
+/* ---------------- Badge akun baru, toko, lama ---------------- */
 .badge-baru { background: #fff4e0; color: #a4700f; }
 .badge-toko { background: #e0f0ff; color: #1a5fa0; }
+.badge-lama { background: #f0f0f0; color: #6b6b6b; }
+
+/* ---------------- Peringatan chat rawan penipuan ---------------- */
+.peringatan-rawan {
+  background: #fff0f0;
+  border: 1px solid #f5b8b8;
+  color: #a02020;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+}
 
 .donasi-btn {
   display: block;
