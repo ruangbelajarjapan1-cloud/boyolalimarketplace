@@ -237,6 +237,10 @@ async function apiPost(action, data = {}) {
         if (error) throw error;
         return hasil;
       }
+        case 'clickAd': {
+        await supabaseClient.rpc('catat_klik_iklan', { p_iklan_id: data.iklan_id });
+        return { success: true };
+      }
       case 'removeFavorite': {
         const { data: hasil, error } = await supabaseClient.rpc('hapus_favorit', {
           p_user_id: data.user_id, p_product_id: data.product_id,
