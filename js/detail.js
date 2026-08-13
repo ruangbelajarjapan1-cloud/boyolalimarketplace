@@ -65,10 +65,10 @@ async function muatDetail() {
       </button>
     </div>
 
-    <h2 style="margin: 14px 0 4px;">${p.nama_barang} ${badgeCepat}${badgeLama}</h2>
+   <h2 style="margin: 14px 0 4px;">${escapeHtml(p.nama_barang)} ${badgeCepat}${badgeLama}</h2>
     <p class="${gratis ? 'harga-gratis' : 'detail-harga'}" style="${gratis ? 'font-size:1.5rem;' : ''}">${p.kategori === 'Donasi' ? '💚 Ajakan Donasi' : gratis ? '🎁 GRATIS untuk sesama' : 'Rp' + harga}</p>
     <p style="color:var(--color-muted); font-size:0.85rem; margin: 4px 0 6px;">
-      📍 ${p.lokasi || '-'}, ${p.kabupaten || '-'} &nbsp;·&nbsp; ${p.kategori || '-'}
+      📍 ${escapeHtml(p.lokasi) || '-'}, ${escapeHtml(p.kabupaten) || '-'} &nbsp;·&nbsp; ${escapeHtml(p.kategori) || '-'}
     </p>
     <p style="color:var(--color-muted); font-size:0.78rem; margin: 0 0 16px;">
       👁️ ${p.jumlah_dilihat || 1} orang melihat barang ini
@@ -77,7 +77,7 @@ async function muatDetail() {
     <div class="seller-card">
       <div class="seller-avatar">${inisial}</div>
       <div style="flex:1;">
-        <p style="margin:0; font-weight:700;">${p.penjual_nama || 'Warga'}</p>
+       <p style="margin:0; font-weight:700;">${escapeHtml(p.penjual_nama) || 'Warga'}</p>
         <div style="display:flex; gap:6px; align-items:center; margin-top:2px; flex-wrap:wrap;">
          ${badgeVerif}
           ${badgeToko}
@@ -91,7 +91,7 @@ async function muatDetail() {
     ${badgeBaru ? '<div class="info-note" style="background:#fff4e0; border-color:#f5d99e; color:#a4700f;">🆕 Penjual ini baru bergabung minggu ini. Tetap hati-hati seperti biasa — utamakan COD di tempat umum, terutama untuk barang bernilai tinggi.</div>' : ''}
 
     <p class="section-title" style="margin-top:18px;">Deskripsi</p>
-    <p style="line-height:1.6; color: var(--color-ink);">${p.deskripsi || 'Tidak ada deskripsi.'}</p>
+   <p style="line-height:1.6; color: var(--color-ink);">${escapeHtml(p.deskripsi) || 'Tidak ada deskripsi.'}</p>
 
     <div class="info-note">
       Serah terima & pembayaran dilakukan langsung antara Anda dan penjual/pembeli
@@ -191,7 +191,7 @@ function pasangLaporkan(p) {
       <div class="modal-box">
         <h3 style="margin-top:0;">🚩 Laporkan Barang</h3>
         <p style="font-size:0.85rem; color:var(--color-muted);">
-          Kenapa Anda melaporkan "<strong>${p.nama_barang}</strong>"?
+        Kenapa Anda melaporkan "<strong>${escapeHtml(p.nama_barang)}</strong>"?
         </p>
         <div class="form-group">
           <select id="alasanLapor">
@@ -279,11 +279,11 @@ function gambarKomentar(list) {
   el.innerHTML = list.map((k) => `
     <div class="seller-card" style="margin-bottom:8px; align-items:flex-start;">
       <div class="seller-avatar" style="width:32px; height:32px; font-size:0.85rem; flex-shrink:0;">
-        ${(k.nama_pengirim || '?').charAt(0).toUpperCase()}
+    ${escapeHtml((k.nama_pengirim || '?').charAt(0).toUpperCase())}
       </div>
       <div style="flex:1;">
-        <p style="margin:0; font-weight:700; font-size:0.85rem;">${k.nama_pengirim || 'Warga'}</p>
-        <p style="margin:2px 0 0; font-size:0.87rem;">${k.isi_komentar}</p>
+        <p style="margin:0; font-weight:700; font-size:0.85rem;">${escapeHtml(k.nama_pengirim) || 'Warga'}</p>
+        <p style="margin:2px 0 0; font-size:0.87rem;">${escapeHtml(k.isi_komentar)}</p>
       </div>
     </div>
   `).join('');
