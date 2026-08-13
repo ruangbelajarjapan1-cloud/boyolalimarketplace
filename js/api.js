@@ -254,6 +254,13 @@ async function apiPost(action, data = {}) {
         if (error) return { error: pesanErrorAdmin(error) };
         return hasil;
       }
+        case 'adminDeleteProduct': {
+  const { data: hasil, error } = await supabaseClient.rpc('admin_hapus_produk', {
+    p_password: data.password, p_product_id: data.product_id,
+  });
+  if (error) return { error: pesanErrorAdmin(error) };
+  return hasil;
+}
       case 'adminSetToko': {
         const { data: hasil, error } = await supabaseClient.rpc('admin_set_toko', {
           p_password: data.password, p_user_id: data.user_id, p_aktif: data.aktif, p_hari: data.hari || 30,
