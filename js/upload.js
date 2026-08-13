@@ -106,3 +106,18 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Posting Barang';
   }
 });
+let formSudahDiisi = false;
+document.querySelectorAll('#uploadForm input, #uploadForm textarea, #uploadForm select').forEach((el) => {
+  el.addEventListener('input', () => { formSudahDiisi = true; });
+});
+
+window.addEventListener('beforeunload', (e) => {
+  if (formSudahDiisi) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+
+document.getElementById('uploadForm').addEventListener('submit', () => {
+  formSudahDiisi = false; // supaya tidak muncul konfirmasi saat submit berhasil
+});
