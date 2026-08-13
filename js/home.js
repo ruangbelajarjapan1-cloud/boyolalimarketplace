@@ -341,24 +341,69 @@ function pasangEventFavorit() {
 // ------------------------------------------------------------
 // IKLAN
 // ------------------------------------------------------------
+let iklanRotasi = [];
+let indexIklanAktif = 0;
+let intervalIklanRotasi = null;
+
 async function muatIklan() {
   const banner = document.getElementById('adsBanner');
   const iklanList = await apiGet('getAds');
 
+  if (intervalIklanRotasi) clearInterval(intervalIklanRotasi);
+
   if (!Array.isArray(iklanList) || iklanList.length === 0) {
-    banner.innerHTML = `
-      <a href="pasang-iklan.html" style="display:block; text-align:center; padding:14px; border-radius:var(--radius-lg); background:linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color:white; font-weight:700; text-decoration:none;">
-        📢 Punya usaha di Boyolali? Pasang iklan di sini →
-      </a>
-    `;
+    banner.innerHTML = bannerCtaPasangIklan();
     return;
   }
 
-  const iklan = iklanList[0];
-  banner.innerHTML = `
-    <a class="ads-banner" href="${iklan.link_tujuan || '#'}" target="_blank" rel="noopener">
-      <img src="${escapeHtml(iklan.gambar_url)}" alt="${escapeHtml(iklan.nama_pengiklan) || 'Iklan'}" />
-      <span class="ads-label">Iklan</span>
+  // Gabung iklan asli + 1 slide ajakan pasang iklan, biar slot
+  // "pasang iklan" tetap ikut berputar meski sudah ada iklan aktif.
+  iklanRotasi = [...iklanList, { cta: true }];
+  indexIklanAktif = 0;
+  renderSlideIklan();
+
+  if (iklanRotasi.length > 1) {
+    intervalIklanRotasi = setInterval(() => {
+      indexIklanAktif = (indexIklanAktif + 1) % iklanRotasi.length;
+      renderSlideIklan();
+    }, 5000);
+  }
+}
+
+function renderSlideIklan() {
+  const banner = document.getElementById('adsBanner');
+  const item = iklanRotasi[indexIklanAktif];
+
+  banner.style.transition = 'opacity 0.35s ease';
+  banner.style.opacity = '0';
+
+  setTimeout(() => {
+    let html = item.cta
+      ? bannerCtaPasangIklan()
+      : `
+        <a class="ads-banner" href="${item.link_tujuan || '#'}" target="_blank" rel="noopener">
+          <img src="${escapeHtml(item.gambar_url)}" alt="${escapeHtml(item.nama_pengiklan) || 'Iklan'}" />
+          <span class="ads-label">Iklan</span>
+        </a>
+      `;
+
+    if (iklanRotasi.length > 1) {
+      html += `
+        <div style="display:flex; justify-content:center; gap:5px; margin-top:6px;">
+          ${iklanRotasi.map((_, i) => `<span style="width:6px; height:6px; border-radius:50%; background:${i === indexIklanAktif ? 'var(--color-primary)' : '#ddd'};"></span>`).join('')}
+        </div>
+      `;
+    }
+
+    banner.innerHTML = html;
+    banner.style.opacity = '1';
+  }, 200);
+}
+
+function bannerCtaPasangIklan() {
+  return `
+    <a href="pasang-iklan.html" style="display:block; text-align:center; padding:14px; border-radius:var(--radius-lg); background:linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color:white; font-weight:700; text-decoration:none;">
+      📢 Punya usaha di Boyolali? Pasang iklan di sini →
     </a>
   `;
 }
