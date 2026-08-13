@@ -1,7 +1,6 @@
 // ============================================================
 // CHAT-LIST.JS — logika untuk chat-list.html
 // ============================================================
-
 let userChatList = null;
 
 let sudahPernahMuatChat = false;
