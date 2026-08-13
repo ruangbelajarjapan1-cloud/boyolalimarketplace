@@ -344,11 +344,20 @@ function pasangEventFavorit() {
 async function muatIklan() {
   const banner = document.getElementById('adsBanner');
   const iklanList = await apiGet('getAds');
-  if (!Array.isArray(iklanList) || iklanList.length === 0) { banner.innerHTML = ''; return; }
+
+  if (!Array.isArray(iklanList) || iklanList.length === 0) {
+    banner.innerHTML = `
+      <a href="pasang-iklan.html" style="display:block; text-align:center; padding:14px; border-radius:var(--radius-lg); background:linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color:white; font-weight:700; text-decoration:none;">
+        📢 Punya usaha di Boyolali? Pasang iklan di sini →
+      </a>
+    `;
+    return;
+  }
+
   const iklan = iklanList[0];
   banner.innerHTML = `
     <a class="ads-banner" href="${iklan.link_tujuan || '#'}" target="_blank" rel="noopener">
-      <img src="${iklan.gambar_url}" alt="${iklan.nama_pengiklan || 'Iklan'}" />
+      <img src="${escapeHtml(iklan.gambar_url)}" alt="${escapeHtml(iklan.nama_pengiklan) || 'Iklan'}" />
       <span class="ads-label">Iklan</span>
     </a>
   `;
