@@ -96,7 +96,7 @@ document.getElementById('btnBukaForm').addEventListener('click', async () => {
 
   document.getElementById('btnBatalPengumuman').addEventListener('click', () => modal.remove());
 
-  document.getElementById('btnKirimPengumuman').addEventListener('click', async () => {
+document.getElementById('btnKirimPengumuman').addEventListener('click', async (e) => {
     const judul = document.getElementById('judulPengumuman').value.trim();
     const isi = document.getElementById('isiPengumuman').value.trim();
 
@@ -104,6 +104,10 @@ document.getElementById('btnBukaForm').addEventListener('click', async () => {
       tampilkanToast('Judul dan isi wajib diisi', 'error');
       return;
     }
+
+    const btn = e.target;
+    btn.disabled = true;
+    btn.textContent = 'Mengirim...';
 
     const result = await apiPost('addPengumuman', {
       user_id: user.user_id,
@@ -116,6 +120,8 @@ document.getElementById('btnBukaForm').addEventListener('click', async () => {
 
     if (result.error) {
       tampilkanToast(result.error, 'error');
+      btn.disabled = false;
+      btn.textContent = 'Posting';
       return;
     }
 
