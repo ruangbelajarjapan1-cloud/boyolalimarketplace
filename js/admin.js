@@ -20,6 +20,7 @@ document.getElementById('btnMasukAdmin').addEventListener('click', async () => {
   document.getElementById('adminPanel').style.display = 'block';
   semuaUsers = cek;
   renderUsers(semuaUsers);
+  perbaruiBadgeIklanMasuk();
 });
 
 (async function cekSesiAdmin() {
@@ -30,6 +31,7 @@ document.getElementById('btnMasukAdmin').addEventListener('click', async () => {
   document.getElementById('adminPanel').style.display = 'block';
   semuaUsers = cek;
   renderUsers(semuaUsers);
+  perbaruiBadgeIklanMasuk();
 })();
 
 // --- Tab switching ---
@@ -255,6 +257,7 @@ async function setujuiIklan(iklan_id) {
   tampilkanToast('Iklan disetujui dan mulai tayang', 'success');
   const iklan = await apiGet('adminGetAllAds', { password: adminPassword });
   renderIklanMasuk(iklan);
+  perbaruiBadgeIklanMasuk(iklan);
 }
 
 async function tolakIklan(iklan_id) {
@@ -263,4 +266,12 @@ async function tolakIklan(iklan_id) {
   tampilkanToast('Iklan ditolak', 'success');
   const iklan = await apiGet('adminGetAllAds', { password: adminPassword });
   renderIklanMasuk(iklan);
+  perbaruiBadgeIklanMasuk(iklan);
+}
+
+async function perbaruiBadgeIklanMasuk(daftarIklanSudahAda) {
+  const iklan = daftarIklanSudahAda || (await apiGet('adminGetAllAds', { password: adminPassword }));
+  const jumlahPending = Array.isArray(iklan) ? iklan.filter((i) => i.status === 'pending').length : 0;
+  document.getElementById('tabIklanMasuk').textContent =
+    jumlahPending > 0 ? `Iklan Masuk (${jumlahPending})` : 'Iklan Masuk';
 }
