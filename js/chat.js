@@ -116,7 +116,7 @@ async function muatPesan() {
       const centang = punyaSaya
         ? `<span class="centang ${p.dibaca === true ? 'dibaca' : ''}">${p.dibaca === true ? '✓✓' : '✓'}</span>`
         : '';
-      return `<div class="bubble ${punyaSaya ? 'mine' : 'theirs'}">${p.isi_pesan}${centang}</div>`;
+   return `<div class="bubble ${punyaSaya ? 'mine' : 'theirs'}">${escapeHtml(p.isi_pesan)}${centang}</div>`;
     })
     .join('');
 
