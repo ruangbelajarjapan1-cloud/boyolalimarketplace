@@ -43,9 +43,9 @@ function chatKeBaris(c) {
     <a class="chat-row" href="chat.html?productId=${encodeURIComponent(c.product_id)}&penjual=${encodeURIComponent(c.lawan_id)}">
       <img src="${fotoUrl}" loading="lazy" onerror="this.src='img/placeholder.svg'" />
       <div class="info">
-        <p class="lawan">${c.lawan_nama}</p>
-        <p class="produk">${c.produk_nama}</p>
-        <p class="pesan">${prefix}${c.pesan_terakhir}</p>
+      <p class="lawan">${escapeHtml(c.lawan_nama)}</p>
+        <p class="produk">${escapeHtml(c.produk_nama)}</p>
+        <p class="pesan">${prefix}${escapeHtml(c.pesan_terakhir)}</p>
       </div>
       <span class="waktu">${waktu}</span>
     </a>
