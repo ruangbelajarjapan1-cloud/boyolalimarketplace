@@ -96,7 +96,8 @@ function tampilkanProfil(user) {
     </button>
     <button class="btn" style="width:100%; background:#25D366; color:white; margin-bottom:10px;" onclick="tampilkanAjakShare()">📤 Ajak Teman/Keluarga Pakai Dulur</button>
     <button class="donasi-btn" style="margin-bottom:10px;" onclick="tampilkanFormDonasi()">☕ Traktir Kopi untuk Developer</button>
-    <a class="btn btn-secondary" href="peraturan.html" style="margin-bottom:10px;">📄 Syarat & Ketentuan</a>
+  <a class="btn btn-secondary" href="peraturan.html" style="margin-bottom:10px;">📄 Syarat & Ketentuan</a>
+    <button class="btn btn-secondary" style="margin-bottom:10px;" onclick="tampilkanFormGantiPin()">🔑 Ganti PIN</button>
     <button class="btn btn-secondary" onclick="logout(); location.reload();">Keluar</button>
   `;
 
@@ -208,3 +209,61 @@ async function muatRatingSaya(userId) {
 }
 
 muatProfil();
+function tampilkanFormGantiPin() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-box">
+      <h3 style="margin-top:0;">🔑 Ganti PIN</h3>
+      <div class="form-group">
+        <label>PIN Lama</label>
+        <input type="password" id="pinLama" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="4 digit" />
+      </div>
+      <div class="form-group">
+        <label>PIN Baru</label>
+        <input type="password" id="pinBaru" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="4 digit" />
+      </div>
+      <div class="form-group">
+        <label>Ulangi PIN Baru</label>
+        <input type="password" id="pinBaruUlang" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="4 digit" />
+      </div>
+      <button class="btn btn-primary" id="btnSimpanPin" style="margin-bottom:8px;">Simpan PIN Baru</button>
+      <button class="btn btn-secondary" id="btnBatalGantiPin">Batal</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  modal.querySelector('#btnBatalGantiPin').addEventListener('click', () => modal.remove());
+
+  modal.querySelector('#btnSimpanPin').addEventListener('click', async () => {
+    const pinLama = modal.querySelector('#pinLama').value;
+    const pinBaru = modal.querySelector('#pinBaru').value;
+    const pinBaruUlang = modal.querySelector('#pinBaruUlang').value;
+
+    if (!/^[0-9]{4}$/.test(pinBaru)) {
+      tampilkanToast('PIN baru wajib 4 digit angka.', 'error');
+      return;
+    }
+    if (pinBaru !== pinBaruUlang) {
+      tampilkanToast('Konfirmasi PIN baru tidak cocok.', 'error');
+      return;
+    }
+
+    const btn = modal.querySelector('#btnSimpanPin');
+    btn.disabled = true;
+    btn.textContent = 'Menyimpan...';
+
+    const user = getCurrentUser();
+    const result = await apiPost('changePin', { user_id: user.user_id, pin_lama: pinLama, pin_baru: pinBaru });
+
+    if (result.error) {
+      tampilkanToast(result.error, 'error');
+      btn.disabled = false;
+      btn.textContent = 'Simpan PIN Baru';
+      return;
+    }
+
+    modal.remove();
+    tampilkanToast('PIN berhasil diganti!', 'success');
+  });
+}
