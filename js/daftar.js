@@ -23,12 +23,19 @@ document.getElementById('daftarForm').addEventListener('submit', async (e) => {
   btn.disabled = true;
   btn.textContent = 'Mendaftarkan...';
 
+ const pin = document.getElementById('pin').value;
+  if (!/^[0-9]{4}$/.test(pin)) {
+    tampilkanToast('PIN wajib 4 digit angka.', 'error');
+    return;
+  }
+
   const payload = {
     nama: document.getElementById('nama').value,
     no_hp: noHp,
     lokasi_kecamatan: document.getElementById('lokasi_kecamatan').value,
     kabupaten: document.getElementById('kabupaten').value,
     kode_referral_dipakai: document.getElementById('kode_referral_dipakai').value.trim(),
+    pin,
   };
 
   const result = await apiPost('addUser', payload);
