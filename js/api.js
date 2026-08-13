@@ -108,6 +108,11 @@ async function apiGet(action, params = {}) {
         if (error) return { error: pesanErrorAdmin(error) };
         return data;
       }
+        case 'adminGetAllAds': {
+        const { data, error } = await supabaseClient.rpc('admin_ambil_semua_iklan', { p_password: params.password });
+        if (error) return { error: pesanErrorAdmin(error) };
+        return data;
+      }
       case 'adminGetReports': {
         const { data, error } = await supabaseClient.rpc('admin_ambil_laporan', { p_password: params.password });
         if (error) return { error: pesanErrorAdmin(error) };
@@ -145,6 +150,14 @@ async function apiPost(action, data = {}) {
           p_lokasi_kecamatan: data.lokasi_kecamatan, p_kabupaten: data.kabupaten,
           p_kode_referral_dipakai: data.kode_referral_dipakai || null,
           p_pin: data.pin,
+        });
+        if (error) throw error;
+        return hasil;
+      }
+        case 'daftarIklan': {
+        const { data: hasil, error } = await supabaseClient.rpc('daftar_iklan_mandiri', {
+          p_nama_pengiklan: data.nama_pengiklan, p_gambar_url: data.gambar_url,
+          p_link_tujuan: data.link_tujuan, p_kontak_pengiklan: data.kontak_pengiklan,
         });
         if (error) throw error;
         return hasil;
@@ -278,6 +291,20 @@ async function apiPost(action, data = {}) {
       case 'adminSundul': {
         const { data: hasil, error } = await supabaseClient.rpc('admin_sundul', {
           p_password: data.password, p_product_id: data.product_id,
+        });
+        if (error) return { error: pesanErrorAdmin(error) };
+        return hasil;
+      }
+        case 'adminSetujuiIklan': {
+        const { data: hasil, error } = await supabaseClient.rpc('admin_setujui_iklan', {
+          p_password: data.password, p_iklan_id: data.iklan_id, p_hari: data.hari || 30,
+        });
+        if (error) return { error: pesanErrorAdmin(error) };
+        return hasil;
+      }
+      case 'adminTolakIklan': {
+        const { data: hasil, error } = await supabaseClient.rpc('admin_tolak_iklan', {
+          p_password: data.password, p_iklan_id: data.iklan_id,
         });
         if (error) return { error: pesanErrorAdmin(error) };
         return hasil;
