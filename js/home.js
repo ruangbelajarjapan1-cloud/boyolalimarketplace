@@ -378,14 +378,19 @@ function renderSlideIklan() {
   banner.style.opacity = '0';
 
   setTimeout(() => {
-    let html = item.cta
-      ? bannerCtaPasangIklan()
-      : `
-        <a class="ads-banner" href="${item.link_tujuan || '#'}" target="_blank" rel="noopener">
+    let html;
+    if (item.cta) {
+      html = bannerCtaPasangIklan();
+    } else {
+      const baru = item.tanggal_mulai && (new Date() - new Date(item.tanggal_mulai)) < 3 * 24 * 60 * 60 * 1000;
+      html = `
+        <a class="ads-banner" href="${item.link_tujuan || '#'}" target="_blank" rel="noopener"
+           onclick="apiPost('clickAd', {iklan_id: '${item.id}'})">
           <img src="${escapeHtml(item.gambar_url)}" alt="${escapeHtml(item.nama_pengiklan) || 'Iklan'}" />
-          <span class="ads-label">Iklan</span>
+          <span class="ads-label">${baru ? '🆕 Baru · Iklan' : 'Iklan'}</span>
         </a>
       `;
+    }
 
     if (iklanRotasi.length > 1) {
       html += `
@@ -399,7 +404,6 @@ function renderSlideIklan() {
     banner.style.opacity = '1';
   }, 200);
 }
-
 function bannerCtaPasangIklan() {
   return `
     <a href="pasang-iklan.html" style="display:block; text-align:center; padding:14px; border-radius:var(--radius-lg); background:linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color:white; font-weight:700; text-decoration:none;">
