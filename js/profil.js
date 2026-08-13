@@ -25,9 +25,13 @@ async function muatProfil() {
     return;
   }
 
-  // Perbarui cache lokal supaya konsisten dengan server
+// Perbarui cache lokal supaya konsisten dengan server
   setCurrentUser(fresh);
   tampilkanProfil(fresh);
+
+  if (new URLSearchParams(window.location.search).get('wajib_ganti_pin') === '1') {
+    tampilkanFormGantiPin(true);
+  }
 }
 
 function tampilkanBelumLogin() {
@@ -209,14 +213,15 @@ async function muatRatingSaya(userId) {
 }
 
 muatProfil();
-function tampilkanFormGantiPin() {
+function tampilkanFormGantiPin(wajib = false) {
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
   modal.innerHTML = `
     <div class="modal-box">
-      <h3 style="margin-top:0;">🔑 Ganti PIN</h3>
+      <h3 style="margin-top:0;">🔑 ${wajib ? 'Buat PIN Baru (Wajib)' : 'Ganti PIN'}</h3>
+      ${wajib ? '<p style="font-size:0.85rem; color:var(--color-muted);">Demi keamanan, PIN sementara Anda harus diganti dulu sebelum lanjut memakai aplikasi.</p>' : ''}
       <div class="form-group">
-        <label>PIN Lama</label>
+        <label>PIN Lama${wajib ? ' (PIN sementara tadi)' : ''}</label>
         <input type="password" id="pinLama" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="4 digit" />
       </div>
       <div class="form-group">
@@ -228,12 +233,14 @@ function tampilkanFormGantiPin() {
         <input type="password" id="pinBaruUlang" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="4 digit" />
       </div>
       <button class="btn btn-primary" id="btnSimpanPin" style="margin-bottom:8px;">Simpan PIN Baru</button>
-      <button class="btn btn-secondary" id="btnBatalGantiPin">Batal</button>
+      ${wajib ? '' : '<button class="btn btn-secondary" id="btnBatalGantiPin">Batal</button>'}
     </div>
   `;
   document.body.appendChild(modal);
 
-  modal.querySelector('#btnBatalGantiPin').addEventListener('click', () => modal.remove());
+  if (!wajib) {
+    modal.querySelector('#btnBatalGantiPin').addEventListener('click', () => modal.remove());
+  }
 
   modal.querySelector('#btnSimpanPin').addEventListener('click', async () => {
     const pinLama = modal.querySelector('#pinLama').value;
@@ -265,5 +272,6 @@ function tampilkanFormGantiPin() {
 
     modal.remove();
     tampilkanToast('PIN berhasil diganti!', 'success');
+    if (wajib) window.history.replaceState({}, '', 'profil.html');
   });
 }
