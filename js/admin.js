@@ -33,7 +33,7 @@ document.getElementById('btnMasukAdmin').addEventListener('click', async () => {
 })();
 
 // --- Tab switching ---
-const tabs = { tabUsers: 'panelUsers', tabProducts: 'panelProducts', tabAds: 'panelAds' };
+const tabs = { tabUsers: 'panelUsers', tabProducts: 'panelProducts', tabIklanMasuk: 'panelIklanMasuk', tabAds: 'panelAds' };
 Object.keys(tabs).forEach((tabId) => {
   document.getElementById(tabId).addEventListener('click', async () => {
     Object.keys(tabs).forEach((id) => {
@@ -47,6 +47,10 @@ Object.keys(tabs).forEach((tabId) => {
     if (tabId === 'tabProducts') {
       semuaProducts = await apiGet('adminGetProducts', { password: adminPassword });
       renderProducts(semuaProducts);
+    }
+    if (tabId === 'tabIklanMasuk') {
+      const iklan = await apiGet('adminGetAllAds', { password: adminPassword });
+      renderIklanMasuk(iklan);
     }
   });
 });
@@ -213,3 +217,50 @@ document.getElementById('adForm').addEventListener('submit', async (e) => {
   tampilkanToast('Iklan berhasil ditambahkan!', 'success');
   e.target.reset();
 });
+function renderIklanMasuk(daftar) {
+  const el = document.getElementById('panelIklanMasuk');
+
+  if (!Array.isArray(daftar) || daftar.length === 0) {
+    el.innerHTML = '<p class="empty-state">Belum ada iklan masuk.</p>';
+    return;
+  }
+
+  el.innerHTML = daftar
+    .map(
+      (i) => `
+    <div class="admin-row">
+      <img src="${i.gambar_url}" style="width:100%; border-radius:8px; margin-bottom:8px;" onerror="this.style.display='none'" />
+      <strong>${escapeHtml(i.nama_pengiklan)}</strong><br>
+      <small>WA: ${escapeHtml(i.kontak_pengiklan) || '-'} | Link: ${escapeHtml(i.link_tujuan) || '-'}</small><br>
+      Status: ${
+        i.status === 'disetujui'
+          ? '✅ Disetujui, tayang sampai ' + formatTanggal(i.tanggal_selesai)
+          : i.status === 'ditolak'
+          ? '❌ Ditolak'
+          : '⏳ Menunggu persetujuan'
+      }
+      <div class="aksi">
+        ${i.status !== 'disetujui' ? `<button onclick="setujuiIklan('${i.id}')">✅ Setujui (30 hari)</button>` : ''}
+        ${i.status !== 'ditolak' ? `<button onclick="tolakIklan('${i.id}')">❌ Tolak</button>` : ''}
+      </div>
+    </div>
+  `
+    )
+    .join('');
+}
+
+async function setujuiIklan(iklan_id) {
+  const result = await apiPost('adminSetujuiIklan', { password: adminPassword, iklan_id, hari: 30 });
+  if (result.error) return tampilkanToast(result.error, 'error');
+  tampilkanToast('Iklan disetujui dan mulai tayang', 'success');
+  const iklan = await apiGet('adminGetAllAds', { password: adminPassword });
+  renderIklanMasuk(iklan);
+}
+
+async function tolakIklan(iklan_id) {
+  const result = await apiPost('adminTolakIklan', { password: adminPassword, iklan_id });
+  if (result.error) return tampilkanToast(result.error, 'error');
+  tampilkanToast('Iklan ditolak', 'success');
+  const iklan = await apiGet('adminGetAllAds', { password: adminPassword });
+  renderIklanMasuk(iklan);
+}
