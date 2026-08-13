@@ -59,6 +59,13 @@ async function apiGet(action, params = {}) {
   if (!data || data.length === 0) return { error: 'Nomor HP belum terdaftar. Silakan Daftar dulu.' };
   return { ...data[0], user_id: data[0].id };
 }
+        case 'loginUser': {
+        const { data, error } = await supabaseClient.rpc('login_user', {
+          p_no_hp: params.no_hp, p_pin: params.pin,
+        });
+        if (error) throw error;
+        return data;
+      }
      case 'getUserById': {
   const { data, error } = await supabaseClient.rpc('ambil_user_by_id', { p_user_id: params.user_id });
   if (error) throw error;
@@ -126,11 +133,12 @@ async function apiPost(action, data = {}) {
 
   try {
     switch (action) {
-      case 'addUser': {
+ case 'addUser': {
         const { data: hasil, error } = await supabaseClient.rpc('daftar_user', {
           p_nama: data.nama, p_no_hp: data.no_hp,
           p_lokasi_kecamatan: data.lokasi_kecamatan, p_kabupaten: data.kabupaten,
           p_kode_referral_dipakai: data.kode_referral_dipakai || null,
+          p_pin: data.pin,
         });
         if (error) throw error;
         return hasil;
@@ -225,6 +233,13 @@ async function apiPost(action, data = {}) {
         if (error) throw error;
         return hasil;
       }
+        case 'changePin': {
+        const { data: hasil, error } = await supabaseClient.rpc('ganti_pin', {
+          p_user_id: data.user_id, p_pin_lama: data.pin_lama, p_pin_baru: data.pin_baru,
+        });
+        if (error) throw error;
+        return hasil;
+      }
       case 'addReport': {
         const { data: hasil, error } = await supabaseClient.rpc('tambah_laporan', {
           p_jenis: data.jenis, p_target_id: data.target_id, p_target_nama: data.target_nama,
@@ -236,6 +251,13 @@ async function apiPost(action, data = {}) {
       case 'adminSetVerified': {
         const { data: hasil, error } = await supabaseClient.rpc('admin_set_verifikasi', {
           p_password: data.password, p_user_id: data.user_id, p_verified: data.verified,
+        });
+        if (error) return { error: pesanErrorAdmin(error) };
+        return hasil;
+      }
+        case 'adminResetPin': {
+        const { data: hasil, error } = await supabaseClient.rpc('admin_reset_pin', {
+          p_password: data.password, p_user_id: data.user_id,
         });
         if (error) return { error: pesanErrorAdmin(error) };
         return hasil;
