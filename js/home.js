@@ -173,11 +173,21 @@ async function muatProduk() {
   const kabupaten = document.getElementById('kabupatenFilter').value;
   if (kabupaten) params.kabupaten = kabupaten;
 
-  const [, produkListHasil] = await Promise.all([
+ const [, produkListHasil] = await Promise.all([
     muatFavoritSaya(),
     apiGet('getProducts', params),
   ]);
   let produkList = produkListHasil;
+
+  if (Array.isArray(produkList)) {
+    const kecamatanEl = document.getElementById('kecamatanFilter');
+    const kecamatanTerpilih = kecamatanEl.value;
+    const daftarKecamatan = [...new Set(produkList.map((p) => p.lokasi).filter(Boolean))].sort();
+    kecamatanEl.innerHTML =
+      '<option value="">Semua Kecamatan</option>' +
+      daftarKecamatan.map((k) => `<option value="${k}" ${k === kecamatanTerpilih ? 'selected' : ''}>${k}</option>`).join('');
+    if (kecamatanTerpilih) produkList = produkList.filter((p) => p.lokasi === kecamatanTerpilih);
+  }
 
   if (produkList && produkList.error) {
     grid.innerHTML = `<p class="empty-state">⚠️ ${pesanErrorRamah(produkList.error)}</p>`;
@@ -260,6 +270,7 @@ function produkKeCard(p, i) {
   const badgeGratis = gratis ? '<span class="badge badge-hibah">🎁 Hibah</span>' : '';
   const badgeBaru = (!p.penjual_terverifikasi && p.penjual_akun_baru) ? '<span class="badge badge-baru">🆕 Akun Baru</span>' : '';
   const badgeToko = p.penjual_toko_aktif ? '<span class="badge badge-toko">🏪 Toko</span>' : '';
+  const badgeResponCepat = p.penjual_respon_cepat ? '<span class="badge" style="background:#e0f7e9; color:#1a7a4c;">⚡ Respon Cepat</span>' : '';
   const badgeCepat = (p.butuh_cepat === true) ? '<span class="badge badge-cepat">🔴 Butuh Cepat</span>' : '';
   const badgeLama = (p.listing_lama === true) ? '<span class="badge badge-lama">🕒 Listing Lama</span>' : '';
   const delay = (i % 6) * 0.04;
@@ -273,7 +284,7 @@ function produkKeCard(p, i) {
     <a href="produk.html?id=${encodeURIComponent(p.id)}">
         <img src="${fotoUrl}" alt="${p.nama_barang}" loading="lazy" onerror="this.src='img/placeholder.svg'"/>
         <div class="info">
-          <div class="badges">${badgeGratis}${badgeVerif}${badgeToko}${badgeBaru}${badgeCepat}${badgeLama}</div>
+         <div class="badges">${badgeGratis}${badgeVerif}${badgeToko}${badgeResponCepat}${badgeBaru}${badgeCepat}${badgeLama}</div>
           <p class="nama">${p.nama_barang}</p>
           <p class="${gratis ? 'harga-gratis' : 'harga'}">${gratis ? 'GRATIS untuk sesama 🎁' : 'Rp' + harga}</p>
           ${ratingHtml(p.penjual_rating_avg, p.penjual_rating_count)}
@@ -349,7 +360,7 @@ async function muatIklan() {
 document.getElementById('kabupatenFilter').addEventListener('change', muatProduk);
 document.getElementById('urutkanFilter').addEventListener('change', muatProduk);
 document.getElementById('hargaMaxFilter').addEventListener('change', muatProduk);
-
+document.getElementById('kecamatanFilter').addEventListener('change', muatProduk);
 document.getElementById('categoryChips').addEventListener('click', (e) => {
   const chip = e.target.closest('.chip');
   if (!chip) return;
