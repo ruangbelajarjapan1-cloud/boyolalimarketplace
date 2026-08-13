@@ -16,6 +16,9 @@ const HARGA_SUNDUL = 3000; // sekali bayar, bump ke atas urutan Terbaru
 const HARGA_TOKO_BULANAN = 15000; // langganan bulanan, badge "🏪 Toko"
 const DURASI_TOKO_HARI = 30;
 
+const HARGA_IKLAN_BULANAN = 15000; // banner iklan di Home, tayang 30 hari
+const DURASI_IKLAN_HARI = 30;
+
 // Nomor WhatsApp Anda (pengelola), format internasional TANPA tanda + atau 0 di depan
 // Contoh: 0812-3456-7890 ditulis jadi 6281234567890
 const NOMOR_WA_ADMIN = '6281806089472';
