@@ -45,11 +45,11 @@ function pengumumanKeItem(p) {
   return `
     <div class="pengumuman-item">
       <span class="jenis-pill jenis-${jenisKey}">${LABEL_JENIS[jenisKey] || '📌 Lainnya'}</span>
-      <h3 style="margin:4px 0 4px; font-size:1rem;">${p.judul}</h3>
+     <h3 style="margin:4px 0 4px; font-size:1rem;">${escapeHtml(p.judul)}</h3>
       ${p.foto_url ? `<img src="${p.foto_url}" onerror="this.style.display='none'" />` : ''}
-      <p style="font-size:0.87rem; line-height:1.6; margin:6px 0;">${p.isi}</p>
+     <p style="font-size:0.87rem; line-height:1.6; margin:6px 0;">${escapeHtml(p.isi)}</p>
       <p style="font-size:0.75rem; color:var(--color-muted); margin:6px 0 0;">
-        Oleh ${p.nama_pengirim || 'Warga'} · ${waktu}
+      Oleh ${escapeHtml(p.nama_pengirim) || 'Warga'} · ${waktu}
       </p>
     </div>
   `;
