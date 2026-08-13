@@ -1,11 +1,17 @@
-// ============================================================
-// API.JS — Semua fungsi di sini "bicara" ke Supabase.
-// Anda TIDAK perlu edit file ini kecuali menambah fitur baru.
-//
-// PENTING: cara pemanggilan apiGet()/apiPost() dari file lain
-// TIDAK BERUBAH sama sekali dari versi Apps Script sebelumnya —
-// yang berubah cuma "mesin" di dalam file ini.
-// ============================================================
+// ------------------------------------------------------------
+// Cegah XSS: ubah karakter HTML berbahaya jadi teks biasa
+// sebelum ditampilkan. WAJIB dipakai untuk semua teks dari
+// pengguna lain (nama barang, deskripsi, komentar, pesan chat, dll)
+// ------------------------------------------------------------
+function escapeHtml(teks) {
+  if (teks === null || teks === undefined) return '';
+  return String(teks)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
