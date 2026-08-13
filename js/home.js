@@ -282,13 +282,13 @@ function produkKeCard(p, i) {
         <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
       </button>
     <a href="produk.html?id=${encodeURIComponent(p.id)}">
-        <img src="${fotoUrl}" alt="${p.nama_barang}" loading="lazy" onerror="this.src='img/placeholder.svg'"/>
+   <img src="${fotoUrl}" alt="${escapeHtml(p.nama_barang)}" loading="lazy" onerror="this.src='img/placeholder.svg'"/>
         <div class="info">
-         <div class="badges">${badgeGratis}${badgeVerif}${badgeToko}${badgeResponCepat}${badgeBaru}${badgeCepat}${badgeLama}</div>
-          <p class="nama">${p.nama_barang}</p>
+          <div class="badges">${badgeGratis}${badgeVerif}${badgeToko}${badgeResponCepat}${badgeBaru}${badgeCepat}${badgeLama}</div>
+          <p class="nama">${escapeHtml(p.nama_barang)}</p>
           <p class="${gratis ? 'harga-gratis' : 'harga'}">${gratis ? 'GRATIS untuk sesama 🎁' : 'Rp' + harga}</p>
           ${ratingHtml(p.penjual_rating_avg, p.penjual_rating_count)}
-          <p class="lokasi">📍 ${p.lokasi || '-'}, ${p.kabupaten || ''}</p>
+          <p class="lokasi">📍 ${escapeHtml(p.lokasi) || '-'}, ${escapeHtml(p.kabupaten) || ''}</p>
         </div>
       </a>
     </div>
@@ -301,7 +301,7 @@ function produkKeCardKecil(p) {
   return `
   <a class="featured-card" href="produk.html?id=${encodeURIComponent(p.id)}">
       <span class="badge badge-featured" style="position:absolute; top:8px; left:8px;">⭐ Unggulan</span>
-      <img src="${fotoUrl}" alt="${p.nama_barang}" loading="lazy" onerror="this.src='img/placeholder.svg'"/>
+      <img src="${fotoUrl}" alt="${escapeHtml(p.nama_barang)}" loading="lazy" onerror="this.src='img/placeholder.svg'"/>
       <div class="info">
         <p class="nama">${p.nama_barang}</p>
         <p class="harga">Rp${harga}</p>
