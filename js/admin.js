@@ -228,12 +228,18 @@ function renderIklanMasuk(daftar) {
   }
 
   el.innerHTML = daftar
-    .map(
-      (i) => `
-    <div class="admin-row">
+    .map((i) => {
+      const hariTersisa = i.tanggal_selesai
+        ? Math.ceil((new Date(i.tanggal_selesai) - new Date()) / (1000 * 60 * 60 * 24))
+        : null;
+      const segeraHabis = i.status === 'disetujui' && hariTersisa !== null && hariTersisa <= 3 && hariTersisa >= 0;
+
+      return `
+    <div class="admin-row" style="${segeraHabis ? 'border: 2px solid #f0a500;' : ''}">
       <img src="${i.gambar_url}" style="width:100%; border-radius:8px; margin-bottom:8px;" onerror="this.style.display='none'" />
       <strong>${escapeHtml(i.nama_pengiklan)}</strong><br>
       <small>WA: ${escapeHtml(i.kontak_pengiklan) || '-'} | Link: ${escapeHtml(i.link_tujuan) || '-'}</small><br>
+      <small>👁️ ${i.jumlah_klik || 0} klik</small><br>
       Status: ${
         i.status === 'disetujui'
           ? '✅ Disetujui, tayang sampai ' + formatTanggal(i.tanggal_selesai)
@@ -241,13 +247,15 @@ function renderIklanMasuk(daftar) {
           ? '❌ Ditolak'
           : '⏳ Menunggu persetujuan'
       }
+      ${segeraHabis ? `<br><span style="color:#a4700f; font-weight:700;">⏰ Segera habis, tinggal ${hariTersisa} hari — WA untuk tawarkan perpanjang?</span>` : ''}
       <div class="aksi">
         ${i.status !== 'disetujui' ? `<button onclick="setujuiIklan('${i.id}')">✅ Setujui (30 hari)</button>` : ''}
+        ${i.status === 'disetujui' ? `<button onclick="setujuiIklan('${i.id}')">🔄 Perpanjang 30 hari</button>` : ''}
         ${i.status !== 'ditolak' ? `<button onclick="tolakIklan('${i.id}')">❌ Tolak</button>` : ''}
       </div>
     </div>
-  `
-    )
+  `;
+    })
     .join('');
 }
 
