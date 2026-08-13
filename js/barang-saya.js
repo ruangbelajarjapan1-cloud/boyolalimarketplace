@@ -57,24 +57,24 @@ function itemKeBaris(p) {
         <p style="margin:0; font-weight:600;">${p.nama_barang}</p>
         <p style="margin:0; color: var(--color-primary-dark); font-weight:700;">Rp${harga}</p>
         <div class="aksi">
-          <button onclick="location.href='produk.html?id=${p.product_id}'">Lihat</button>
-          <button onclick="location.href='edit.html?id=${p.product_id}'">✏️ Edit</button>
+          <button onclick="location.href='produk.html?id=${p.id}'">Lihat</button>
+          <button onclick="location.href='edit.html?id=${p.id}'">✏️ Edit</button>
           ${
             terjual
-              ? `<button onclick="ubahStatus('${p.product_id}', false)">Tandai Tersedia Lagi</button>`
-              : `<button onclick="ubahStatus('${p.product_id}', true)">Tandai Terjual</button>`
+              ? `<button onclick="ubahStatus('${p.id}', false)">Tandai Tersedia Lagi</button>`
+              : `<button onclick="ubahStatus('${p.id}', true)">Tandai Terjual</button>`
           }
           ${
             !terjual && !sudahUnggulan
-              ? `<button onclick="tampilkanFormUnggulan('${p.product_id}', '${p.nama_barang.replace(/'/g, "")}')" style="background:#fdf0d9; border-color:var(--color-accent-dark); color:var(--color-accent-dark);">⭐ Jadikan Unggulan</button>`
+              ? `<button onclick="tampilkanFormUnggulan('${p.id}', '${p.nama_barang.replace(/'/g, "")}')" style="background:#fdf0d9; border-color:var(--color-accent-dark); color:var(--color-accent-dark);">⭐ Jadikan Unggulan</button>`
               : ''
           }
           ${
             !terjual
-              ? `<button onclick="tampilkanFormSundul('${p.product_id}', '${p.nama_barang.replace(/'/g, "")}')" style="background:#e0f0ff; border-color:#1a5fa0; color:#1a5fa0;">🚀 Sundul</button>`
+              ? `<button onclick="tampilkanFormSundul('${p.id}', '${p.nama_barang.replace(/'/g, "")}')" style="background:#e0f0ff; border-color:#1a5fa0; color:#1a5fa0;">🚀 Sundul</button>`
               : ''
           }
-          <button onclick="hapusBarang('${p.product_id}')" style="border-color:#c0392b; color:#c0392b;">🗑️ Hapus</button>
+          <button onclick="hapusBarang('${p.id}')" style="border-color:#c0392b; color:#c0392b;">🗑️ Hapus</button>
         </div>
       </div>
     </div>
