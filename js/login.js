@@ -9,7 +9,8 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   btn.textContent = 'Memeriksa...';
 
   const no_hp = document.getElementById('no_hp').value;
-  const result = await apiGet('findUserByPhone', { no_hp });
+  const pin = document.getElementById('pin').value;
+  const result = await apiGet('loginUser', { no_hp, pin });
 
   if (result.error) {
     tampilkanToast(result.error, 'error');
@@ -19,7 +20,12 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   }
 
   setCurrentUser(result);
-  tampilkanToast(`Selamat datang kembali, ${result.nama.split(' ')[0]}! 👋`, 'success');
+  tampilkanToast(
+    result.pin_baru_dibuat
+      ? 'PIN berhasil dibuat untuk akun ini. Ingat baik-baik ya! 🔐'
+      : `Selamat datang kembali, ${result.nama.split(' ')[0]}! 👋`,
+    'success'
+  );
 
   const params = new URLSearchParams(window.location.search);
   setTimeout(() => {
