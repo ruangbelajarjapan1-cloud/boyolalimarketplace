@@ -72,8 +72,12 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
 
   const user = await requireUser();
   if (!user) return;
+const linkManual = document.getElementById('foto_url').value;
 
-  const linkManual = document.getElementById('foto_url').value;
+  if (!fotoTerupload[1] && !linkManual) {
+    tampilkanToast('Foto barang wajib diisi — upload foto atau tempel link foto utama.', 'error');
+    return;
+  }
 
   const data = {
     user_id: user.user_id,
