@@ -53,12 +53,12 @@ async function apiGet(action, params = {}) {
         if (error) throw error;
         return data;
       }
-      case 'findUserByPhone': {
-        const { data, error } = await supabaseClient.rpc('cari_user_by_hp', { p_no_hp: params.no_hp });
-        if (error) throw error;
-        if (!data || data.length === 0) return { error: 'Nomor HP belum terdaftar. Silakan Daftar dulu.' };
-        return data[0];
-      }
+    case 'findUserByPhone': {
+  const { data, error } = await supabaseClient.rpc('cari_user_by_hp', { p_no_hp: params.no_hp });
+  if (error) throw error;
+  if (!data || data.length === 0) return { error: 'Nomor HP belum terdaftar. Silakan Daftar dulu.' };
+  return { ...data[0], user_id: data[0].id };
+}
       case 'getUserById': {
         const { data, error } = await supabaseClient.rpc('ambil_user_by_id', { p_user_id: params.user_id });
         if (error) throw error;
