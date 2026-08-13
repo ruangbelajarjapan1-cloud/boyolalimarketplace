@@ -55,7 +55,7 @@ function itemKeBaris(p) {
         ${
           p.sudah_dirating
             ? '<span class="badge badge-verified" style="margin-top:6px;">✅ Sudah diberi rating</span>'
-            : `<button class="btn btn-secondary" style="margin-top:8px; padding:8px; font-size:0.8rem;" onclick="bukaFormRating('${p.product_id}', '${p.user_id}', '${p.nama_barang.replace(/'/g, '')}')">⭐ Beri Rating</button>`
+            : `<button class="btn btn-secondary" style="margin-top:8px; padding:8px; font-size:0.8rem;" onclick="bukaFormRating('${p.id}', '${p.user_id}', '${p.nama_barang.replace(/'/g, '')}')">⭐ Beri Rating</button>`
         }
       </div>
     </div>
