@@ -26,9 +26,14 @@
     </div>
 
     <form id="loginForm">
-      <div class="form-group">
+     <div class="form-group">
         <label>Nomor HP/WhatsApp yang dipakai saat daftar</label>
         <input type="tel" id="no_hp" required placeholder="mis. 0812xxxxxxx" />
+      </div>
+
+      <div class="form-group">
+        <label>PIN</label>
+        <input type="password" id="pin" required inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="4 digit PIN Anda" />
       </div>
 
       <button type="submit" class="btn btn-primary">Masuk</button>
