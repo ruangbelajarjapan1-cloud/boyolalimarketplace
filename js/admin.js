@@ -151,9 +151,10 @@ function gambarDaftarProduk(products) {
       <small>Penjual: ${p.penjual_nama || '-'} | Status: ${p.status}</small><br>
       Unggulan: ${p.unggulan === true ? '⭐ Aktif sampai ' + formatTanggal(p.unggulan_sampai) : 'Tidak aktif'}
       <div class="aksi">
-        <button onclick="ubahUnggulan('${p.product_id}', true)">Jadikan Unggulan (7 hari)</button>
-        <button onclick="ubahUnggulan('${p.product_id}', false)">Matikan</button>
-        <button onclick="sundulProduk('${p.product_id}')">🚀 Sundul ke Atas</button>
+        <button onclick="ubahUnggulan('${p.id}', true)">Jadikan Unggulan (7 hari)</button>
+        <button onclick="ubahUnggulan('${p.id}', false)">Matikan</button>
+        <button onclick="sundulProduk('${p.id}')">🚀 Sundul ke Atas</button>
+        <button onclick="hapusProdukAdmin('${p.id}', '${p.nama_barang.replace(/'/g, "")}')" style="border-color:#c0392b; color:#c0392b;">🗑️ Hapus</button>
       </div>
     </div>
   `
@@ -168,7 +169,16 @@ async function sundulProduk(product_id) {
   semuaProducts = await apiGet('adminGetProducts', { password: adminPassword });
   renderProducts(semuaProducts);
 }
+async function hapusProdukAdmin(product_id, namaBarang) {
+  const yakin = await tampilkanKonfirmasi(`Barang "${namaBarang}" akan dihapus permanen dari database.`, 'Hapus Barang Ini?');
+  if (!yakin) return;
 
+  const result = await apiPost('adminDeleteProduct', { password: adminPassword, product_id });
+  if (result.error) return tampilkanToast(result.error, 'error');
+  tampilkanToast('Barang berhasil dihapus', 'success');
+  semuaProducts = await apiGet('adminGetProducts', { password: adminPassword });
+  renderProducts(semuaProducts);
+}
 function formatTanggal(v) {
   if (!v) return '-';
   const d = new Date(v);
