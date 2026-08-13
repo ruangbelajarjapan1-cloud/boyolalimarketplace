@@ -15,8 +15,7 @@
   `;
   banner.innerHTML =
     '⚠️ Backend belum disambungkan. Buka <code>js/config.js</code>, ' +
-    'ganti <code>APPS_SCRIPT_URL</code> dengan URL hasil Deploy Apps Script Anda ' +
-    '(lihat README Langkah 2-3).';
+    'isi <code>SUPABASE_URL</code> dan <code>SUPABASE_ANON_KEY</code> Anda.';
   document.body.prepend(banner);
   document.body.style.paddingTop = '50px';
 })();
