@@ -20,12 +20,16 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   }
 
   setCurrentUser(result);
-  tampilkanToast(
-    result.pin_baru_dibuat
-      ? 'PIN berhasil dibuat untuk akun ini. Ingat baik-baik ya! 🔐'
-      : `Selamat datang kembali, ${result.nama.split(' ')[0]}! 👋`,
-    'success'
-  );
+
+  if (result.wajib_ganti_pin) {
+    tampilkanToast('PIN Anda masih PIN sementara — silakan buat PIN baru.', 'success');
+    setTimeout(() => {
+      window.location.href = 'profil.html?wajib_ganti_pin=1';
+    }, 900);
+    return;
+  }
+
+  tampilkanToast(`Selamat datang kembali, ${result.nama.split(' ')[0]}! 👋`, 'success');
 
   const params = new URLSearchParams(window.location.search);
   setTimeout(() => {
