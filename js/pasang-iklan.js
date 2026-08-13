@@ -33,6 +33,7 @@ document.getElementById('foto_file').addEventListener('change', async (e) => {
     }
     fotoTerupload = result.url;
     status.textContent = '✅ Foto berhasil diupload';
+    perbaruiPratinjau();
   } catch (err) {
     status.textContent = '⚠️ Gagal memproses foto. Coba foto lain.';
   }
@@ -66,7 +67,26 @@ function kompresFotoKeBase64(file) {
     reader.readAsDataURL(file);
   });
 }
+function perbaruiPratinjau() {
+  const nama = document.getElementById('nama_pengiklan').value || 'Nama Usaha Anda';
+  const gambar = fotoTerupload || document.getElementById('foto_url_manual').value;
+  const preview = document.getElementById('previewBanner');
 
+  if (!gambar) {
+    preview.innerHTML = 'Isi nama usaha & foto dulu untuk lihat pratinjau';
+    return;
+  }
+
+  preview.innerHTML = `
+    <div class="ads-banner" style="position:relative; width:100%; border-radius:var(--radius-lg); overflow:hidden;">
+      <img src="${gambar}" alt="${nama}" style="width:100%; display:block;" onerror="this.style.display='none'" />
+      <span class="ads-label">Iklan</span>
+    </div>
+  `;
+}
+
+document.getElementById('nama_pengiklan').addEventListener('input', perbaruiPratinjau);
+document.getElementById('foto_url_manual').addEventListener('input', perbaruiPratinjau);
 document.getElementById('iklanForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
