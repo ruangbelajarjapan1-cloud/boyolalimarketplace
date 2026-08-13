@@ -1,14 +1,12 @@
 // ============================================================
 // SW.JS — Service Worker sederhana.
-// Fungsinya 2: (1) syarat teknis supaya browser mau menawarkan
-// "Install App", (2) simpan file statis (css/js/ikon) di cache
-// supaya tampilan app tetap muncul walau sinyal sedang lemah.
-//
-// PENTING: data barang/chat TETAP selalu ambil langsung dari
-// server (tidak di-cache) — cuma "kerangka" app ini yang di-cache.
+// Strategi: NETWORK-FIRST — selalu coba ambil versi terbaru dari
+// internet dulu; cache cuma dipakai kalau sedang offline/sinyal
+// lemah. Ini supaya update kode selalu langsung kepakai tanpa
+// pengguna perlu hapus cache manual.
 // ============================================================
 
-const CACHE_NAME = 'dulur-shell-v9';
+const CACHE_NAME = 'dulur-shell-v10';
 
 const FILE_KERANGKA = [
   './index.html',
@@ -44,21 +42,22 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Jangan cache panggilan ke Apps Script (data harus selalu fresh)
   if (url.hostname.includes('script.google.com')) return;
 
-  // File statis: coba cache dulu, kalau tidak ada baru ambil dari network
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return (
-        cached ||
-        fetch(event.request).catch(() => {
-          // Offline & tidak ada di cache — tampilkan halaman utama sebagai fallback
+    fetch(event.request)
+      .then((response) => {
+        const salinan = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, salinan));
+        return response;
+      })
+      .catch(() => {
+        return caches.match(event.request).then((cached) => {
+          if (cached) return cached;
           if (event.request.mode === 'navigate') {
             return caches.match('./index.html');
           }
-        })
-      );
-    })
+        });
+      })
   );
 });
