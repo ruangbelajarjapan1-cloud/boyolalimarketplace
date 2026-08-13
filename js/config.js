@@ -1,11 +1,8 @@
 // ============================================================
-// GANTI URL DI BAWAH INI dengan URL Web App hasil Deploy
-// Apps Script Anda (lihat langkah di apps-script/Code.gs / README).
-//
-// Contoh format URL yang benar:
-// https://script.google.com/macros/s/AKfycbxXXXXXXXXXXXXXXXXX/exec
+// KONEKSI BACKEND — Supabase (pengganti Google Apps Script)
 // ============================================================
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpK6IKQ8WwTQNrzfXqGvcEm5gV04bK2sjThDfpFPArgUDiQVVDw4GMqdbGRjZWpYWxag/exec';
+const SUPABASE_URL = 'https://oohuxqgizqdvvlhkcmsx.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_jYqLiDztkLuhgOQ37WUbzw_phAHQEgx';
 
 const APP_NAME = 'Dulur';
 
@@ -16,7 +13,7 @@ const HARGA_UNGGULAN = 10000; // dalam Rupiah
 const DURASI_UNGGULAN_HARI = 7;
 
 const HARGA_SUNDUL = 3000; // sekali bayar, bump ke atas urutan Terbaru
-const HARGA_TOKO_BULANAN = 20000; // langganan bulanan, badge "🏪 Toko"
+const HARGA_TOKO_BULANAN = 15000; // langganan bulanan, badge "🏪 Toko"
 const DURASI_TOKO_HARI = 30;
 
 // Nomor WhatsApp Anda (pengelola), format internasional TANPA tanda + atau 0 di depan
@@ -32,8 +29,10 @@ const QRIS_IMAGE_URL = 'qris.jpg';
 // Dipakai file lain untuk cek apakah config.js sudah diisi dengan benar
 function isConfigured() {
   return (
-    typeof APPS_SCRIPT_URL === 'string' &&
-    APPS_SCRIPT_URL.indexOf('GANTI_DENGAN') === -1 &&
-    APPS_SCRIPT_URL.indexOf('https://') === 0
+    typeof SUPABASE_URL === 'string' &&
+    SUPABASE_URL.indexOf('GANTI_DENGAN') === -1 &&
+    SUPABASE_URL.indexOf('https://') === 0 &&
+    typeof SUPABASE_ANON_KEY === 'string' &&
+    SUPABASE_ANON_KEY.length > 10
   );
 }
