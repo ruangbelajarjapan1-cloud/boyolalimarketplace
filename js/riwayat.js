@@ -50,8 +50,8 @@ function itemKeBaris(p) {
     <div class="riwayat-item">
       <img src="${fotoUrl}" loading="lazy" onerror="this.src='img/placeholder.svg'" />
       <div style="flex:1">
-        <p style="margin:0; font-weight:600;">${p.nama_barang}</p>
-        <p style="margin:0; font-size:0.8rem; color:var(--color-muted);">Penjual: ${p.penjual_nama || '-'} · Rp${harga}</p>
+       <p style="margin:0; font-weight:600;">${escapeHtml(p.nama_barang)}</p>
+        <p style="margin:0; font-size:0.8rem; color:var(--color-muted);">Penjual: ${escapeHtml(p.penjual_nama) || '-'} · Rp${harga}</p>
         ${
           p.sudah_dirating
             ? '<span class="badge badge-verified" style="margin-top:6px;">✅ Sudah diberi rating</span>'
