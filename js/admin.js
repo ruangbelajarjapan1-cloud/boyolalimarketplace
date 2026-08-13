@@ -89,8 +89,9 @@ function gambarDaftarUser(users) {
       <div class="aksi">
         <button onclick="ubahVerifikasi('${u.user_id}', true)">Verifikasi</button>
         <button onclick="ubahVerifikasi('${u.user_id}', false)">Batalkan</button>
-        <button onclick="ubahToko('${u.user_id}', true)">🏪 Jadikan Toko (30 hari)</button>
+    <button onclick="ubahToko('${u.user_id}', true)">🏪 Jadikan Toko (30 hari)</button>
         <button onclick="ubahToko('${u.user_id}', false)">Matikan Toko</button>
+        <button onclick="resetPin('${u.user_id}', '${u.nama.replace(/'/g, "")}')" style="border-color:#c0392b; color:#c0392b;">🔑 Reset PIN</button>
       </div>
     </div>
   `
@@ -106,12 +107,16 @@ async function ubahToko(user_id, aktif) {
   renderUsers(semuaUsers);
 }
 
-async function ubahVerifikasi(user_id, verified) {
-  const result = await apiPost('adminSetVerified', { password: adminPassword, user_id, verified });
+async function resetPin(user_id, nama) {
+  const yakin = await tampilkanKonfirmasi(
+    `PIN akun "${nama}" akan dihapus. User itu harus bikin PIN baru lagi saat Masuk berikutnya (pastikan sudah verifikasi identitas via WhatsApp dulu sebelum reset).`,
+    'Reset PIN?'
+  );
+  if (!yakin) return;
+
+  const result = await apiPost('adminResetPin', { password: adminPassword, user_id });
   if (result.error) return tampilkanToast(result.error, 'error');
-  tampilkanToast('Status verifikasi diperbarui', 'success');
-  semuaUsers = await apiGet('adminGetUsers', { password: adminPassword });
-  renderUsers(semuaUsers);
+  tampilkanToast('PIN berhasil direset', 'success');
 }
 
 // --- Tab: Listing Unggulan (dengan pencarian) ---
