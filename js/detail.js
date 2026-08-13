@@ -112,7 +112,7 @@ async function muatDetail() {
     ? `<div class="sticky-cta"><span class="btn" style="background:#eee; color:var(--color-muted);">Barang Ini Sudah Terjual</span></div>`
     : `
       <div class="sticky-cta">
-        <a class="btn btn-primary" href="chat.html?productId=${encodeURIComponent(p.product_id)}&penjual=${encodeURIComponent(p.user_id)}">
+        <a class="btn btn-primary" href="chat.html?productId=${encodeURIComponent(p.id)}&penjual=${encodeURIComponent(p.user_id)}">
           💬 Chat Penjual
         </a>
       </div>
@@ -152,7 +152,7 @@ function bukaLightbox(src) {
 async function cekFavoritAktif(productId, userId) {
   const hasil = await apiGet('getFavorites', { user_id: userId });
   if (!Array.isArray(hasil)) return false;
-  return hasil.some((p) => p.product_id === productId);
+  return hasil.some((p) => p.id === productId);
 }
 
 function pasangFavoritDetail(productId) {
@@ -216,7 +216,7 @@ function pasangLaporkan(p) {
       const alasan = document.getElementById('alasanLapor').value + ' — ' + document.getElementById('detailLapor').value;
       await apiPost('addReport', {
         jenis: 'barang',
-        target_id: p.product_id,
+        target_id: p.id,
         target_nama: p.nama_barang,
         pelapor_id: user.user_id,
         alasan,
