@@ -54,7 +54,7 @@ function itemKeBaris(p) {
         </span>
         ${sudahUnggulan ? '<span class="badge badge-featured">⭐ Unggulan</span>' : ''}
         ${p.penjual_toko_aktif ? '<span class="badge badge-toko">🏪 Toko</span>' : ''}
-        <p style="margin:0; font-weight:600;">${p.nama_barang}</p>
+       <p style="margin:0; font-weight:600;">${escapeHtml(p.nama_barang)}</p>
         <p style="margin:0; color: var(--color-primary-dark); font-weight:700;">Rp${harga}</p>
         <div class="aksi">
           <button onclick="location.href='produk.html?id=${p.id}'">Lihat</button>
