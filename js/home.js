@@ -155,7 +155,7 @@ async function muatFavoritSaya() {
   const user = getCurrentUser();
   if (!user) { daftarFavoritSaya = []; return; }
   const hasil = await apiGet('getFavorites', { user_id: user.user_id });
-  daftarFavoritSaya = Array.isArray(hasil) ? hasil.map((p) => p.product_id) : [];
+  daftarFavoritSaya = Array.isArray(hasil) ? hasil.map((p) => p.id) : [];
 }
 
 async function muatProduk() {
@@ -263,14 +263,14 @@ function produkKeCard(p, i) {
   const badgeCepat = (p.butuh_cepat === true) ? '<span class="badge badge-cepat">🔴 Butuh Cepat</span>' : '';
   const badgeLama = (p.listing_lama === true) ? '<span class="badge badge-lama">🕒 Listing Lama</span>' : '';
   const delay = (i % 6) * 0.04;
-  const favAktif = daftarFavoritSaya.indexOf(p.product_id) !== -1;
+ const favAktif = daftarFavoritSaya.indexOf(p.id) !== -1;
 
   return `
     <div class="product-card" style="animation-delay:${delay}s">
-      <button class="fav-heart ${favAktif ? 'active' : ''}" data-id="${p.product_id}" aria-label="Favorit">
+     <button class="fav-heart ${favAktif ? 'active' : ''}" data-id="${p.id}" aria-label="Favorit">
         <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
       </button>
-      <a href="produk.html?id=${encodeURIComponent(p.product_id)}">
+    <a href="produk.html?id=${encodeURIComponent(p.id)}">
         <img src="${fotoUrl}" alt="${p.nama_barang}" loading="lazy" onerror="this.src='img/placeholder.svg'"/>
         <div class="info">
           <div class="badges">${badgeGratis}${badgeVerif}${badgeToko}${badgeBaru}${badgeCepat}${badgeLama}</div>
@@ -288,7 +288,7 @@ function produkKeCardKecil(p) {
   const fotoUrl = p.foto_url || 'img/placeholder.svg';
   const harga = Number(p.harga || 0).toLocaleString('id-ID');
   return `
-    <a class="featured-card" href="produk.html?id=${encodeURIComponent(p.product_id)}">
+  <a class="featured-card" href="produk.html?id=${encodeURIComponent(p.id)}">
       <span class="badge badge-featured" style="position:absolute; top:8px; left:8px;">⭐ Unggulan</span>
       <img src="${fotoUrl}" alt="${p.nama_barang}" loading="lazy" onerror="this.src='img/placeholder.svg'"/>
       <div class="info">
