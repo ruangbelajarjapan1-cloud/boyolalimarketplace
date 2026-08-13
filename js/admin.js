@@ -82,8 +82,8 @@ function gambarDaftarUser(users) {
     .map(
       (u) => `
     <div class="admin-row">
-      <strong>${u.nama}</strong> — ${u.no_hp}<br>
-      <small>${u.lokasi_kecamatan || ''}, ${u.kabupaten || ''}</small><br>
+    <strong>${escapeHtml(u.nama)}</strong> — ${escapeHtml(u.no_hp)}<br>
+      <small>${escapeHtml(u.lokasi_kecamatan) || ''}, ${escapeHtml(u.kabupaten) || ''}</small><br>
       Status: ${u.is_verified_ktp === true ? '✅ Terverifikasi' : '⏳ Belum'} |
       Toko: ${u.is_toko === true ? '🏪 Aktif sampai ' + formatTanggal(u.toko_sampai) : 'Tidak aktif'}
       <div class="aksi">
@@ -152,8 +152,8 @@ function gambarDaftarProduk(products) {
     .map(
       (p) => `
     <div class="admin-row">
-      <strong>${p.nama_barang}</strong> — Rp${Number(p.harga || 0).toLocaleString('id-ID')}<br>
-      <small>Penjual: ${p.penjual_nama || '-'} | Status: ${p.status}</small><br>
+    <strong>${escapeHtml(p.nama_barang)}</strong> — Rp${Number(p.harga || 0).toLocaleString('id-ID')}<br>
+      <small>Penjual: ${escapeHtml(p.penjual_nama) || '-'} | Status: ${escapeHtml(p.status)}</small><br>
       Unggulan: ${p.unggulan === true ? '⭐ Aktif sampai ' + formatTanggal(p.unggulan_sampai) : 'Tidak aktif'}
       <div class="aksi">
         <button onclick="ubahUnggulan('${p.id}', true)">Jadikan Unggulan (7 hari)</button>
