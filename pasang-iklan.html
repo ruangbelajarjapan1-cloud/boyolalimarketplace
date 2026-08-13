@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://lh3.googleusercontent.com" />
+  <title>Pasang Iklan - Dulur</title>
+  <link rel="stylesheet" href="css/style.css?v=17" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0eab6f" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="icon" href="favicon.png" />
+</head>
+<body>
+
+  <div class="app-header">
+    <a href="index.html" class="header-back" aria-label="Kembali ke Home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </a>
+    Pasang Iklan
+  </div>
+
+  <div class="container">
+    <div class="info-note">
+      📢 Punya toko/usaha di Boyolali & sekitarnya? Pasang banner iklan Anda
+      di halaman utama Dulur, dilihat warga yang aktif jual-beli di sini.
+    </div>
+
+    <div class="info-note" id="infoHarga">
+      Memuat info harga...
+    </div>
+
+    <form id="iklanForm">
+      <div class="form-group">
+        <label>Nama Usaha</label>
+        <input type="text" id="nama_pengiklan" required placeholder="mis. Bengkel Motor Jaya" />
+      </div>
+
+      <div class="form-group">
+        <label>Foto/Banner Iklan</label>
+        <input type="file" id="foto_file" accept="image/*" />
+        <img id="fotoPreview" style="display:none; width:100%; margin-top:8px; border-radius: var(--radius-md);" />
+        <p id="uploadStatus" style="font-size:0.78rem; color: var(--color-muted); margin-top:4px;"></p>
+      </div>
+
+      <div class="form-group">
+        <label>Atau tempel Link Foto (opsional, kalau tidak upload dari HP)</label>
+        <input type="url" id="foto_url_manual" placeholder="https://..." />
+      </div>
+
+      <div class="form-group">
+        <label>Link Tujuan (WhatsApp/Instagram/dll, opsional)</label>
+        <input type="url" id="link_tujuan" placeholder="mis. https://wa.me/6281234567890" />
+      </div>
+
+      <div class="form-group">
+        <label>Nomor WhatsApp Anda (wajib, untuk konfirmasi)</label>
+        <input type="tel" id="kontak_pengiklan" required placeholder="mis. 0812xxxxxxx" />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Daftar Iklan</button>
+      <p style="font-size:0.75rem; color:var(--color-muted); text-align:center; margin-top:12px;">
+        Setelah daftar, Anda akan diarahkan ke WhatsApp untuk kirim bukti bayar.
+        Iklan tayang otomatis setelah dikonfirmasi Admin.
+      </p>
+    </form>
+  </div>
+
+  <script src="js/config.js?v=17"></script>
+  <script src="js/setup-check.js?v=17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/api.js?v=17"></script>
+  <script src="js/toast.js?v=17"></script>
+  <script src="js/session.js?v=17"></script>
+  <script src="js/pasang-iklan.js?v=17"></script>
+  <script src="js/register-sw.js?v=17"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c59e07c75c4c4782beb907baa909d35f"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
